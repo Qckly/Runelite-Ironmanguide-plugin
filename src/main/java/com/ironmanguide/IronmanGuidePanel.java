@@ -8,9 +8,8 @@ import net.runelite.client.ui.PluginPanel;
 
 public class IronmanGuidePanel extends PluginPanel
 {
-private final GuideStep[] steps = GuideData.getSteps();
-
-private int currentStep = 0;
+private final GuideManager guideManager =
+new GuideManager(GuideData.getSteps());
 
 private final JLabel title = new JLabel();
 private final JTextArea stepText = new JTextArea();
@@ -34,19 +33,13 @@ JButton previous = new JButton("Previous");
 JButton next = new JButton("Next");
 
 previous.addActionListener(e -> {
-if (currentStep > 0)
-{
-currentStep--;
+guideManager.previous();
 updateStep();
-}
 });
 
 next.addActionListener(e -> {
-if (currentStep < steps.length - 1)
-{
-currentStep++;
+guideManager.next();
 updateStep();
-}
 });
 
 buttons.add(previous);
@@ -58,11 +51,13 @@ updateStep();
 
 private void updateStep()
 {
-GuideStep step = steps[currentStep];
+GuideStep step = guideManager.getCurrentStep();
 
 title.setText(
 "<html><b>" + step.getTitle() + "</b><br>Step "
-+ (currentStep + 1) + " / " + steps.length + "</html>"
++ (guideManager.getCurrentStepIndex() + 1)
++ " / " + guideManager.getTotalSteps()
++ "</html>"
 );
 
 stepText.setText(step.getDescription());
