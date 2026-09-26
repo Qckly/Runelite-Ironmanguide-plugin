@@ -8,11 +8,7 @@ import net.runelite.client.ui.PluginPanel;
 
 public class IronmanGuidePanel extends PluginPanel
 {
-private final String[] steps = {
-"Welcome to the Ironman Guide.",
-"Talk to the Gielinor Guide.",
-"Continue through Tutorial Island."
-};
+private final GuideStep[] steps = GuideData.getSteps();
 
 private int currentStep = 0;
 
@@ -62,7 +58,13 @@ updateStep();
 
 private void updateStep()
 {
-title.setText("<html><b>Ironman Guide</b><br>Step " + (currentStep + 1) + " / " + steps.length + "</html>");
-stepText.setText(steps[currentStep]);
+GuideStep step = steps[currentStep];
+
+title.setText(
+"<html><b>" + step.getTitle() + "</b><br>Step "
++ (currentStep + 1) + " / " + steps.length + "</html>"
+);
+
+stepText.setText(step.getDescription());
 }
 }
