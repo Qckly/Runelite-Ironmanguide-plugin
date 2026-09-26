@@ -1,54 +1,53 @@
 package com.ironmanguide;
 
 import com.google.inject.Provides;
+import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.ImageUtil;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Ironman Guide"
+name = "Ironman Guide"
 )
 public class IronmanGuidePlugin extends Plugin
 {
-	@Inject
-	private Client client;
+@Inject
+private ClientToolbar clientToolbar;
 
-	@Inject
-	private IronmanGuideConfig config;
+private IronmanGuidePanel panel;
+private NavigationButton navButton;
 
-	@Override
-	protected void startUp() throws Exception
-	{
-		log.debug("Example started!");
-	}
+@Override
+protected void startUp()
+{
+panel = new IronmanGuidePanel();
 
-	@Override
-	protected void shutDown() throws Exception
-	{
-		log.debug("Example stopped!");
-	}
+BufferedImage icon = ImageUtil.loadImageResource(getClass(), "icon.png");
 
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
-		}
-	}
+navButton = NavigationButton.builder()
+.tooltip("Ironman Guide")
+.icon(icon)
+.panel(panel)
+.build();
 
-	@Provides
-	IronmanGuideConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(IronmanGuideConfig.class);
-	}
+clientToolbar.addNavigation(navButton);
 }
 
+@Override
+protected void shutDown()
+{
+clientToolbar.removeNavigation(navButton);
+}
+
+@Provides
+IronmanGuideConfig provideConfig(ConfigManager configManager)
+{
+return configManager.getConfig(IronmanGuideConfig.class);
+}
+}
