@@ -2,20 +2,24 @@ package com.ironmanguide;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.function.IntConsumer;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import net.runelite.client.ui.PluginPanel;
 
 public class IronmanGuidePanel extends PluginPanel
 {
-private final GuideManager guideManager =
-new GuideManager(GuideData.getSteps());
+private final GuideManager guideManager;
+private final IntConsumer onStepChanged;
 
 private final JLabel title = new JLabel();
 private final JTextArea stepText = new JTextArea();
 
-public IronmanGuidePanel()
+public IronmanGuidePanel(int savedStep, IntConsumer onStepChanged)
 {
+this.onStepChanged = onStepChanged;
+this.guideManager = new GuideManager(GuideData.getSteps(), savedStep);
+
 setLayout(new BorderLayout(0, 10));
 setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -34,11 +38,13 @@ JButton next = new JButton("Next");
 
 previous.addActionListener(e -> {
 guideManager.previous();
+onStepChanged.accept(guideManager.getCurrentStepIndex());
 updateStep();
 });
 
 next.addActionListener(e -> {
 guideManager.next();
+onStepChanged.accept(guideManager.getCurrentStepIndex());
 updateStep();
 });
 

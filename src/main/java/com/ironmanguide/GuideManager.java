@@ -3,11 +3,12 @@ package com.ironmanguide;
 public class GuideManager
 {
 private final GuideStep[] steps;
-private int currentStep = 0;
+private int currentStep;
 
-public GuideManager(GuideStep[] steps)
+public GuideManager(GuideStep[] steps, int savedStep)
 {
 this.steps = steps;
+this.currentStep = Math.max(0, Math.min(savedStep, steps.length - 1));
 }
 
 public GuideStep getCurrentStep()
