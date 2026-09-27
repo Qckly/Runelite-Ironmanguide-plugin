@@ -55,6 +55,7 @@ private GuideManager guideManager;
 	private IronmanGuideItemNameResolver itemNameResolver;
 	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
+private QuestHelperIntegration questHelperIntegration;
 
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
@@ -71,6 +72,13 @@ guideManager = new GuideManager(
 GuideData.getSteps(),
 config.currentStep()
 );
+
+questHelperIntegration = new QuestHelperIntegration(configManager);
+
+if (config.questHelperIntegration())
+{
+questHelperIntegration.enableAutoStart();
+}
 
 itemChecker = new IronmanGuideItemChecker(client);
 		completionChecker = new IronmanGuideStepCompletionChecker(client, itemChecker);
@@ -149,6 +157,10 @@ clientToolbar.addNavigation(navButton);
 @Override
 protected void shutDown()
 {
+if (questHelperIntegration != null)
+{
+questHelperIntegration.restore();
+}
 if (worldMapGuideManager != null)
 {
 worldMapGuideManager.remove();
@@ -297,6 +309,22 @@ public void onConfigChanged(ConfigChanged event)
 {
 if (!"ironmanguide".equals(event.getGroup()))
 {
+return;
+}
+
+if ("questHelperIntegration".equals(event.getKey()))
+{
+boolean enabled = Boolean.parseBoolean(event.getNewValue());
+
+if (enabled)
+{
+questHelperIntegration.enableAutoStart();
+}
+else
+{
+questHelperIntegration.restore();
+}
+
 return;
 }
 

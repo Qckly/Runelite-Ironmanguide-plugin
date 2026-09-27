@@ -42,6 +42,17 @@ return true;
 }
 
 @ConfigItem(
+keyName = "questHelperIntegration",
+name = "Quest Helper integration",
+description = "Allow Ironman Guide to integrate with Quest Helper",
+position = 3
+)
+default boolean questHelperIntegration()
+{
+return true;
+}
+
+@ConfigItem(
 keyName = "currentStep",
 name = "",
 description = "",

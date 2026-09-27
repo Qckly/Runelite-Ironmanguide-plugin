@@ -4,6 +4,8 @@ import net.runelite.api.coords.WorldPoint;
 
 public class QuestGuideStep extends GuideStep
 {
+private final String questName;
+private final QuestRouteType routeType;
 private final int npcId;
 private final WorldPoint worldPoint;
 private final GuideItemRequirement[] itemRequirements;
@@ -17,12 +19,46 @@ WorldPoint worldPoint,
 GuideItemRequirement[] itemRequirements,
 String... dialogueOptions)
 {
+this(
+title,
+description,
+title,
+QuestRouteType.FULL,
+npcId,
+worldPoint,
+itemRequirements,
+dialogueOptions
+);
+}
+
+public QuestGuideStep(
+String title,
+String description,
+String questName,
+QuestRouteType routeType,
+int npcId,
+WorldPoint worldPoint,
+GuideItemRequirement[] itemRequirements,
+String... dialogueOptions)
+{
 super(GuideStepType.QUEST, title, description);
 
+this.questName = questName;
+this.routeType = routeType;
 this.npcId = npcId;
 this.worldPoint = worldPoint;
 this.itemRequirements = itemRequirements;
 this.dialogueOptions = dialogueOptions;
+}
+
+public String getQuestName()
+{
+return questName;
+}
+
+public QuestRouteType getRouteType()
+{
+return routeType;
 }
 
 public int getNpcId()
