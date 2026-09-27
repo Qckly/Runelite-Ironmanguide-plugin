@@ -58,7 +58,7 @@ step
 )
 );
 
-overlay = new IronmanGuideOverlay(client, guideManager, modelOutlineRenderer);
+overlay = new IronmanGuideOverlay(client, guideManager, modelOutlineRenderer, config);
 overlayManager.add(overlay);
 
 BufferedImage icon =

@@ -12,15 +12,18 @@ public class IronmanGuideOverlay extends Overlay
 private final Client client;
 private final GuideManager guideManager;
 private final ModelOutlineRenderer modelOutlineRenderer;
+private final IronmanGuideConfig config;
 
 public IronmanGuideOverlay(
 Client client,
 GuideManager guideManager,
-ModelOutlineRenderer modelOutlineRenderer)
+ModelOutlineRenderer modelOutlineRenderer,
+IronmanGuideConfig config)
 {
 this.client = client;
 this.guideManager = guideManager;
 this.modelOutlineRenderer = modelOutlineRenderer;
+this.config = config;
 }
 
 @Override
@@ -42,7 +45,7 @@ if (npc.getId() == npcStep.getNpcId())
 modelOutlineRenderer.drawOutline(
 npc,
 2,
-java.awt.Color.YELLOW,
+config.highlightColor(),
 4
 );
 
