@@ -83,6 +83,9 @@ return rule.getSkill() != null
 rule.getSkill()
 ) >= rule.getValue();
 
+case INVENTORY_EMPTY:
+return itemChecker.isInventoryEmpty();
+
 case QUEST_STARTED:
 return questStateChecker.isStarted(
 rule.getQuestName()
