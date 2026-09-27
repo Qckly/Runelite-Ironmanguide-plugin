@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.Player;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
@@ -45,6 +46,7 @@ return null;
 }
 
 NpcGuideStep npcStep = (NpcGuideStep) step;
+WorldPoint targetPoint = npcStep.getWorldPoint();
 
 NPC closestNpc = null;
 int closestDistance = Integer.MAX_VALUE;
@@ -56,8 +58,13 @@ if (npc.getId() != npcStep.getNpcId())
 continue;
 }
 
+WorldPoint referencePoint =
+targetPoint != null
+? targetPoint
+: player.getWorldLocation();
+
 int distance = npc.getWorldLocation()
-.distanceTo2D(player.getWorldLocation());
+.distanceTo2D(referencePoint);
 
 if (distance < closestDistance)
 {
