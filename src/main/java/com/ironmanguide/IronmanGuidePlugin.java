@@ -129,6 +129,7 @@ worldMapPointManager
 worldMapGuideManager.update();
 
 panel = new IronmanGuidePanel(
+		client,
 		guideManager,
 		itemChecker,
 		itemNameResolver,
@@ -197,6 +198,7 @@ guideRuleEvaluator
 		overlayManager.add(itemOverlay);
 
 stepOverlay = new IronmanGuideStepOverlay(
+client,
 guideManager,
 itemChecker,
 itemNameResolver,
