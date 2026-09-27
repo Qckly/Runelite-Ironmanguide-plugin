@@ -8,12 +8,23 @@ private int currentStep;
 public GuideManager(GuideStep[] steps, int savedStep)
 {
 this.steps = steps;
-this.currentStep = Math.max(0, Math.min(savedStep, steps.length - 1));
+this.currentStep =
+Math.max(0, Math.min(savedStep, steps.length - 1));
 }
 
 public GuideStep getCurrentStep()
 {
 return steps[currentStep];
+}
+
+public GuideStep getStep(int index)
+{
+return steps[index];
+}
+
+public boolean isStepCompleted(int index)
+{
+return index < currentStep;
 }
 
 public int getCurrentStepIndex()

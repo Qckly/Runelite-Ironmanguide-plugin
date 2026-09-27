@@ -6,6 +6,7 @@ import java.util.function.IntConsumer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import net.runelite.client.ui.PluginPanel;
@@ -19,6 +20,7 @@ private final IntConsumer onStepChanged;
 
 private final JLabel title = new JLabel();
 private final JTextArea stepText = new JTextArea();
+private final IronmanGuideStepListPanel stepListPanel;
 
 public IronmanGuidePanel(
 GuideManager guideManager,
@@ -36,11 +38,29 @@ setBorder(new EmptyBorder(10, 10, 10, 10));
 
 add(title, BorderLayout.NORTH);
 
+JPanel centerPanel = new JPanel(new BorderLayout(0, 10));
+centerPanel.setOpaque(false);
+
 stepText.setEditable(false);
 stepText.setLineWrap(true);
 stepText.setWrapStyleWord(true);
 stepText.setOpaque(false);
-add(stepText, BorderLayout.CENTER);
+
+centerPanel.add(stepText, BorderLayout.NORTH);
+
+stepListPanel =
+new IronmanGuideStepListPanel(guideManager);
+
+JScrollPane scrollPane =
+new JScrollPane(stepListPanel);
+
+scrollPane.setBorder(null);
+scrollPane.setOpaque(false);
+scrollPane.getViewport().setOpaque(false);
+
+centerPanel.add(scrollPane, BorderLayout.CENTER);
+
+add(centerPanel, BorderLayout.CENTER);
 
 JPanel buttons = new JPanel(new FlowLayout());
 
@@ -49,13 +69,17 @@ JButton next = new JButton("Next");
 
 previous.addActionListener(e -> {
 guideManager.previous();
-onStepChanged.accept(guideManager.getCurrentStepIndex());
+onStepChanged.accept(
+guideManager.getCurrentStepIndex()
+);
 updateStep();
 });
 
 next.addActionListener(e -> {
 guideManager.next();
-onStepChanged.accept(guideManager.getCurrentStepIndex());
+onStepChanged.accept(
+guideManager.getCurrentStepIndex()
+);
 updateStep();
 });
 
@@ -87,14 +111,18 @@ String text = step.getDescription();
 
 if (step instanceof ItemGuideStep)
 {
-ItemGuideStep itemStep = (ItemGuideStep) step;
+ItemGuideStep itemStep =
+(ItemGuideStep) step;
 
-int have = itemChecker.getInventoryQuantity(
+int have =
+itemChecker.getInventoryQuantity(
 itemStep.getItemId()
 );
 
 text += "\n\nRequired: "
-+ itemNameResolver.getName(itemStep.getItemId())
++ itemNameResolver.getName(
+itemStep.getItemId()
+)
 + " x"
 + itemStep.getQuantity()
 + "\nYou have: "
@@ -106,18 +134,21 @@ text += "\n\nRequired: "
 }
 else if (step instanceof QuestGuideStep)
 {
-QuestGuideStep questStep = (QuestGuideStep) step;
+QuestGuideStep questStep =
+(QuestGuideStep) step;
 
 GuideItemRequirement[] requirements =
 questStep.getItemRequirements();
 
-if (requirements != null && requirements.length > 0)
+if (requirements != null
+&& requirements.length > 0)
 {
 text += "\n\nRequired items:";
 
 for (GuideItemRequirement requirement : requirements)
 {
-int have = itemChecker.getInventoryQuantity(
+int have =
+itemChecker.getInventoryQuantity(
 requirement.getItemId()
 );
 
@@ -133,11 +164,14 @@ requirement.getItemId()
 + " / "
 + requirement.getQuantity()
 + " "
-+ (ready ? "[READY]" : "[MISSING]");
++ (ready
+? "[READY]"
+: "[MISSING]");
 }
 }
 }
 
 stepText.setText(text);
+stepListPanel.refresh();
 }
 }
