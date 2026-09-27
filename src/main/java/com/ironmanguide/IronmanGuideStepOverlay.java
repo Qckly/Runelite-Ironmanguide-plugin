@@ -3,12 +3,14 @@ package com.ironmanguide;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.components.LineComponent;
 
 public class IronmanGuideStepOverlay extends OverlayPanel
 {
+private final Client client;
 private static final Color DESCRIPTION_COLOR =
 new Color(190, 190, 190);
 
@@ -27,11 +29,13 @@ private final IronmanGuideItemNameResolver itemNameResolver;
 private final GuideRuleEvaluator ruleEvaluator;
 
 public IronmanGuideStepOverlay(
+Client client,
 GuideManager guideManager,
 IronmanGuideItemChecker itemChecker,
 IronmanGuideItemNameResolver itemNameResolver)
 {
 this(
+client,
 guideManager,
 itemChecker,
 itemNameResolver,
@@ -40,11 +44,13 @@ null
 }
 
 public IronmanGuideStepOverlay(
+Client client,
 GuideManager guideManager,
 IronmanGuideItemChecker itemChecker,
 IronmanGuideItemNameResolver itemNameResolver,
 GuideRuleEvaluator ruleEvaluator)
 {
+this.client = client;
 this.guideManager = guideManager;
 this.itemChecker = itemChecker;
 this.itemNameResolver = itemNameResolver;
@@ -119,11 +125,19 @@ return;
 for (GuideResourceRequirement requirement :
 requirements)
 {
+int requiredQuantity =
+requirement.resolveQuantity(client);
+
+if (requiredQuantity <= 0)
+{
+continue;
+}
+
 panelComponent.getChildren().add(
 LineComponent.builder()
 .left(
 "You will need "
-+ requirement.getQuantity()
++ requiredQuantity
 + " "
 + itemNameResolver.getName(
 requirement.getItemId()
