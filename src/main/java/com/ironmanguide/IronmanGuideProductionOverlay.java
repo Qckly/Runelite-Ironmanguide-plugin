@@ -42,9 +42,7 @@ setPosition(OverlayPosition.DYNAMIC);
 setLayer(OverlayLayer.ABOVE_WIDGETS);
 setPriority(PRIORITY_HIGHEST);
 
-drawAfterInterface(
-MAKE_X_INTERFACE
-);
+
 }
 
 @Override
