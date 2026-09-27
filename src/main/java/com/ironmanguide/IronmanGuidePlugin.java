@@ -53,6 +53,7 @@ private IronmanGuideOverlay overlay;
 private IronmanGuideObjectOverlay objectOverlay;
 private IronmanGuideLocationOverlay locationOverlay;
 private IronmanGuideMinimapOverlay minimapOverlay;
+	private IronmanGuideItemOverlay itemOverlay;
 private NavigationButton navButton;
 
 @Override
@@ -118,6 +119,9 @@ config
 );
 overlayManager.add(minimapOverlay);
 
+		itemOverlay = new IronmanGuideItemOverlay(guideManager, config);
+		overlayManager.add(itemOverlay);
+
 BufferedImage icon =
 ImageUtil.loadImageResource(getClass(), "icon.png");
 
@@ -142,6 +146,7 @@ overlayManager.remove(overlay);
 overlayManager.remove(objectOverlay);
 overlayManager.remove(locationOverlay);
 overlayManager.remove(minimapOverlay);
+		overlayManager.remove(itemOverlay);
 
 clientToolbar.removeNavigation(navButton);
 }
