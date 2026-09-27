@@ -33,7 +33,29 @@ public Dimension render(Graphics2D graphics)
 {
 GuideStep step = guideManager.getCurrentStep();
 
-if (!(step instanceof NpcGuideStep))
+int npcId;
+WorldPoint targetPoint;
+
+if (step instanceof NpcGuideStep)
+{
+NpcGuideStep npcStep = (NpcGuideStep) step;
+npcId = npcStep.getNpcId();
+targetPoint = npcStep.getWorldPoint();
+}
+else if (step instanceof DialogueGuideStep)
+{
+DialogueGuideStep dialogueStep =
+(DialogueGuideStep) step;
+
+npcId = dialogueStep.getNpcId();
+targetPoint = dialogueStep.getWorldPoint();
+}
+else
+{
+return null;
+}
+
+if (npcId < 0)
 {
 return null;
 }
@@ -45,15 +67,12 @@ if (player == null)
 return null;
 }
 
-NpcGuideStep npcStep = (NpcGuideStep) step;
-WorldPoint targetPoint = npcStep.getWorldPoint();
-
 NPC closestNpc = null;
 int closestDistance = Integer.MAX_VALUE;
 
 for (NPC npc : client.getNpcs())
 {
-if (npc.getId() != npcStep.getNpcId())
+if (npc.getId() != npcId)
 {
 continue;
 }

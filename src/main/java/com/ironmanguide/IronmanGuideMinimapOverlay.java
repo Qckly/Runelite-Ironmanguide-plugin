@@ -46,13 +46,19 @@ return null;
 
 GuideStep step = guideManager.getCurrentStep();
 
-if (!(step instanceof LocationGuideStep))
+WorldPoint target = null;
+
+if (step instanceof LocationGuideStep)
 {
-return null;
+LocationGuideStep locationStep = (LocationGuideStep) step;
+target = locationStep.getWorldPoint();
+}
+else if (step instanceof DialogueGuideStep)
+{
+DialogueGuideStep dialogueStep = (DialogueGuideStep) step;
+target = dialogueStep.getWorldPoint();
 }
 
-LocationGuideStep locationStep = (LocationGuideStep) step;
-WorldPoint target = locationStep.getWorldPoint();
 Player player = client.getLocalPlayer();
 
 if (target == null || player == null)

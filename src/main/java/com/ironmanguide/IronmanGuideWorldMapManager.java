@@ -33,13 +33,19 @@ remove();
 
 GuideStep step = guideManager.getCurrentStep();
 
-if (!(step instanceof LocationGuideStep))
-{
-return;
-}
+WorldPoint worldPoint = null;
+String title = step.getTitle();
 
+if (step instanceof LocationGuideStep)
+{
 LocationGuideStep locationStep = (LocationGuideStep) step;
-WorldPoint worldPoint = locationStep.getWorldPoint();
+worldPoint = locationStep.getWorldPoint();
+}
+else if (step instanceof DialogueGuideStep)
+{
+DialogueGuideStep dialogueStep = (DialogueGuideStep) step;
+worldPoint = dialogueStep.getWorldPoint();
+}
 
 if (worldPoint == null)
 {
@@ -52,7 +58,7 @@ createMarker(config.highlightColor())
 );
 
 currentPoint.setSnapToEdge(true);
-currentPoint.setTooltip(locationStep.getTitle());
+currentPoint.setTooltip(title);
 
 worldMapPointManager.add(currentPoint);
 }

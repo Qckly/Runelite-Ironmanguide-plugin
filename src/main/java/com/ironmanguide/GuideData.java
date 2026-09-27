@@ -2,6 +2,7 @@ package com.ironmanguide;
 
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.NpcID;
 
 public final class GuideData
 {
@@ -36,6 +37,14 @@ new ItemGuideStep(
 "Have a bronze axe in your inventory.",
 ItemID.BRONZE_AXE,
 1
+),
+
+new DialogueGuideStep(
+"Dialogue Highlight Test",
+"Talk to Father Aereck and choose the highlighted answer.",
+NpcID.FATHER_AERECK,
+new WorldPoint(3243, 3206, 0),
+"I'm looking for a quest!"
 )
 };
 }

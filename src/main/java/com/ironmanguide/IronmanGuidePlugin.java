@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -46,6 +47,7 @@ private IronmanGuideConfig config;
 
 private GuideManager guideManager;
 	private IronmanGuideItemChecker itemChecker;
+	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
 
 private IronmanGuidePanel panel;
@@ -65,6 +67,7 @@ config.currentStep()
 );
 
 itemChecker = new IronmanGuideItemChecker(client);
+		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
 
 		worldMapGuideManager = new IronmanGuideWorldMapManager(
 guideManager,
@@ -149,6 +152,12 @@ overlayManager.remove(minimapOverlay);
 		overlayManager.remove(itemOverlay);
 
 clientToolbar.removeNavigation(navButton);
+}
+
+@Subscribe
+public void onGameTick(GameTick event)
+{
+dialogueHighlighter.update();
 }
 
 @Subscribe
