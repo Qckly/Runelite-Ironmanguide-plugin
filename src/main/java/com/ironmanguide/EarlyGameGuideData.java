@@ -1,5 +1,6 @@
 package com.ironmanguide;
 
+import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.NpcID;
@@ -269,6 +270,91 @@ GuideRule.action(GuideRuleType.HAVE_ITEM)
 GuideTarget.location(
 new WorldPoint(3221, 3210, 0),
 4
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Start Rune Mysteries",
+"Go upstairs in Lumbridge Castle and talk to Duke Horacio. Start Rune Mysteries and receive the Air talisman.",
+
+GuideRule.action(
+GuideRuleType.QUEST_STARTED
+).quest("Rune Mysteries")
+)
+.withId(
+"early_012_start_rune_mysteries"
+)
+.withTargets(
+GuideTarget.npc(
+new WorldPoint(3210, 3221, 1),
+815
+).areaRadius(5)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Bank everything",
+"Go to the Lumbridge Castle bank on the top floor and deposit everything in your inventory.",
+
+GuideRule.action(
+GuideRuleType.INVENTORY_EMPTY
+)
+)
+.withId(
+"early_013_bank_everything"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3208, 3220, 2),
+5
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Get 15 Firemaking",
+"Cut normal logs near Lumbridge Castle and light them with your tinderbox until you reach 15 Firemaking.",
+
+GuideRule.action(
+GuideRuleType.SKILL_LEVEL
+).skill(
+Skill.FIREMAKING,
+15
+)
+)
+.withId(
+"early_014_get_15_firemaking"
+)
+.withExactResources(
+GuideResourceRequirement.forSkillLevel(
+ItemID.LOGS,
+Skill.FIREMAKING,
+15,
+40.0
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Make 1,000 arrow shafts",
+"Cut normal logs and use your knife on the logs. Choose Arrow shafts until you have 1,000 arrow shafts.",
+
+GuideRule.action(
+GuideRuleType.HAVE_ITEM
+).item(
+ItemID.ARROW_SHAFT,
+1000
+)
+)
+.withId(
+"early_015_make_1000_arrow_shafts"
+)
+.withExactResources(
+GuideResourceRequirement.fromOutput(
+ItemID.LOGS,
+1000,
+15
 )
 )
 };
