@@ -12,6 +12,9 @@ public class IronmanGuideStepOverlay extends OverlayPanel
 private static final Color DESCRIPTION_COLOR =
 new Color(190, 190, 190);
 
+private static final Color RESOURCE_COLOR =
+new Color(255, 190, 60);
+
 private static final Color HAVE_COLOR =
 new Color(80, 200, 120);
 
@@ -91,10 +94,45 @@ LineComponent.builder()
 .build()
 );
 
+addExactResources(step);
 addRules(step);
 addItemRequirements(step);
 
 return super.render(graphics);
+}
+
+private void addExactResources(GuideStep step)
+{
+if (itemNameResolver == null)
+{
+return;
+}
+
+GuideResourceRequirement[] requirements =
+step.getExactResources();
+
+if (requirements == null)
+{
+return;
+}
+
+for (GuideResourceRequirement requirement :
+requirements)
+{
+panelComponent.getChildren().add(
+LineComponent.builder()
+.left(
+"You will need "
++ requirement.getQuantity()
++ " "
++ itemNameResolver.getName(
+requirement.getItemId()
+)
+)
+.leftColor(RESOURCE_COLOR)
+.build()
+);
+}
 }
 
 private void addRules(GuideStep step)
