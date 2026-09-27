@@ -56,6 +56,7 @@ private GuideManager guideManager;
 	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
 private QuestHelperIntegration questHelperIntegration;
+private IronmanGuideQuestStateChecker questStateChecker;
 
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
@@ -74,6 +75,7 @@ config.currentStep()
 );
 
 questHelperIntegration = new QuestHelperIntegration(configManager);
+questStateChecker = new IronmanGuideQuestStateChecker(client);
 
 if (config.questHelperIntegration())
 {
@@ -208,6 +210,57 @@ panel.refresh();
 return;
 }
 
+if (currentStep instanceof QuestGuideStep)
+{
+QuestGuideStep questStep = (QuestGuideStep) currentStep;
+
+boolean complete = false;
+
+if (questStep.getRouteType() == QuestRouteType.FULL
+|| questStep.getRouteType() == QuestRouteType.FINISH)
+{
+complete =
+questStateChecker.isFinished(
+questStep.getQuestName()
+);
+}
+else if (questStep.getRouteType() == QuestRouteType.START)
+{
+complete =
+questStateChecker.isStarted(
+questStep.getQuestName()
+);
+}
+else if (questStep.getRouteType() == QuestRouteType.CONTINUE
+|| questStep.getRouteType() == QuestRouteType.UNTIL)
+{
+complete =
+questStateChecker.meetsProgress(
+questStep.getProgressRequirement()
+);
+}
+
+if (complete)
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return;
+}
+}
+
 if (itemNameChanged && panel != null)
 {
 panel.refresh();
@@ -227,12 +280,19 @@ options = ((DialogueGuideStep) step).getOptions();
 }
 else if (step instanceof QuestGuideStep)
 {
+QuestGuideStep questStep = (QuestGuideStep) step;
+
+if (questStep.getRouteType() == QuestRouteType.FULL)
+{
+return;
+}
+
 if (!completionChecker.isComplete(step))
 {
 return;
 }
 
-options = ((QuestGuideStep) step).getDialogueOptions();
+options = questStep.getDialogueOptions();
 }
 else
 {
