@@ -502,7 +502,7 @@ ASHES
 new GuideStep(
 GuideStepType.TEXT,
 "Fletch 1,000 arrow shafts",
-"Keep collecting the four log spawns and use your Knife on them until you have at least 1,000 Arrow shafts.",
+"Keep collecting the four log spawns and use your Knife on them until you have at least 1,000 Arrow shafts.\n\nYou will need 67 Logs.",
 
 GuideRule.action(
 GuideRuleType.ITEM_ON_ITEM
@@ -516,7 +516,7 @@ GuideRuleType.HAVE_ITEM
 ).item(
 ItemID.ARROW_SHAFT,
 1000
-)
+).hidden()
 )
 .withId(
 "early_020_fletch_1000_arrow_shafts"

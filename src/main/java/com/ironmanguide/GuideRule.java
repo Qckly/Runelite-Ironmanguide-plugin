@@ -26,6 +26,8 @@ private int value;
 private WorldPoint worldPoint;
 private int radius;
 
+private boolean hidden;
+
 private GuideRule(GuideRuleType type)
 {
 this.type = type;
@@ -116,6 +118,12 @@ this.radius = radius;
 return this;
 }
 
+public GuideRule hidden()
+{
+this.hidden = true;
+return this;
+}
+
 public GuideRuleType getType()
 {
 return type;
@@ -184,5 +192,10 @@ return worldPoint;
 public int getRadius()
 {
 return radius;
+}
+
+public boolean isHidden()
+{
+return hidden;
 }
 }

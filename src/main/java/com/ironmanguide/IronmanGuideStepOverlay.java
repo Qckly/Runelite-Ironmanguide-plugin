@@ -107,6 +107,11 @@ return;
 
 for (GuideRule rule : step.getRules())
 {
+if (rule.isHidden())
+{
+continue;
+}
+
 if (rule.getItemId() <= 0)
 {
 continue;
