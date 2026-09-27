@@ -59,6 +59,12 @@ ItemID.BRONZE_AXE,
 )
 },
 "I'm looking for a quest!"
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Guide Complete",
+"Combined quest step completed successfully."
 )
 };
 }

@@ -40,12 +40,39 @@ return current.getPlane() == target.getPlane()
 
 if (step instanceof ItemGuideStep)
 {
-ItemGuideStep itemStep = (ItemGuideStep) step;
+ItemGuideStep itemStep =
+(ItemGuideStep) step;
 
 return itemChecker.hasRequiredQuantity(
 itemStep.getItemId(),
 itemStep.getQuantity()
 );
+}
+
+if (step instanceof QuestGuideStep)
+{
+QuestGuideStep questStep =
+(QuestGuideStep) step;
+
+GuideItemRequirement[] requirements =
+questStep.getItemRequirements();
+
+if (requirements == null || requirements.length == 0)
+{
+return true;
+}
+
+for (GuideItemRequirement requirement : requirements)
+{
+if (!itemChecker.hasRequiredQuantity(
+requirement.getItemId(),
+requirement.getQuantity()))
+{
+return false;
+}
+}
+
+return true;
 }
 
 return false;

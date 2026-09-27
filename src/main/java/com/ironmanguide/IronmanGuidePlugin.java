@@ -207,7 +207,22 @@ public void onMenuOptionClicked(MenuOptionClicked event)
 {
 GuideStep step = guideManager.getCurrentStep();
 
-if (!(step instanceof DialogueGuideStep))
+String[] options;
+
+if (step instanceof DialogueGuideStep)
+{
+options = ((DialogueGuideStep) step).getOptions();
+}
+else if (step instanceof QuestGuideStep)
+{
+if (!completionChecker.isComplete(step))
+{
+return;
+}
+
+options = ((QuestGuideStep) step).getDialogueOptions();
+}
+else
 {
 return;
 }
@@ -221,10 +236,7 @@ return;
 
 String clickedText = Text.removeTags(widget.getText());
 
-DialogueGuideStep dialogueStep =
-(DialogueGuideStep) step;
-
-for (String option : dialogueStep.getOptions())
+for (String option : options)
 {
 if (clickedText.equals(option))
 {
@@ -260,9 +272,8 @@ itemChecker.update(event.getItemContainer());
 
 GuideStep currentStep = guideManager.getCurrentStep();
 
-	itemChecker.update(client.getItemContainer(InventoryID.INV));
-
-if (completionChecker.isComplete(currentStep))
+if (currentStep instanceof ItemGuideStep
+&& completionChecker.isComplete(currentStep))
 {
 guideManager.next();
 
@@ -280,6 +291,7 @@ if (panel != null)
 panel.refresh();
 }
 }
+
 @Subscribe
 public void onConfigChanged(ConfigChanged event)
 {
