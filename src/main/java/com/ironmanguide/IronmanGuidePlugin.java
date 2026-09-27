@@ -78,6 +78,7 @@ private IronmanGuideWorldMapManager worldMapGuideManager;
 private QuestHelperIntegration questHelperIntegration;
 	private QuestHelperBridge questHelperBridge;
 private IronmanGuideQuestStateChecker questStateChecker;
+private boolean productionWidgetDiagnosticDumped;
 
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
@@ -283,6 +284,8 @@ dialogueHighlighter.update();
 @Subscribe
 public void onGameTick(GameTick event)
 {
+debugProductionWidgetsFromGameTick();
+
 GuideStep currentStep = guideManager.getCurrentStep();
 
 syncQuestHelper(currentStep);
@@ -587,5 +590,121 @@ worldMapGuideManager.remove();
 IronmanGuideConfig provideConfig(ConfigManager configManager)
 {
 return configManager.getConfig(IronmanGuideConfig.class);
+}
+
+private void debugProductionWidgetsFromGameTick()
+{
+Widget title =
+findProductionTitle(
+client.getWidgetRoots()
+);
+
+if (title == null)
+{
+productionWidgetDiagnosticDumped = false;
+return;
+}
+
+if (productionWidgetDiagnosticDumped)
+{
+return;
+}
+
+productionWidgetDiagnosticDumped = true;
+
+int groupId =
+title.getId() >>> 16;
+
+System.out.println(
+"IRONMAN_GUIDE_PRODUCTION_INTERFACE="
++ groupId
+);
+
+dumpProductionWidgetGroup(
+client.getWidgetRoots(),
+groupId
+);
+}
+
+private Widget findProductionTitle(
+Widget[] widgets)
+{
+if (widgets == null)
+{
+return null;
+}
+
+for (Widget widget : widgets)
+{
+if (widget == null)
+{
+continue;
+}
+
+String widgetText =
+widget.getText();
+
+if (widgetText != null
+&& widgetText.contains(
+"What would you like to make?"
+))
+{
+return widget;
+}
+
+Widget found =
+findProductionTitle(
+widget.getChildren()
+);
+
+if (found != null)
+{
+return found;
+}
+}
+
+return null;
+}
+
+private void dumpProductionWidgetGroup(
+Widget[] widgets,
+int groupId)
+{
+if (widgets == null)
+{
+return;
+}
+
+for (Widget widget : widgets)
+{
+if (widget == null)
+{
+continue;
+}
+
+int widgetGroupId =
+widget.getId() >>> 16;
+
+if (widgetGroupId == groupId)
+{
+System.out.println(
+"IRONMAN_WIDGET"
++ " id=" + widget.getId()
++ " type=" + widget.getType()
++ " itemId=" + widget.getItemId()
++ " itemQty=" + widget.getItemQuantity()
++ " modelType=" + widget.getModelType()
++ " modelId=" + widget.getModelId()
++ " text=[" + widget.getText() + "]"
++ " name=[" + widget.getName() + "]"
++ " bounds=[" + widget.getBounds() + "]"
+);
+}
+
+dumpProductionWidgetGroup(
+widget.getChildren(),
+groupId
+);
+}
 }
 }
