@@ -20,6 +20,28 @@ assertEquals(1511, requirement.getItemId());
 assertEquals(67, requirement.getQuantity());
 }
 
+@Test
+public void calculatesRemainingSkillActionsFromCurrentXp()
+{
+assertEquals(
+60,
+GuideResourceRequirement.calculateRequiredActions(
+40,
+2411,
+40.0
+)
+);
+
+assertEquals(
+0,
+GuideResourceRequirement.calculateRequiredActions(
+2411,
+2411,
+40.0
+)
+);
+}
+
 @Test(expected = IllegalArgumentException.class)
 public void rejectsUnknownOrVariableQuantity()
 {
