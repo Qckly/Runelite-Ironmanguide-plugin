@@ -13,6 +13,9 @@ private String questHelperQuestName;
 private GuideTarget[] targets =
 new GuideTarget[0];
 
+private GuideResourceRequirement[] exactResources =
+new GuideResourceRequirement[0];
+
 public GuideStep(
 GuideStepType type,
 String title,
@@ -66,6 +69,22 @@ targets != null
 return this;
 }
 
+/**
+ * Adds only deterministic, exactly calculable resources for this step.
+ *
+ * Do not use this for variable activities such as Wintertodt games.
+ */
+public GuideStep withExactResources(
+GuideResourceRequirement... exactResources)
+{
+this.exactResources =
+exactResources != null
+? exactResources
+: new GuideResourceRequirement[0];
+
+return this;
+}
+
 public String getId()
 {
 return id;
@@ -99,5 +118,10 @@ return rules;
 public GuideTarget[] getTargets()
 {
 return targets;
+}
+
+public GuideResourceRequirement[] getExactResources()
+{
+return exactResources;
 }
 }
