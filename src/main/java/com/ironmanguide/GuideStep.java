@@ -8,6 +8,7 @@ private final String description;
 private final GuideRule[] rules;
 
 private String id;
+private String questHelperQuestName;
 
 private GuideTarget[] targets =
 new GuideTarget[0];
@@ -47,6 +48,13 @@ this.id = id;
 return this;
 }
 
+public GuideStep withQuestHelper(
+String questName)
+{
+this.questHelperQuestName = questName;
+return this;
+}
+
 public GuideStep withTargets(
 GuideTarget... targets)
 {
@@ -61,6 +69,11 @@ return this;
 public String getId()
 {
 return id;
+}
+
+public String getQuestHelperQuestName()
+{
+return questHelperQuestName;
 }
 
 public GuideStepType getType()

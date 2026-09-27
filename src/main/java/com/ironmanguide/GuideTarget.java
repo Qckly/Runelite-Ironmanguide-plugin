@@ -43,6 +43,21 @@ target.ids = objectIds;
 return target;
 }
 
+public static GuideTarget groundItem(
+WorldPoint worldPoint,
+int... itemIds)
+{
+GuideTarget target =
+new GuideTarget(
+GuideTargetType.GROUND_ITEM
+);
+
+target.worldPoint = worldPoint;
+target.ids = itemIds;
+
+return target;
+}
+
 public static GuideTarget location(
 WorldPoint worldPoint,
 int radius)

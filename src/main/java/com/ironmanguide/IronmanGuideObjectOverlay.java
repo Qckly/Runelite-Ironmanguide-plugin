@@ -34,56 +34,104 @@ this.config = config;
 @Override
 public Dimension render(Graphics2D graphics)
 {
-GuideStep step = guideManager.getCurrentStep();
+GuideStep step =
+guideManager.getCurrentStep();
 
-if (!(step instanceof ObjectGuideStep))
+if (step == null)
 {
 return null;
 }
 
-Player player = client.getLocalPlayer();
+Player player =
+client.getLocalPlayer();
 
 if (player == null)
 {
 return null;
 }
 
-ObjectGuideStep objectStep = (ObjectGuideStep) step;
-List<TileObject> matches = new ArrayList<>();
+GuideTarget target =
+findObjectTarget(step);
 
-for (Tile[] row : client.getScene().getTiles()[client.getPlane()])
+if (target != null)
+{
+renderUniversalTarget(
+target,
+player
+);
+
+return null;
+}
+
+if (step instanceof ObjectGuideStep)
+{
+renderLegacyTarget(
+(ObjectGuideStep) step,
+player
+);
+}
+
+return null;
+}
+
+private void renderUniversalTarget(
+GuideTarget target,
+Player player)
+{
+List<TileObject> matches =
+new ArrayList<>();
+
+for (Tile[] row :
+client.getScene()
+.getTiles()[client.getPlane()])
 {
 for (Tile tile : row)
 {
 if (tile == null)
+{
 continue;
+}
 
-for (TileObject object : tile.getGameObjects())
-addIfMatch(matches, object, objectStep);
+for (TileObject object :
+tile.getGameObjects())
+{
+addIfMatch(
+matches,
+object,
+target.getIds()
+);
+}
 
-addIfMatch(matches, tile.getWallObject(), objectStep);
-addIfMatch(matches, tile.getDecorativeObject(), objectStep);
-addIfMatch(matches, tile.getGroundObject(), objectStep);
+addIfMatch(
+matches,
+tile.getWallObject(),
+target.getIds()
+);
+
+addIfMatch(
+matches,
+tile.getDecorativeObject(),
+target.getIds()
+);
+
+addIfMatch(
+matches,
+tile.getGroundObject(),
+target.getIds()
+);
 }
 }
 
-TileObject closest = null;
-int closestDistance = Integer.MAX_VALUE;
-
-WorldPoint reference = objectStep.getWorldPoint() != null
-? objectStep.getWorldPoint()
+WorldPoint reference =
+target.getWorldPoint() != null
+? target.getWorldPoint()
 : player.getWorldLocation();
 
-for (TileObject object : matches)
-{
-int distance = object.getWorldLocation().distanceTo2D(reference);
-
-if (distance < closestDistance)
-{
-closestDistance = distance;
-closest = object;
-}
-}
+TileObject closest =
+findClosest(
+matches,
+reference
+);
 
 if (closest != null)
 {
@@ -94,6 +142,91 @@ config.highlightColor(),
 config.highlightFeather()
 );
 }
+}
+
+private void renderLegacyTarget(
+ObjectGuideStep step,
+Player player)
+{
+List<TileObject> matches =
+new ArrayList<>();
+
+for (Tile[] row :
+client.getScene()
+.getTiles()[client.getPlane()])
+{
+for (Tile tile : row)
+{
+if (tile == null)
+{
+continue;
+}
+
+for (TileObject object :
+tile.getGameObjects())
+{
+if (object != null
+&& object.getId()
+== step.getObjectId())
+{
+matches.add(object);
+}
+}
+
+addLegacyIfMatch(
+matches,
+tile.getWallObject(),
+step
+);
+
+addLegacyIfMatch(
+matches,
+tile.getDecorativeObject(),
+step
+);
+
+addLegacyIfMatch(
+matches,
+tile.getGroundObject(),
+step
+);
+}
+}
+
+WorldPoint reference =
+step.getWorldPoint() != null
+? step.getWorldPoint()
+: player.getWorldLocation();
+
+TileObject closest =
+findClosest(
+matches,
+reference
+);
+
+if (closest != null)
+{
+modelOutlineRenderer.drawOutline(
+closest,
+config.highlightOutlineWidth(),
+config.highlightColor(),
+config.highlightFeather()
+);
+}
+}
+
+private GuideTarget findObjectTarget(
+GuideStep step)
+{
+for (GuideTarget target :
+step.getTargets())
+{
+if (target.getType()
+== GuideTargetType.OBJECT)
+{
+return target;
+}
+}
 
 return null;
 }
@@ -101,11 +234,58 @@ return null;
 private void addIfMatch(
 List<TileObject> matches,
 TileObject object,
+int[] ids)
+{
+if (object == null)
+{
+return;
+}
+
+for (int id : ids)
+{
+if (object.getId() == id)
+{
+matches.add(object);
+return;
+}
+}
+}
+
+private void addLegacyIfMatch(
+List<TileObject> matches,
+TileObject object,
 ObjectGuideStep step)
 {
-if (object != null && object.getId() == step.getObjectId())
+if (object != null
+&& object.getId()
+== step.getObjectId())
 {
 matches.add(object);
 }
+}
+
+private TileObject findClosest(
+List<TileObject> matches,
+WorldPoint reference)
+{
+TileObject closest = null;
+int closestDistance =
+Integer.MAX_VALUE;
+
+for (TileObject object :
+matches)
+{
+int distance =
+object.getWorldLocation()
+.distanceTo2D(reference);
+
+if (distance < closestDistance)
+{
+closestDistance = distance;
+closest = object;
+}
+}
+
+return closest;
 }
 }

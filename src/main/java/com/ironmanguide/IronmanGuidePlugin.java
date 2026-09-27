@@ -82,6 +82,7 @@ private IronmanGuideObjectOverlay objectOverlay;
 private IronmanGuideLocationOverlay locationOverlay;
 private IronmanGuideMinimapOverlay minimapOverlay;
 private IronmanGuideWorldMapAreaOverlay worldMapAreaOverlay;
+private IronmanGuideGroundItemOverlay groundItemOverlay;
 	private IronmanGuideItemOverlay itemOverlay;
 private NavigationButton navButton;
 
@@ -181,6 +182,13 @@ worldMapOverlay
 );
 overlayManager.add(worldMapAreaOverlay);
 
+groundItemOverlay = new IronmanGuideGroundItemOverlay(
+client,
+guideManager,
+config
+);
+overlayManager.add(groundItemOverlay);
+
 		itemOverlay = new IronmanGuideItemOverlay(
 guideManager,
 config,
@@ -225,6 +233,7 @@ overlayManager.remove(objectOverlay);
 overlayManager.remove(locationOverlay);
 overlayManager.remove(minimapOverlay);
 overlayManager.remove(worldMapAreaOverlay);
+overlayManager.remove(groundItemOverlay);
 		overlayManager.remove(itemOverlay);
 overlayManager.remove(stepOverlay);
 
@@ -270,6 +279,13 @@ if (routeType == QuestRouteType.FULL
 {
 questHelperBridge.startQuest(
 questStep.getQuestName()
+);
+}
+else if (currentStep.getQuestHelperQuestName() != null
+&& !currentStep.getQuestHelperQuestName().isEmpty())
+{
+questHelperBridge.startQuest(
+currentStep.getQuestHelperQuestName()
 );
 }
 else
@@ -495,6 +511,13 @@ if (routeType == QuestRouteType.FULL
 {
 questHelperBridge.startQuest(
 questStep.getQuestName()
+);
+}
+else if (currentStep.getQuestHelperQuestName() != null
+&& !currentStep.getQuestHelperQuestName().isEmpty())
+{
+questHelperBridge.startQuest(
+currentStep.getQuestHelperQuestName()
 );
 }
 else

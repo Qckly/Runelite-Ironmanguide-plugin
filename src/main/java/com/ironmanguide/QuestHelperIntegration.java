@@ -20,6 +20,18 @@ this.configManager = configManager;
 
 public void applyForStep(GuideStep step)
 {
+if (step != null)
+{
+for (GuideRule rule : step.getRules())
+{
+if (rule.getType() == GuideRuleType.QUEST_STARTED)
+{
+disableAutoStart();
+return;
+}
+}
+}
+
 if (!(step instanceof QuestGuideStep))
 {
 enableAutoStart();
