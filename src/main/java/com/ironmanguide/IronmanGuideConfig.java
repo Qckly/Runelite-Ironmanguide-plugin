@@ -31,6 +31,17 @@ return true;
 }
 
 @ConfigItem(
+keyName = "showWorldMapGuidance",
+name = "World map guidance",
+description = "Show guide target on the world map",
+position = 2
+)
+default boolean showWorldMapGuidance()
+{
+return true;
+}
+
+@ConfigItem(
 keyName = "currentStep",
 name = "",
 description = "",
