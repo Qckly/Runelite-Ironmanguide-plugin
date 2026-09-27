@@ -267,6 +267,24 @@ clientToolbar.removeNavigation(navButton);
 @Subscribe
 public void onWidgetLoaded(WidgetLoaded event)
 {
+int loadedGroupId =
+event.getGroupId();
+
+System.out.println(
+"IRONMAN_WIDGET_LOADED="
++ loadedGroupId
+);
+
+if (loadedGroupId == 270)
+{
+clientThread.invokeLater(() ->
+{
+dumpProductionWidgetGroupDirect(
+loadedGroupId
+);
+});
+}
+
 if (event.getGroupId() != InterfaceID.CHATMENU)
 {
 return;
@@ -705,6 +723,109 @@ dumpProductionWidgetGroup(
 widget.getChildren(),
 groupId
 );
+}
+}
+
+private void dumpProductionWidgetGroupDirect(
+int groupId)
+{
+System.out.println(
+"IRONMAN_PRODUCTION_GROUP="
++ groupId
+);
+
+for (int childId = 0;
+childId < 200;
+childId++)
+{
+Widget widget =
+client.getWidget(
+groupId,
+childId
+);
+
+if (widget == null)
+{
+continue;
+}
+
+dumpProductionWidgetDirect(
+widget,
+childId,
+0
+);
+}
+}
+
+private void dumpProductionWidgetDirect(
+Widget widget,
+int rootChildId,
+int depth)
+{
+if (widget == null
+|| depth > 8)
+{
+return;
+}
+
+System.out.println(
+"IRONMAN_WIDGET"
++ " rootChild=" + rootChildId
++ " depth=" + depth
++ " id=" + widget.getId()
++ " type=" + widget.getType()
++ " itemId=" + widget.getItemId()
++ " itemQty=" + widget.getItemQuantity()
++ " modelType=" + widget.getModelType()
++ " modelId=" + widget.getModelId()
++ " text=[" + widget.getText() + "]"
++ " name=[" + widget.getName() + "]"
++ " bounds=[" + widget.getBounds() + "]"
+);
+
+Widget[] children =
+widget.getChildren();
+
+if (children != null)
+{
+for (Widget child : children)
+{
+dumpProductionWidgetDirect(
+child,
+rootChildId,
+depth + 1
+);
+}
+}
+
+Widget[] dynamicChildren =
+widget.getDynamicChildren();
+
+if (dynamicChildren != null)
+{
+for (Widget child : dynamicChildren)
+{
+dumpProductionWidgetDirect(
+child,
+rootChildId,
+depth + 1
+);
+}
+}
+
+Widget[] staticChildren =
+widget.getStaticChildren();
+
+if (staticChildren != null)
+{
+for (Widget child : staticChildren)
+{
+dumpProductionWidgetDirect(
+child,
+rootChildId,
+depth + 1
+);
+}
 }
 }
 }
