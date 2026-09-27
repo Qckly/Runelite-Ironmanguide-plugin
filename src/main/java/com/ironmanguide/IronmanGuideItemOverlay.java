@@ -15,6 +15,7 @@ import net.runelite.client.ui.overlay.WidgetItemOverlay;
 
 public class IronmanGuideItemOverlay extends WidgetItemOverlay
 {
+private static final int MAKE_X_INTERFACE = 270;
 private final Client client;
 private final GuideManager guideManager;
 private final IronmanGuideConfig config;
