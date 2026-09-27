@@ -205,6 +205,7 @@ itemManager
 		overlayManager.add(itemOverlay);
 
 stepOverlay = new IronmanGuideStepOverlay(
+client,
 guideManager,
 itemChecker,
 itemNameResolver,
