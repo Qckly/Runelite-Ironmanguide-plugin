@@ -8,8 +8,6 @@ import java.awt.Rectangle;
 
 import net.runelite.api.Client;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetModelType;
-import net.runelite.api.widgets.WidgetUtil;
 
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -18,14 +16,13 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 public class IronmanGuideProductionOverlay
 extends Overlay
 {
-private static final int MAKE_X_INTERFACE = 270;
+private static final int PRODUCTION_INTERFACE = 270;
+private static final int MAX_CHILD_ID = 200;
 
 private final Client client;
 private final GuideManager guideManager;
 private final IronmanGuideConfig config;
 private final GuideRuleEvaluator ruleEvaluator;
-
-private boolean diagnosticDumped;
 
 public IronmanGuideProductionOverlay(
 Client client,
@@ -41,57 +38,15 @@ this.ruleEvaluator = ruleEvaluator;
 setPosition(OverlayPosition.DYNAMIC);
 setLayer(OverlayLayer.ABOVE_WIDGETS);
 setPriority(PRIORITY_HIGHEST);
-
-
 }
 
 @Override
 public Dimension render(Graphics2D graphics)
 {
-Widget productionTitle =
-findWidgetByText(
-client.getWidgetRoots(),
-"What would you like to make?"
-);
-
-if (productionTitle != null)
-{
-if (!diagnosticDumped)
-{
-diagnosticDumped = true;
-
-int interfaceId =
-WidgetUtil.componentToInterface(
-productionTitle.getId()
-);
-
-System.out.println(
-"IRONMAN_GUIDE_PRODUCTION_INTERFACE=" + interfaceId
-);
-
-dumpProductionInterface(
-client.getWidgetRoots(),
-interfaceId
-);
-}
-}
-else
-{
-diagnosticDumped = false;
-}
-
 GuideStep step =
 guideManager.getCurrentStep();
 
 if (step == null)
-{
-return null;
-}
-
-Widget[] roots =
-client.getWidgetRoots();
-
-if (roots == null)
 {
 return null;
 }
@@ -115,138 +70,169 @@ if (ruleEvaluator != null
 continue;
 }
 
-for (Widget root : roots)
-{
-highlightWidgetTree(
+if (highlightProductionItem(
 graphics,
-root,
 rule.getItemId()
-);
+))
+{
+break;
 }
 }
 
 return null;
 }
 
-private void highlightWidgetTree(
+private boolean highlightProductionItem(
 Graphics2D graphics,
-Widget widget,
 int targetItemId)
 {
+for (int childId = 0;
+childId < MAX_CHILD_ID;
+childId++)
+{
+Widget widget =
+client.getWidget(
+PRODUCTION_INTERFACE,
+childId
+);
+
 if (widget == null)
 {
-return;
+continue;
 }
 
-int interfaceId =
-WidgetUtil.componentToInterface(
-widget.getId()
+Widget matched =
+findItemWidget(
+widget,
+targetItemId,
+0
 );
 
-if (interfaceId == MAKE_X_INTERFACE
-&& matchesItem(
-widget,
-targetItemId
-))
+if (matched == null)
 {
+continue;
+}
+
+Rectangle bounds =
+findProductionSlotBounds(
+matched
+);
+
 drawHighlight(
 graphics,
-getHighlightBounds(widget)
+bounds
 );
-}
 
-Widget[] children =
-widget.getChildren();
-
-if (children != null)
-{
-for (Widget child : children)
-{
-highlightWidgetTree(
-graphics,
-child,
-targetItemId
-);
-}
-}
-
-Widget[] dynamicChildren =
-widget.getDynamicChildren();
-
-if (dynamicChildren != null)
-{
-for (Widget child : dynamicChildren)
-{
-highlightWidgetTree(
-graphics,
-child,
-targetItemId
-);
-}
-}
-
-Widget[] staticChildren =
-widget.getStaticChildren();
-
-if (staticChildren != null)
-{
-for (Widget child : staticChildren)
-{
-highlightWidgetTree(
-graphics,
-child,
-targetItemId
-);
-}
-}
-}
-
-private boolean matchesItem(
-Widget widget,
-int targetItemId)
-{
-if (widget.getItemId()
-== targetItemId)
-{
 return true;
 }
 
-return widget.getModelType()
-== WidgetModelType.ITEM
-&& widget.getModelId()
-== targetItemId;
+return false;
 }
 
-private Rectangle getHighlightBounds(
-Widget widget)
+private Widget findItemWidget(
+Widget widget,
+int targetItemId,
+int depth)
 {
-Rectangle best =
-widget.getBounds();
+if (widget == null
+|| depth > 10)
+{
+return null;
+}
+
+if (widget.getItemId()
+== targetItemId)
+{
+return widget;
+}
+
+Widget found =
+findItemWidgetArray(
+widget.getChildren(),
+targetItemId,
+depth + 1
+);
+
+if (found != null)
+{
+return found;
+}
+
+found =
+findItemWidgetArray(
+widget.getDynamicChildren(),
+targetItemId,
+depth + 1
+);
+
+if (found != null)
+{
+return found;
+}
+
+return findItemWidgetArray(
+widget.getStaticChildren(),
+targetItemId,
+depth + 1
+);
+}
+
+private Widget findItemWidgetArray(
+Widget[] widgets,
+int targetItemId,
+int depth)
+{
+if (widgets == null)
+{
+return null;
+}
+
+for (Widget widget : widgets)
+{
+Widget found =
+findItemWidget(
+widget,
+targetItemId,
+depth
+);
+
+if (found != null)
+{
+return found;
+}
+}
+
+return null;
+}
+
+private Rectangle findProductionSlotBounds(
+Widget itemWidget)
+{
+Rectangle itemBounds =
+itemWidget.getBounds();
 
 Widget parent =
-widget.getParent();
+itemWidget.getParent();
 
-for (int i = 0;
-i < 2 && parent != null;
-i++)
+while (parent != null)
 {
 Rectangle bounds =
 parent.getBounds();
 
 if (bounds != null
-&& bounds.width >= 50
-&& bounds.height >= 40
-&& bounds.width <= 220
-&& bounds.height <= 170)
+&& bounds.width >= 80
+&& bounds.width <= 120
+&& bounds.height >= 60
+&& bounds.height <= 90)
 {
-best = bounds;
+return bounds;
 }
 
 parent =
 parent.getParent();
 }
 
-return best;
+return itemBounds;
 }
 
 private void drawHighlight(
@@ -294,117 +280,5 @@ graphics.draw(bounds);
 graphics.setStroke(
 new BasicStroke(1)
 );
-}
-
-private Widget findWidgetByText(
-Widget[] widgets,
-String targetText)
-{
-if (widgets == null)
-{
-return null;
-}
-
-for (Widget widget : widgets)
-{
-if (widget == null)
-{
-continue;
-}
-
-String text = widget.getText();
-
-if (text != null
-&& text.contains(targetText))
-{
-return widget;
-}
-
-Widget found =
-findWidgetByText(
-widget.getChildren(),
-targetText
-);
-
-if (found != null)
-{
-return found;
-}
-
-found =
-findWidgetByText(
-widget.getDynamicChildren(),
-targetText
-);
-
-if (found != null)
-{
-return found;
-}
-
-found =
-findWidgetByText(
-widget.getStaticChildren(),
-targetText
-);
-
-if (found != null)
-{
-return found;
-}
-}
-
-return null;
-}
-
-private void dumpProductionInterface(
-Widget[] widgets,
-int targetInterfaceId)
-{
-if (widgets == null)
-{
-return;
-}
-
-for (Widget widget : widgets)
-{
-if (widget == null)
-{
-continue;
-}
-
-int interfaceId =
-WidgetUtil.componentToInterface(
-widget.getId()
-);
-
-if (interfaceId == targetInterfaceId)
-{
-System.out.println(
-"IRONMAN_WIDGET"
-+ " id=" + widget.getId()
-+ " itemId=" + widget.getItemId()
-+ " modelType=" + widget.getModelType()
-+ " modelId=" + widget.getModelId()
-+ " text=[" + widget.getText() + "]"
-+ " name=[" + widget.getName() + "]"
-);
-}
-
-dumpProductionInterface(
-widget.getChildren(),
-targetInterfaceId
-);
-
-dumpProductionInterface(
-widget.getDynamicChildren(),
-targetInterfaceId
-);
-
-dumpProductionInterface(
-widget.getStaticChildren(),
-targetInterfaceId
-);
-}
 }
 }
