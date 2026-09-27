@@ -4,6 +4,8 @@ import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import net.runelite.api.Client;
+import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -43,6 +45,7 @@ private ConfigManager configManager;
 private IronmanGuideConfig config;
 
 private GuideManager guideManager;
+	private IronmanGuideItemChecker itemChecker;
 private IronmanGuideWorldMapManager worldMapGuideManager;
 
 private IronmanGuidePanel panel;
@@ -60,7 +63,9 @@ GuideData.getSteps(),
 config.currentStep()
 );
 
-worldMapGuideManager = new IronmanGuideWorldMapManager(
+itemChecker = new IronmanGuideItemChecker(client);
+
+		worldMapGuideManager = new IronmanGuideWorldMapManager(
 guideManager,
 config,
 worldMapPointManager
@@ -70,7 +75,8 @@ worldMapGuideManager.update();
 
 panel = new IronmanGuidePanel(
 guideManager,
-step ->
+itemChecker,
+			step ->
 {
 configManager.setConfiguration(
 "ironmanguide",
@@ -138,6 +144,22 @@ overlayManager.remove(locationOverlay);
 overlayManager.remove(minimapOverlay);
 
 clientToolbar.removeNavigation(navButton);
+}
+
+@Subscribe
+public void onItemContainerChanged(ItemContainerChanged event)
+{
+if (event.getContainerId() != InventoryID.INV)
+{
+return;
+}
+
+itemChecker.update(event.getItemContainer());
+
+if (panel != null)
+{
+panel.refresh();
+}
 }
 @Subscribe
 public void onConfigChanged(ConfigChanged event)

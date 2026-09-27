@@ -3,13 +3,17 @@ package com.ironmanguide;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.function.IntConsumer;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import net.runelite.client.ui.PluginPanel;
 
 public class IronmanGuidePanel extends PluginPanel
 {
 private final GuideManager guideManager;
+private final IronmanGuideItemChecker itemChecker;
 private final IntConsumer onStepChanged;
 
 private final JLabel title = new JLabel();
@@ -17,9 +21,11 @@ private final JTextArea stepText = new JTextArea();
 
 public IronmanGuidePanel(
 GuideManager guideManager,
+IronmanGuideItemChecker itemChecker,
 IntConsumer onStepChanged)
 {
 this.guideManager = guideManager;
+this.itemChecker = itemChecker;
 this.onStepChanged = onStepChanged;
 
 setLayout(new BorderLayout(0, 10));
@@ -57,6 +63,11 @@ add(buttons, BorderLayout.SOUTH);
 updateStep();
 }
 
+public void refresh()
+{
+updateStep();
+}
+
 private void updateStep()
 {
 GuideStep step = guideManager.getCurrentStep();
@@ -68,6 +79,29 @@ title.setText(
 + "</html>"
 );
 
-stepText.setText(step.getDescription());
+String text = step.getDescription();
+
+if (step instanceof ItemGuideStep)
+{
+ItemGuideStep itemStep = (ItemGuideStep) step;
+
+int have = itemChecker.getInventoryQuantity(
+itemStep.getItemId()
+);
+
+boolean ready = itemChecker.hasRequiredQuantity(
+itemStep.getItemId(),
+itemStep.getQuantity()
+);
+
+text += "\n\nRequired: "
++ itemStep.getQuantity()
++ "\nYou have: "
++ have
++ "\nStatus: "
++ (ready ? "READY" : "MISSING");
+}
+
+stepText.setText(text);
 }
 }

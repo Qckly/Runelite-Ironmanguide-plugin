@@ -1,6 +1,7 @@
 package com.ironmanguide;
 
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.gameval.ItemID;
 
 public final class GuideData
 {
@@ -28,6 +29,13 @@ new LocationGuideStep(
 "Location Highlight Test",
 "Walk to the highlighted tile.",
 new WorldPoint(3222, 3218, 0)
+),
+
+new ItemGuideStep(
+"Item Requirement Test",
+"Have a bronze axe in your inventory.",
+ItemID.BRONZE_AXE,
+1
 )
 };
 }
