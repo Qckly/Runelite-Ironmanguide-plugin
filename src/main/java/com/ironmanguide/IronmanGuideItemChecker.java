@@ -60,4 +60,9 @@ int requiredQuantity)
 {
 return getInventoryQuantity(itemId) >= requiredQuantity;
 }
+
+public boolean isInventoryEmpty()
+{
+return inventory.isEmpty();
+}
 }
