@@ -127,6 +127,14 @@ case BUY:
 action = "Buy";
 break;
 
+case DROP:
+action = "Drop";
+break;
+
+case PICKUP:
+action = "Pick up";
+break;
+
 case HAVE_ITEM:
 action = "Have";
 break;

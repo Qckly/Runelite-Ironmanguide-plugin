@@ -7,6 +7,8 @@ private final String title;
 private final String description;
 private final GuideRule[] rules;
 
+private String id;
+
 private GuideTarget[] targets =
 new GuideTarget[0];
 
@@ -32,10 +34,17 @@ GuideRule... rules)
 this.type = type;
 this.title = title;
 this.description = description;
+
 this.rules =
 rules != null
 ? rules
 : new GuideRule[0];
+}
+
+public GuideStep withId(String id)
+{
+this.id = id;
+return this;
 }
 
 public GuideStep withTargets(
@@ -47,6 +56,11 @@ targets != null
 : new GuideTarget[0];
 
 return this;
+}
+
+public String getId()
+{
+return id;
 }
 
 public GuideStepType getType()

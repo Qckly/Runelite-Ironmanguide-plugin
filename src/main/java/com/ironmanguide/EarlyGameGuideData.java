@@ -32,7 +32,11 @@ GuideRule.action(GuideRuleType.SELL)
 
 GuideRule.action(GuideRuleType.SELL)
 .item(ItemID.SHORTBOW, 1)
-).withTargets(
+)
+.withId(
+"early_001_sell_starting_equipment"
+)
+.withTargets(
 GuideTarget.npc(
 new WorldPoint(3212, 3246, 0),
 NpcID.GENERALSHOPKEEPER1,
@@ -47,7 +51,11 @@ GuideStepType.TEXT,
 
 GuideRule.action(GuideRuleType.BUY)
 .item(ItemID.SPADE, 1)
-).withTargets(
+)
+.withId(
+"early_002_buy_spade"
+)
+.withTargets(
 GuideTarget.npc(
 new WorldPoint(3212, 3246, 0),
 NpcID.GENERALSHOPKEEPER1,
@@ -63,7 +71,11 @@ GuideStepType.TEXT,
 GuideRule.action(
 GuideRuleType.QUEST_STARTED
 ).quest("X Marks the Spot")
-).withTargets(
+)
+.withId(
+"early_003_start_x_marks_the_spot"
+)
+.withTargets(
 GuideTarget.npc(
 new WorldPoint(3228, 3242, 0),
 NpcID.VEOS_VISIBLE
@@ -71,8 +83,61 @@ NpcID.VEOS_VISIBLE
 
 GuideTarget.dialogue(
 "I'm looking for a quest.",
-"Sounds good, what should I do?"
+"Sounds good, what should I do?",
+"Can I help?",
+"Yes."
 )
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Drop starter runes",
+"Drop your Air runes and Mind runes before claiming more from the Magic tutor.",
+
+GuideRule.action(GuideRuleType.DROP)
+.item(ItemID.AIRRUNE, 1),
+
+GuideRule.action(GuideRuleType.DROP)
+.item(ItemID.MINDRUNE, 1)
+)
+.withId(
+"early_004_drop_starter_runes"
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Claim replacement runes",
+"Right-click the Magic combat tutor and choose Claim to receive 30 Air runes and 30 Mind runes.",
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.AIRRUNE, 30),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.MINDRUNE, 30)
+)
+.withId(
+"early_005_claim_replacement_runes"
+)
+.withTargets(
+GuideTarget.npc(
+new WorldPoint(3216, 3237, 0),
+3218
+).areaRadius(4)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Pick up dropped runes",
+"Pick up the Air runes and Mind runes you dropped before claiming the replacement runes.",
+
+GuideRule.action(GuideRuleType.PICKUP)
+.item(ItemID.AIRRUNE, 1),
+
+GuideRule.action(GuideRuleType.PICKUP)
+.item(ItemID.MINDRUNE, 1)
+)
+.withId(
+"early_006_pick_up_dropped_runes"
 )
 };
 }

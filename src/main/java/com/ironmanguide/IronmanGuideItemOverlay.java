@@ -148,6 +148,9 @@ return interfaceId == InterfaceID.SHOPSIDE;
 case BUY:
 return interfaceId == InterfaceID.SHOPMAIN;
 
+case DROP:
+return interfaceId == InterfaceID.INVENTORY;
+
 case HAVE_ITEM:
 return interfaceId == InterfaceID.INVENTORY
 || interfaceId == InterfaceID.SHOPSIDE;

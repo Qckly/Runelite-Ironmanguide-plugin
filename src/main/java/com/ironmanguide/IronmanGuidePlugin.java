@@ -292,7 +292,25 @@ questHelperBridge.stopManagedQuest();
 boolean itemNameChanged =
 itemNameResolver.update(currentStep);
 
-dialogueHighlighter.update();
+if (guideRuleEvaluator.isStepComplete(currentStep))
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return;
+}
 
 if ((currentStep instanceof LocationGuideStep || currentStep instanceof ItemGuideStep)
 && completionChecker.isComplete(currentStep))

@@ -59,6 +59,18 @@ GuideRuleType.BUY,
 rule.getItemId()
 ) >= rule.getQuantity();
 
+case DROP:
+return stateTracker.getConfirmedQuantity(
+GuideRuleType.DROP,
+rule.getItemId()
+) >= rule.getQuantity();
+
+case PICKUP:
+return stateTracker.getConfirmedQuantity(
+GuideRuleType.PICKUP,
+rule.getItemId()
+) >= rule.getQuantity();
+
 case HAVE_ITEM:
 return itemChecker.hasRequiredQuantity(
 rule.getItemId(),
