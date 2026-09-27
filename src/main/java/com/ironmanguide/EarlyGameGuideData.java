@@ -8,6 +8,7 @@ import net.runelite.api.gameval.ObjectID;
 
 public final class EarlyGameGuideData
 {
+private static final int ASHES_ITEM_ID = 592;
 private EarlyGameGuideData()
 {
 }
@@ -355,6 +356,56 @@ GuideResourceRequirement.fromOutput(
 ItemID.LOGS,
 1000,
 15
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Bank at least 4 ashes",
+"Pick up at least 4 ashes from the fires you made and deposit them in the Lumbridge Castle bank. Keep them for later.",
+
+GuideRule.action(
+GuideRuleType.BANK_DEPOSIT
+).item(
+ASHES_ITEM_ID,
+4
+)
+)
+.withId(
+"early_016_bank_4_ashes"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3208, 3220, 2),
+5
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Bank 7 logs for later",
+"Cut 7 normal logs and deposit them in the Lumbridge Castle bank. Keep these logs for later steps.",
+
+GuideRule.action(
+GuideRuleType.BANK_DEPOSIT
+).item(
+ItemID.LOGS,
+7
+)
+)
+.withId(
+"early_017_bank_7_logs"
+)
+.withExactResources(
+GuideResourceRequirement.exact(
+ItemID.LOGS,
+7
+)
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3208, 3220, 2),
+5
 )
 )
 };
