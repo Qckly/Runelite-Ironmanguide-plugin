@@ -191,6 +191,14 @@ case HAVE_ITEM:
 action = "Have";
 break;
 
+case BANK_DEPOSIT:
+action = "Bank";
+break;
+
+case BANK_WITHDRAW:
+action = "Withdraw";
+break;
+
 default:
 continue;
 }
