@@ -7,7 +7,8 @@ import net.runelite.api.Client;
 public class IronmanGuideItemNameResolver
 {
 private final Client client;
-private final Map<Integer, String> names = new HashMap<>();
+private final Map<Integer, String> names =
+new HashMap<>();
 
 public IronmanGuideItemNameResolver(Client client)
 {
@@ -18,21 +19,47 @@ public boolean update(GuideStep step)
 {
 boolean changed = false;
 
+if (step == null)
+{
+return false;
+}
+
+GuideRule[] rules = step.getRules();
+
+if (rules != null)
+{
+for (GuideRule rule : rules)
+{
+if (rule.getItemId() > 0)
+{
+changed |= resolve(
+rule.getItemId()
+);
+}
+}
+}
+
 if (step instanceof ItemGuideStep)
 {
-ItemGuideStep itemStep = (ItemGuideStep) step;
-changed |= resolve(itemStep.getItemId());
+ItemGuideStep itemStep =
+(ItemGuideStep) step;
+
+changed |= resolve(
+itemStep.getItemId()
+);
 }
 else if (step instanceof QuestGuideStep)
 {
-QuestGuideStep questStep = (QuestGuideStep) step;
+QuestGuideStep questStep =
+(QuestGuideStep) step;
 
 GuideItemRequirement[] requirements =
 questStep.getItemRequirements();
 
 if (requirements != null)
 {
-for (GuideItemRequirement requirement : requirements)
+for (GuideItemRequirement requirement :
+requirements)
 {
 changed |= resolve(
 requirement.getItemId()

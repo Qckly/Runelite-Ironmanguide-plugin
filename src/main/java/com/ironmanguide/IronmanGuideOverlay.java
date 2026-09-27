@@ -31,67 +31,76 @@ this.config = config;
 @Override
 public Dimension render(Graphics2D graphics)
 {
-GuideStep step = guideManager.getCurrentStep();
+GuideStep step =
+guideManager.getCurrentStep();
 
-int npcId;
-WorldPoint targetPoint;
-
-if (step instanceof NpcGuideStep)
-{
-NpcGuideStep npcStep = (NpcGuideStep) step;
-npcId = npcStep.getNpcId();
-targetPoint = npcStep.getWorldPoint();
-}
-else if (step instanceof DialogueGuideStep)
-{
-DialogueGuideStep dialogueStep =
-(DialogueGuideStep) step;
-
-npcId = dialogueStep.getNpcId();
-targetPoint = dialogueStep.getWorldPoint();
-}
-else if (step instanceof QuestGuideStep)
-{
-QuestGuideStep questStep =
-(QuestGuideStep) step;
-
-npcId = questStep.getNpcId();
-targetPoint = questStep.getWorldPoint();
-}
-else
+if (step == null)
 {
 return null;
 }
 
-if (npcId < 0)
+GuideTarget npcTarget =
+findNpcTarget(step);
+
+if (npcTarget != null)
 {
+highlightTarget(npcTarget);
 return null;
 }
 
-Player player = client.getLocalPlayer();
+highlightLegacyStep(step);
+
+return null;
+}
+
+private GuideTarget findNpcTarget(
+GuideStep step)
+{
+for (GuideTarget target :
+step.getTargets())
+{
+if (target.getType()
+== GuideTargetType.NPC)
+{
+return target;
+}
+}
+
+return null;
+}
+
+private void highlightTarget(
+GuideTarget target)
+{
+Player player =
+client.getLocalPlayer();
 
 if (player == null)
 {
-return null;
+return;
 }
 
 NPC closestNpc = null;
-int closestDistance = Integer.MAX_VALUE;
+int closestDistance =
+Integer.MAX_VALUE;
 
 for (NPC npc : client.getNpcs())
 {
-if (npc.getId() != npcId)
+if (!contains(
+target.getIds(),
+npc.getId()))
 {
 continue;
 }
 
-WorldPoint referencePoint =
-targetPoint != null
-? targetPoint
+WorldPoint reference =
+target.getWorldPoint() != null
+? target.getWorldPoint()
 : player.getWorldLocation();
 
-int distance = npc.getWorldLocation()
-.distanceTo2D(referencePoint);
+int distance =
+npc.getWorldLocation()
+.distanceTo2D(reference);
 
 if (distance < closestDistance)
 {
@@ -104,12 +113,125 @@ if (closestNpc != null)
 {
 modelOutlineRenderer.drawOutline(
 closestNpc,
-2,
+config.highlightOutlineWidth(),
 config.highlightColor(),
-4
+config.highlightFeather()
 );
 }
+}
 
-return null;
+private void highlightLegacyStep(
+GuideStep step)
+{
+int npcId;
+WorldPoint targetPoint;
+
+if (step instanceof NpcGuideStep)
+{
+NpcGuideStep npcStep =
+(NpcGuideStep) step;
+
+npcId = npcStep.getNpcId();
+targetPoint =
+npcStep.getWorldPoint();
+}
+else if (step
+instanceof DialogueGuideStep)
+{
+DialogueGuideStep dialogueStep =
+(DialogueGuideStep) step;
+
+npcId =
+dialogueStep.getNpcId();
+
+targetPoint =
+dialogueStep.getWorldPoint();
+}
+else if (step
+instanceof QuestGuideStep)
+{
+QuestGuideStep questStep =
+(QuestGuideStep) step;
+
+npcId =
+questStep.getNpcId();
+
+targetPoint =
+questStep.getWorldPoint();
+}
+else
+{
+return;
+}
+
+if (npcId < 0)
+{
+return;
+}
+
+Player player =
+client.getLocalPlayer();
+
+if (player == null)
+{
+return;
+}
+
+NPC closestNpc = null;
+int closestDistance =
+Integer.MAX_VALUE;
+
+for (NPC npc : client.getNpcs())
+{
+if (npc.getId() != npcId)
+{
+continue;
+}
+
+WorldPoint reference =
+targetPoint != null
+? targetPoint
+: player.getWorldLocation();
+
+int distance =
+npc.getWorldLocation()
+.distanceTo2D(reference);
+
+if (distance < closestDistance)
+{
+closestDistance = distance;
+closestNpc = npc;
+}
+}
+
+if (closestNpc != null)
+{
+modelOutlineRenderer.drawOutline(
+closestNpc,
+config.highlightOutlineWidth(),
+config.highlightColor(),
+config.highlightFeather()
+);
+}
+}
+
+private boolean contains(
+int[] ids,
+int id)
+{
+if (ids == null)
+{
+return false;
+}
+
+for (int candidate : ids)
+{
+if (candidate == id)
+{
+return true;
+}
+}
+
+return false;
 }
 }

@@ -4,22 +4,29 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
+import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.ui.overlay.WidgetItemOverlay;
 
 public class IronmanGuideItemOverlay extends WidgetItemOverlay
 {
 private final GuideManager guideManager;
 private final IronmanGuideConfig config;
+private final GuideRuleEvaluator ruleEvaluator;
 
 public IronmanGuideItemOverlay(
 GuideManager guideManager,
-IronmanGuideConfig config)
+IronmanGuideConfig config,
+GuideRuleEvaluator ruleEvaluator)
 {
 this.guideManager = guideManager;
 this.config = config;
+this.ruleEvaluator = ruleEvaluator;
 
 showOnInventory();
+showOnInterfaces(InterfaceID.SHOPMAIN);
 }
 
 @Override
@@ -28,33 +35,40 @@ Graphics2D graphics,
 int itemId,
 WidgetItem widgetItem)
 {
-GuideStep step = guideManager.getCurrentStep();
+GuideStep step =
+guideManager.getCurrentStep();
 
-boolean shouldHighlight = false;
+if (step == null)
+{
+return;
+}
 
-if (step instanceof ItemGuideStep)
-{
-ItemGuideStep itemStep = (ItemGuideStep) step;
-shouldHighlight = itemId == itemStep.getItemId();
-}
-else if (step instanceof QuestGuideStep)
-{
-QuestGuideStep questStep = (QuestGuideStep) step;
+Widget widget = widgetItem.getWidget();
 
-GuideItemRequirement[] requirements =
-questStep.getItemRequirements();
+if (widget == null)
+{
+return;
+}
 
-if (requirements != null)
+int interfaceId =
+WidgetUtil.componentToInterface(
+widget.getId()
+);
+
+boolean shouldHighlight =
+shouldHighlightRuleItem(
+step,
+itemId,
+interfaceId
+);
+
+if (!shouldHighlight)
 {
-for (GuideItemRequirement requirement : requirements)
-{
-if (itemId == requirement.getItemId())
-{
-shouldHighlight = true;
-break;
-}
-}
-}
+shouldHighlight =
+shouldHighlightLegacyItem(
+step,
+itemId
+);
 }
 
 if (!shouldHighlight)
@@ -62,28 +76,121 @@ if (!shouldHighlight)
 return;
 }
 
-Rectangle bounds = widgetItem.getCanvasBounds();
+Rectangle bounds =
+widgetItem.getCanvasBounds();
 
 if (bounds == null)
 {
 return;
 }
 
-Color color = config.highlightColor();
+Color color =
+config.highlightColor();
 
-graphics.setColor(new Color(
+int alpha =
+(int) Math.round(
+255.0
+* config.highlightFillOpacity()
+/ 100.0
+);
+
+graphics.setColor(
+new Color(
 color.getRed(),
 color.getGreen(),
 color.getBlue(),
-45
-));
+alpha
+)
+);
 
 graphics.fill(bounds);
 
 graphics.setColor(color);
-graphics.setStroke(new BasicStroke(2));
+graphics.setStroke(
+new BasicStroke(
+config.highlightOutlineWidth()
+)
+);
 graphics.draw(bounds);
 
-graphics.setStroke(new BasicStroke(1));
+graphics.setStroke(
+new BasicStroke(1)
+);
+}
+
+private boolean shouldHighlightRuleItem(
+GuideStep step,
+int itemId,
+int interfaceId)
+{
+if (ruleEvaluator == null)
+{
+return false;
+}
+
+for (GuideRule rule : step.getRules())
+{
+if (rule.getItemId() != itemId)
+{
+continue;
+}
+
+if (ruleEvaluator.isRuleComplete(rule))
+{
+continue;
+}
+
+switch (rule.getType())
+{
+case SELL:
+return interfaceId == InterfaceID.SHOPSIDE;
+
+case BUY:
+return interfaceId == InterfaceID.SHOPMAIN;
+
+case HAVE_ITEM:
+return interfaceId == InterfaceID.INVENTORY
+|| interfaceId == InterfaceID.SHOPSIDE;
+
+default:
+break;
+}
+}
+
+return false;
+}
+
+private boolean shouldHighlightLegacyItem(
+GuideStep step,
+int itemId)
+{
+if (step instanceof ItemGuideStep)
+{
+return itemId
+== ((ItemGuideStep) step)
+.getItemId();
+}
+
+if (step instanceof QuestGuideStep)
+{
+GuideItemRequirement[] requirements =
+((QuestGuideStep) step)
+.getItemRequirements();
+
+if (requirements != null)
+{
+for (GuideItemRequirement requirement :
+requirements)
+{
+if (itemId
+== requirement.getItemId())
+{
+return true;
+}
+}
+}
+}
+
+return false;
 }
 }

@@ -5,12 +5,48 @@ public class GuideStep
 private final GuideStepType type;
 private final String title;
 private final String description;
+private final GuideRule[] rules;
 
-public GuideStep(GuideStepType type, String title, String description)
+private GuideTarget[] targets =
+new GuideTarget[0];
+
+public GuideStep(
+GuideStepType type,
+String title,
+String description)
+{
+this(
+type,
+title,
+description,
+new GuideRule[0]
+);
+}
+
+public GuideStep(
+GuideStepType type,
+String title,
+String description,
+GuideRule... rules)
 {
 this.type = type;
 this.title = title;
 this.description = description;
+this.rules =
+rules != null
+? rules
+: new GuideRule[0];
+}
+
+public GuideStep withTargets(
+GuideTarget... targets)
+{
+this.targets =
+targets != null
+? targets
+: new GuideTarget[0];
+
+return this;
 }
 
 public GuideStepType getType()
@@ -26,5 +62,15 @@ return title;
 public String getDescription()
 {
 return description;
+}
+
+public GuideRule[] getRules()
+{
+return rules;
+}
+
+public GuideTarget[] getTargets()
+{
+return targets;
 }
 }

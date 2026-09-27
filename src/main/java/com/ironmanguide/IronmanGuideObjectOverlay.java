@@ -89,9 +89,9 @@ if (closest != null)
 {
 modelOutlineRenderer.drawOutline(
 closest,
-2,
+config.highlightOutlineWidth(),
 config.highlightColor(),
-4
+config.highlightFeather()
 );
 }
 

@@ -7,18 +7,23 @@ import net.runelite.api.Client;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
+import net.runelite.client.ui.overlay.worldmap.WorldMapOverlay;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.Text;
 
@@ -29,6 +34,9 @@ public class IronmanGuidePlugin extends Plugin
 {
 @Inject
 private Client client;
+
+@Inject
+private ClientThread clientThread;
 
 @Inject
 private ClientToolbar clientToolbar;
@@ -43,7 +51,13 @@ private ModelOutlineRenderer modelOutlineRenderer;
 private WorldMapPointManager worldMapPointManager;
 
 @Inject
+private WorldMapOverlay worldMapOverlay;
+
+@Inject
 private ConfigManager configManager;
+
+	@Inject
+	private PluginManager pluginManager;
 
 @Inject
 private IronmanGuideConfig config;
@@ -51,18 +65,23 @@ private IronmanGuideConfig config;
 
 private GuideManager guideManager;
 	private IronmanGuideItemChecker itemChecker;
+	private GuideStateTracker guideStateTracker;
+	private GuideRuleEvaluator guideRuleEvaluator;
 	private IronmanGuideStepCompletionChecker completionChecker;
 	private IronmanGuideItemNameResolver itemNameResolver;
 	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
 private QuestHelperIntegration questHelperIntegration;
+	private QuestHelperBridge questHelperBridge;
 private IronmanGuideQuestStateChecker questStateChecker;
 
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
+private IronmanGuideStepOverlay stepOverlay;
 private IronmanGuideObjectOverlay objectOverlay;
 private IronmanGuideLocationOverlay locationOverlay;
 private IronmanGuideMinimapOverlay minimapOverlay;
+private IronmanGuideWorldMapAreaOverlay worldMapAreaOverlay;
 	private IronmanGuideItemOverlay itemOverlay;
 private NavigationButton navButton;
 
@@ -75,6 +94,7 @@ config.currentStep()
 );
 
 questHelperIntegration = new QuestHelperIntegration(configManager);
+		questHelperBridge = new QuestHelperBridge(pluginManager);
 questStateChecker = new IronmanGuideQuestStateChecker(client);
 
 if (config.questHelperIntegration())
@@ -83,6 +103,18 @@ questHelperIntegration.enableAutoStart();
 }
 
 itemChecker = new IronmanGuideItemChecker(client);
+		guideStateTracker = new GuideStateTracker(
+itemChecker,
+guideManager,
+configManager
+);
+
+guideRuleEvaluator = new GuideRuleEvaluator(
+client,
+itemChecker,
+guideStateTracker,
+questStateChecker
+);
 		completionChecker = new IronmanGuideStepCompletionChecker(client, itemChecker);
 		itemNameResolver = new IronmanGuideItemNameResolver(client);
 		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
@@ -141,8 +173,28 @@ config
 );
 overlayManager.add(minimapOverlay);
 
-		itemOverlay = new IronmanGuideItemOverlay(guideManager, config);
+worldMapAreaOverlay = new IronmanGuideWorldMapAreaOverlay(
+client,
+guideManager,
+config,
+worldMapOverlay
+);
+overlayManager.add(worldMapAreaOverlay);
+
+		itemOverlay = new IronmanGuideItemOverlay(
+guideManager,
+config,
+guideRuleEvaluator
+);
 		overlayManager.add(itemOverlay);
+
+stepOverlay = new IronmanGuideStepOverlay(
+guideManager,
+itemChecker,
+itemNameResolver,
+guideRuleEvaluator
+);
+overlayManager.add(stepOverlay);
 
 BufferedImage icon =
 ImageUtil.loadImageResource(getClass(), "icon.png");
@@ -172,15 +224,68 @@ overlayManager.remove(overlay);
 overlayManager.remove(objectOverlay);
 overlayManager.remove(locationOverlay);
 overlayManager.remove(minimapOverlay);
+overlayManager.remove(worldMapAreaOverlay);
 		overlayManager.remove(itemOverlay);
+overlayManager.remove(stepOverlay);
 
 clientToolbar.removeNavigation(navButton);
+}
+
+@Subscribe
+public void onWidgetLoaded(WidgetLoaded event)
+{
+if (event.getGroupId() != InterfaceID.CHATMENU)
+{
+return;
+}
+
+clientThread.invokeLater(() ->
+{
+if (dialogueHighlighter != null)
+{
+dialogueHighlighter.update();
+}
+});
 }
 
 @Subscribe
 public void onGameTick(GameTick event)
 {
 GuideStep currentStep = guideManager.getCurrentStep();
+
+if (config.questHelperIntegration())
+{
+questHelperIntegration.applyForStep(currentStep);
+
+if (currentStep instanceof QuestGuideStep)
+{
+QuestGuideStep questStep =
+(QuestGuideStep) currentStep;
+
+QuestRouteType routeType =
+questStep.getRouteType();
+
+if (routeType == QuestRouteType.FULL
+|| routeType == QuestRouteType.FINISH)
+{
+questHelperBridge.startQuest(
+questStep.getQuestName()
+);
+}
+else
+{
+questHelperBridge.stopManagedQuest();
+}
+}
+else
+{
+questHelperBridge.stopManagedQuest();
+}
+}
+else
+{
+questHelperBridge.stopManagedQuest();
+}
 
 	itemChecker.update(client.getItemContainer(InventoryID.INV));
 
@@ -270,6 +375,8 @@ panel.refresh();
 @Subscribe
 public void onMenuOptionClicked(MenuOptionClicked event)
 {
+guideStateTracker.onMenuOptionClicked(event);
+
 GuideStep step = guideManager.getCurrentStep();
 
 String[] options;
@@ -280,19 +387,7 @@ options = ((DialogueGuideStep) step).getOptions();
 }
 else if (step instanceof QuestGuideStep)
 {
-QuestGuideStep questStep = (QuestGuideStep) step;
-
-if (questStep.getRouteType() == QuestRouteType.FULL)
-{
 return;
-}
-
-if (!completionChecker.isComplete(step))
-{
-return;
-}
-
-options = questStep.getDialogueOptions();
 }
 else
 {
@@ -341,8 +436,63 @@ return;
 }
 
 itemChecker.update(event.getItemContainer());
+guideStateTracker.onInventoryUpdated();
 
 GuideStep currentStep = guideManager.getCurrentStep();
+
+if (guideRuleEvaluator.isStepComplete(currentStep))
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return;
+}
+
+if (config.questHelperIntegration())
+{
+questHelperIntegration.applyForStep(currentStep);
+
+if (currentStep instanceof QuestGuideStep)
+{
+QuestGuideStep questStep =
+(QuestGuideStep) currentStep;
+
+QuestRouteType routeType =
+questStep.getRouteType();
+
+if (routeType == QuestRouteType.FULL
+|| routeType == QuestRouteType.FINISH)
+{
+questHelperBridge.startQuest(
+questStep.getQuestName()
+);
+}
+else
+{
+questHelperBridge.stopManagedQuest();
+}
+}
+else
+{
+questHelperBridge.stopManagedQuest();
+}
+}
+else
+{
+questHelperBridge.stopManagedQuest();
+}
 
 if (currentStep instanceof ItemGuideStep
 && completionChecker.isComplete(currentStep))

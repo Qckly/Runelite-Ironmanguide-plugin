@@ -64,11 +64,19 @@ return null;
 }
 
 Color color = config.highlightColor();
+
+int alpha =
+(int) Math.round(
+255.0
+* config.highlightFillOpacity()
+/ 100.0
+);
+
 Color fill = new Color(
 color.getRed(),
 color.getGreen(),
 color.getBlue(),
-40
+alpha
 );
 
 OverlayUtil.renderPolygon(
@@ -76,7 +84,9 @@ graphics,
 polygon,
 color,
 fill,
-new java.awt.BasicStroke(2)
+new java.awt.BasicStroke(
+config.highlightOutlineWidth()
+)
 );
 
 return null;
