@@ -88,6 +88,7 @@ private IronmanGuideMinimapOverlay minimapOverlay;
 private IronmanGuideWorldMapAreaOverlay worldMapAreaOverlay;
 private IronmanGuideGroundItemOverlay groundItemOverlay;
 	private IronmanGuideItemOverlay itemOverlay;
+private IronmanGuideProductionOverlay productionOverlay;
 private NavigationButton navButton;
 
 @Override
@@ -204,6 +205,18 @@ itemManager
 );
 		overlayManager.add(itemOverlay);
 
+productionOverlay =
+new IronmanGuideProductionOverlay(
+client,
+guideManager,
+config,
+guideRuleEvaluator
+);
+
+overlayManager.add(
+productionOverlay
+);
+
 stepOverlay = new IronmanGuideStepOverlay(
 client,
 guideManager,
@@ -244,6 +257,7 @@ overlayManager.remove(minimapOverlay);
 overlayManager.remove(worldMapAreaOverlay);
 overlayManager.remove(groundItemOverlay);
 		overlayManager.remove(itemOverlay);
+overlayManager.remove(productionOverlay);
 overlayManager.remove(stepOverlay);
 
 clientToolbar.removeNavigation(navButton);
