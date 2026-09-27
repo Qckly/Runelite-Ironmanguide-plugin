@@ -109,6 +109,25 @@ title.setText(
 
 String text = step.getDescription();
 
+GuideResourceRequirement[] exactResources =
+step.getExactResources();
+
+if (exactResources != null
+&& exactResources.length > 0)
+{
+for (GuideResourceRequirement requirement :
+exactResources)
+{
+text += "\n\nYou will need "
++ requirement.getQuantity()
++ " "
++ itemNameResolver.getName(
+requirement.getItemId()
+)
++ ".";
+}
+}
+
 if (step instanceof ItemGuideStep)
 {
 ItemGuideStep itemStep =
