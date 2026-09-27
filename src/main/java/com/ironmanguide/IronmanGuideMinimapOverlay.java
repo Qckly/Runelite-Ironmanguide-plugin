@@ -58,6 +58,11 @@ else if (step instanceof DialogueGuideStep)
 DialogueGuideStep dialogueStep = (DialogueGuideStep) step;
 target = dialogueStep.getWorldPoint();
 }
+else if (step instanceof QuestGuideStep)
+{
+QuestGuideStep questStep = (QuestGuideStep) step;
+target = questStep.getWorldPoint();
+}
 
 Player player = client.getLocalPlayer();
 

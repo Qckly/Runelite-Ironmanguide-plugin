@@ -45,6 +45,20 @@ new DialogueGuideStep(
 NpcID.FATHER_AERECK,
 new WorldPoint(3243, 3206, 0),
 "I'm looking for a quest!"
+),
+
+new QuestGuideStep(
+"Combined Quest Step Test",
+"Bring a bronze axe and talk to Father Aereck.",
+NpcID.FATHER_AERECK,
+new WorldPoint(3243, 3206, 0),
+new GuideItemRequirement[] {
+new GuideItemRequirement(
+ItemID.BRONZE_AXE,
+1
+)
+},
+"I'm looking for a quest!"
 )
 };
 }

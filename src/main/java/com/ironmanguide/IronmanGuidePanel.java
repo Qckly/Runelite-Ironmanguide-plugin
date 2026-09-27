@@ -14,6 +14,7 @@ public class IronmanGuidePanel extends PluginPanel
 {
 private final GuideManager guideManager;
 private final IronmanGuideItemChecker itemChecker;
+private final IronmanGuideItemNameResolver itemNameResolver;
 private final IntConsumer onStepChanged;
 
 private final JLabel title = new JLabel();
@@ -22,10 +23,12 @@ private final JTextArea stepText = new JTextArea();
 public IronmanGuidePanel(
 GuideManager guideManager,
 IronmanGuideItemChecker itemChecker,
+IronmanGuideItemNameResolver itemNameResolver,
 IntConsumer onStepChanged)
 {
 this.guideManager = guideManager;
 this.itemChecker = itemChecker;
+this.itemNameResolver = itemNameResolver;
 this.onStepChanged = onStepChanged;
 
 setLayout(new BorderLayout(0, 10));
@@ -58,6 +61,7 @@ updateStep();
 
 buttons.add(previous);
 buttons.add(next);
+
 add(buttons, BorderLayout.SOUTH);
 
 updateStep();
@@ -89,17 +93,49 @@ int have = itemChecker.getInventoryQuantity(
 itemStep.getItemId()
 );
 
-boolean ready = itemChecker.hasRequiredQuantity(
-itemStep.getItemId(),
-itemStep.getQuantity()
-);
-
 text += "\n\nRequired: "
++ itemNameResolver.getName(itemStep.getItemId())
++ " x"
 + itemStep.getQuantity()
 + "\nYou have: "
 + have
 + "\nStatus: "
-+ (ready ? "READY" : "MISSING");
++ (have >= itemStep.getQuantity()
+? "READY"
+: "MISSING");
+}
+else if (step instanceof QuestGuideStep)
+{
+QuestGuideStep questStep = (QuestGuideStep) step;
+
+GuideItemRequirement[] requirements =
+questStep.getItemRequirements();
+
+if (requirements != null && requirements.length > 0)
+{
+text += "\n\nRequired items:";
+
+for (GuideItemRequirement requirement : requirements)
+{
+int have = itemChecker.getInventoryQuantity(
+requirement.getItemId()
+);
+
+boolean ready =
+have >= requirement.getQuantity();
+
+text += "\n"
++ itemNameResolver.getName(
+requirement.getItemId()
+)
++ ": "
++ have
++ " / "
++ requirement.getQuantity()
++ " "
++ (ready ? "[READY]" : "[MISSING]");
+}
+}
 }
 
 stepText.setText(text);

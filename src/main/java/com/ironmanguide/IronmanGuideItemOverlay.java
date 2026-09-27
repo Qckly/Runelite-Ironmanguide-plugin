@@ -30,14 +30,34 @@ WidgetItem widgetItem)
 {
 GuideStep step = guideManager.getCurrentStep();
 
-if (!(step instanceof ItemGuideStep))
+boolean shouldHighlight = false;
+
+if (step instanceof ItemGuideStep)
 {
-return;
+ItemGuideStep itemStep = (ItemGuideStep) step;
+shouldHighlight = itemId == itemStep.getItemId();
+}
+else if (step instanceof QuestGuideStep)
+{
+QuestGuideStep questStep = (QuestGuideStep) step;
+
+GuideItemRequirement[] requirements =
+questStep.getItemRequirements();
+
+if (requirements != null)
+{
+for (GuideItemRequirement requirement : requirements)
+{
+if (itemId == requirement.getItemId())
+{
+shouldHighlight = true;
+break;
+}
+}
+}
 }
 
-ItemGuideStep itemStep = (ItemGuideStep) step;
-
-if (itemId != itemStep.getItemId())
+if (!shouldHighlight)
 {
 return;
 }

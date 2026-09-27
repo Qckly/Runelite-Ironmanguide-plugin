@@ -25,14 +25,20 @@ this.config = config;
 public void update()
 {
 GuideStep step = guideManager.getCurrentStep();
+String[] options;
 
-if (!(step instanceof DialogueGuideStep))
+if (step instanceof DialogueGuideStep)
+{
+options = ((DialogueGuideStep) step).getOptions();
+}
+else if (step instanceof QuestGuideStep)
+{
+options = ((QuestGuideStep) step).getDialogueOptions();
+}
+else
 {
 return;
 }
-
-DialogueGuideStep dialogueStep =
-(DialogueGuideStep) step;
 
 Widget container =
 client.getWidget(
@@ -45,22 +51,15 @@ if (container == null)
 return;
 }
 
-highlight(
-container.getChildren(),
-dialogueStep.getOptions()
-);
-
-highlight(
-container.getNestedChildren(),
-dialogueStep.getOptions()
-);
+highlight(container.getChildren(), options);
+highlight(container.getNestedChildren(), options);
 }
 
 private void highlight(
 Widget[] widgets,
 String[] options)
 {
-if (widgets == null)
+if (widgets == null || options == null)
 {
 return;
 }

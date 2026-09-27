@@ -50,6 +50,14 @@ DialogueGuideStep dialogueStep =
 npcId = dialogueStep.getNpcId();
 targetPoint = dialogueStep.getWorldPoint();
 }
+else if (step instanceof QuestGuideStep)
+{
+QuestGuideStep questStep =
+(QuestGuideStep) step;
+
+npcId = questStep.getNpcId();
+targetPoint = questStep.getWorldPoint();
+}
 else
 {
 return null;

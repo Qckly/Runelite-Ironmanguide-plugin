@@ -46,6 +46,11 @@ else if (step instanceof DialogueGuideStep)
 DialogueGuideStep dialogueStep = (DialogueGuideStep) step;
 worldPoint = dialogueStep.getWorldPoint();
 }
+else if (step instanceof QuestGuideStep)
+{
+QuestGuideStep questStep = (QuestGuideStep) step;
+worldPoint = questStep.getWorldPoint();
+}
 
 if (worldPoint == null)
 {

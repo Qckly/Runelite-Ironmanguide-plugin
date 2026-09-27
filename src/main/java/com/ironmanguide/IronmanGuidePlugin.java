@@ -45,8 +45,10 @@ private ConfigManager configManager;
 @Inject
 private IronmanGuideConfig config;
 
+
 private GuideManager guideManager;
 	private IronmanGuideItemChecker itemChecker;
+	private IronmanGuideItemNameResolver itemNameResolver;
 	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
 
@@ -67,6 +69,7 @@ config.currentStep()
 );
 
 itemChecker = new IronmanGuideItemChecker(client);
+		itemNameResolver = new IronmanGuideItemNameResolver(client);
 		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
 
 		worldMapGuideManager = new IronmanGuideWorldMapManager(
@@ -78,8 +81,9 @@ worldMapPointManager
 worldMapGuideManager.update();
 
 panel = new IronmanGuidePanel(
-guideManager,
-itemChecker,
+		guideManager,
+		itemChecker,
+		itemNameResolver,
 			step ->
 {
 configManager.setConfiguration(
@@ -157,7 +161,17 @@ clientToolbar.removeNavigation(navButton);
 @Subscribe
 public void onGameTick(GameTick event)
 {
+boolean itemNameChanged =
+itemNameResolver.update(
+guideManager.getCurrentStep()
+);
+
 dialogueHighlighter.update();
+
+if (itemNameChanged && panel != null)
+{
+panel.refresh();
+}
 }
 
 @Subscribe
