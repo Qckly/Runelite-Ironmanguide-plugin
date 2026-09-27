@@ -93,6 +93,18 @@ return 1;
 }
 
 @ConfigItem(
+keyName = "itemOutlineOnly",
+name = "Item outline only",
+description = "Outline the actual inventory and ground item instead of highlighting the whole slot or tile",
+position = 4,
+section = highlightStyleSection
+)
+default boolean itemOutlineOnly()
+{
+return false;
+}
+
+@ConfigItem(
 keyName = "showMinimapArrow",
 name = "Minimap guidance",
 description = "Show direction guidance on the minimap",

@@ -15,6 +15,7 @@ import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -46,6 +47,9 @@ private OverlayManager overlayManager;
 
 @Inject
 private ModelOutlineRenderer modelOutlineRenderer;
+
+@Inject
+private ItemManager itemManager;
 
 @Inject
 private WorldMapPointManager worldMapPointManager;
@@ -100,11 +104,12 @@ questStateChecker = new IronmanGuideQuestStateChecker(client);
 
 if (config.questHelperIntegration())
 {
-questHelperIntegration.enableAutoStart();
+questHelperIntegration.disableAutoStart();
 }
 
 itemChecker = new IronmanGuideItemChecker(client);
 		guideStateTracker = new GuideStateTracker(
+client,
 itemChecker,
 guideManager,
 configManager
@@ -185,14 +190,17 @@ overlayManager.add(worldMapAreaOverlay);
 groundItemOverlay = new IronmanGuideGroundItemOverlay(
 client,
 guideManager,
-config
+config,
+modelOutlineRenderer
 );
 overlayManager.add(groundItemOverlay);
 
 		itemOverlay = new IronmanGuideItemOverlay(
+client,
 guideManager,
 config,
-guideRuleEvaluator
+guideRuleEvaluator,
+itemManager
 );
 		overlayManager.add(itemOverlay);
 
@@ -262,46 +270,7 @@ public void onGameTick(GameTick event)
 {
 GuideStep currentStep = guideManager.getCurrentStep();
 
-if (config.questHelperIntegration())
-{
-questHelperIntegration.applyForStep(currentStep);
-
-if (currentStep instanceof QuestGuideStep)
-{
-QuestGuideStep questStep =
-(QuestGuideStep) currentStep;
-
-QuestRouteType routeType =
-questStep.getRouteType();
-
-if (routeType == QuestRouteType.FULL
-|| routeType == QuestRouteType.FINISH)
-{
-questHelperBridge.startQuest(
-questStep.getQuestName()
-);
-}
-else if (currentStep.getQuestHelperQuestName() != null
-&& !currentStep.getQuestHelperQuestName().isEmpty())
-{
-questHelperBridge.startQuest(
-currentStep.getQuestHelperQuestName()
-);
-}
-else
-{
-questHelperBridge.stopManagedQuest();
-}
-}
-else
-{
-questHelperBridge.stopManagedQuest();
-}
-}
-else
-{
-questHelperBridge.stopManagedQuest();
-}
+syncQuestHelper(currentStep);
 
 	itemChecker.update(client.getItemContainer(InventoryID.INV));
 
@@ -494,46 +463,7 @@ panel.refresh();
 return;
 }
 
-if (config.questHelperIntegration())
-{
-questHelperIntegration.applyForStep(currentStep);
-
-if (currentStep instanceof QuestGuideStep)
-{
-QuestGuideStep questStep =
-(QuestGuideStep) currentStep;
-
-QuestRouteType routeType =
-questStep.getRouteType();
-
-if (routeType == QuestRouteType.FULL
-|| routeType == QuestRouteType.FINISH)
-{
-questHelperBridge.startQuest(
-questStep.getQuestName()
-);
-}
-else if (currentStep.getQuestHelperQuestName() != null
-&& !currentStep.getQuestHelperQuestName().isEmpty())
-{
-questHelperBridge.startQuest(
-currentStep.getQuestHelperQuestName()
-);
-}
-else
-{
-questHelperBridge.stopManagedQuest();
-}
-}
-else
-{
-questHelperBridge.stopManagedQuest();
-}
-}
-else
-{
-questHelperBridge.stopManagedQuest();
-}
+syncQuestHelper(currentStep);
 
 if (currentStep instanceof ItemGuideStep
 && completionChecker.isComplete(currentStep))
@@ -555,6 +485,50 @@ panel.refresh();
 }
 }
 
+private void syncQuestHelper(
+GuideStep currentStep)
+{
+if (!config.questHelperIntegration())
+{
+questHelperBridge.stopManagedQuest();
+return;
+}
+
+questHelperIntegration.applyForStep(
+currentStep
+);
+
+if (currentStep != null
+&& currentStep.getQuestHelperQuestName() != null
+&& !currentStep.getQuestHelperQuestName().isEmpty())
+{
+questHelperBridge.startQuest(
+currentStep.getQuestHelperQuestName()
+);
+return;
+}
+
+if (currentStep instanceof QuestGuideStep)
+{
+QuestGuideStep questStep =
+(QuestGuideStep) currentStep;
+
+QuestRouteType routeType =
+questStep.getRouteType();
+
+if (routeType == QuestRouteType.FULL
+|| routeType == QuestRouteType.FINISH)
+{
+questHelperBridge.startQuest(
+questStep.getQuestName()
+);
+return;
+}
+}
+
+questHelperBridge.stopManagedQuest();
+}
+
 @Subscribe
 public void onConfigChanged(ConfigChanged event)
 {
@@ -569,7 +543,7 @@ boolean enabled = Boolean.parseBoolean(event.getNewValue());
 
 if (enabled)
 {
-questHelperIntegration.enableAutoStart();
+questHelperIntegration.disableAutoStart();
 }
 else
 {

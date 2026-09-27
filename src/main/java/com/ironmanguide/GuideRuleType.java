@@ -5,6 +5,8 @@ public enum GuideRuleType
 SELL,
 BUY,
 HAVE_ITEM,
+ITEM_ON_ITEM,
+INVENTORY_EMPTY,
 DROP,
 PICKUP,
 

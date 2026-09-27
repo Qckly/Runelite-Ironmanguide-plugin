@@ -8,10 +8,14 @@ public class GuideRule
 private final GuideRuleType type;
 
 private int itemId = -1;
+private int secondaryItemId = -1;
 private int quantity = 1;
 
 private int npcId = -1;
 private int objectId = -1;
+
+private int varpId = -1;
+private int varbitId = -1;
 
 private String text;
 private String questName;
@@ -39,6 +43,15 @@ this.quantity = quantity;
 return this;
 }
 
+public GuideRule itemOnItem(
+int sourceItemId,
+int targetItemId)
+{
+this.itemId = sourceItemId;
+this.secondaryItemId = targetItemId;
+return this;
+}
+
 public GuideRule npc(int npcId)
 {
 this.npcId = npcId;
@@ -48,6 +61,24 @@ return this;
 public GuideRule object(int objectId)
 {
 this.objectId = objectId;
+return this;
+}
+
+public GuideRule varp(
+int varpId,
+int value)
+{
+this.varpId = varpId;
+this.value = value;
+return this;
+}
+
+public GuideRule varbit(
+int varbitId,
+int value)
+{
+this.varbitId = varbitId;
+this.value = value;
 return this;
 }
 
@@ -95,6 +126,11 @@ public int getItemId()
 return itemId;
 }
 
+public int getSecondaryItemId()
+{
+return secondaryItemId;
+}
+
 public int getQuantity()
 {
 return quantity;
@@ -108,6 +144,16 @@ return npcId;
 public int getObjectId()
 {
 return objectId;
+}
+
+public int getVarpId()
+{
+return varpId;
+}
+
+public int getVarbitId()
+{
+return varbitId;
 }
 
 public String getText()

@@ -10,9 +10,12 @@ import net.runelite.api.gameval.InventoryID;
 public class IronmanGuideItemChecker
 {
 private final Client client;
-private final Map<Integer, Integer> inventory = new HashMap<>();
 
-public IronmanGuideItemChecker(Client client)
+private final Map<Integer, Integer> inventory =
+new HashMap<>();
+
+public IronmanGuideItemChecker(
+Client client)
 {
 this.client = client;
 }
@@ -20,12 +23,15 @@ this.client = client;
 public void refresh()
 {
 ItemContainer container =
-client.getItemContainer(InventoryID.INV);
+client.getItemContainer(
+InventoryID.INV
+);
 
 update(container);
 }
 
-public void update(ItemContainer container)
+public void update(
+ItemContainer container)
 {
 inventory.clear();
 
@@ -36,7 +42,8 @@ return;
 
 for (Item item : container.getItems())
 {
-if (item.getId() <= 0)
+if (item.getId() <= 0
+|| item.getQuantity() <= 0)
 {
 continue;
 }
@@ -49,15 +56,25 @@ Integer::sum
 }
 }
 
-public int getInventoryQuantity(int itemId)
+public int getInventoryQuantity(
+int itemId)
 {
-return inventory.getOrDefault(itemId, 0);
+return inventory.getOrDefault(
+itemId,
+0
+);
 }
 
 public boolean hasRequiredQuantity(
 int itemId,
 int requiredQuantity)
 {
-return getInventoryQuantity(itemId) >= requiredQuantity;
+return getInventoryQuantity(itemId)
+>= requiredQuantity;
+}
+
+public boolean isInventoryEmpty()
+{
+return inventory.isEmpty();
 }
 }

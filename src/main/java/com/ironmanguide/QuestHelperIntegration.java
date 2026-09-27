@@ -4,8 +4,11 @@ import net.runelite.client.config.ConfigManager;
 
 public class QuestHelperIntegration
 {
-private static final String QUEST_HELPER_GROUP = "questhelper";
-private static final String AUTO_START_KEY = "autostartQuests";
+private static final String QUEST_HELPER_GROUP =
+"questhelper";
+
+private static final String AUTO_START_KEY =
+"autostartQuests";
 
 private final ConfigManager configManager;
 
@@ -13,43 +16,17 @@ private String previousAutoStart;
 private boolean changedByUs;
 private Boolean managedAutoStart;
 
-public QuestHelperIntegration(ConfigManager configManager)
+public QuestHelperIntegration(
+ConfigManager configManager)
 {
-this.configManager = configManager;
+this.configManager =
+configManager;
 }
 
-public void applyForStep(GuideStep step)
-{
-if (step != null)
-{
-for (GuideRule rule : step.getRules())
-{
-if (rule.getType() == GuideRuleType.QUEST_STARTED)
+public void applyForStep(
+GuideStep step)
 {
 disableAutoStart();
-return;
-}
-}
-}
-
-if (!(step instanceof QuestGuideStep))
-{
-enableAutoStart();
-return;
-}
-
-QuestRouteType type =
-((QuestGuideStep) step).getRouteType();
-
-if (type == QuestRouteType.FULL
-|| type == QuestRouteType.FINISH)
-{
-enableAutoStart();
-}
-else
-{
-disableAutoStart();
-}
 }
 
 public void enableAutoStart()
@@ -62,7 +39,8 @@ public void disableAutoStart()
 setAutoStart(false);
 }
 
-private void setAutoStart(boolean enabled)
+private void setAutoStart(
+boolean enabled)
 {
 if (managedAutoStart != null
 && managedAutoStart == enabled)
@@ -72,7 +50,8 @@ return;
 
 if (!changedByUs)
 {
-previousAutoStart = configManager.getConfiguration(
+previousAutoStart =
+configManager.getConfiguration(
 QUEST_HELPER_GROUP,
 AUTO_START_KEY
 );

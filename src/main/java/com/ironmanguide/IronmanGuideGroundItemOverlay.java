@@ -16,28 +16,33 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
+import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 public class IronmanGuideGroundItemOverlay extends Overlay
 {
 private final Client client;
 private final GuideManager guideManager;
 private final IronmanGuideConfig config;
+private final ModelOutlineRenderer modelOutlineRenderer;
 
 public IronmanGuideGroundItemOverlay(
 Client client,
 GuideManager guideManager,
-IronmanGuideConfig config)
+IronmanGuideConfig config,
+ModelOutlineRenderer modelOutlineRenderer)
 {
 this.client = client;
 this.guideManager = guideManager;
 this.config = config;
+this.modelOutlineRenderer = modelOutlineRenderer;
 
 setPosition(OverlayPosition.DYNAMIC);
 setLayer(OverlayLayer.ABOVE_SCENE);
 }
 
 @Override
-public Dimension render(Graphics2D graphics)
+public Dimension render(
+Graphics2D graphics)
 {
 GuideStep step =
 guideManager.getCurrentStep();
@@ -68,16 +73,85 @@ if (tile == null)
 continue;
 }
 
-if (!matchesLocation(tile, target))
+if (!matchesLocation(
+tile,
+target
+))
 {
 continue;
 }
 
-if (!containsTargetItem(tile, target))
+ItemLayer itemLayer =
+tile.getItemLayer();
+
+if (itemLayer == null)
 {
 continue;
 }
 
+if (config.itemOutlineOnly())
+{
+renderItemOutlines(
+itemLayer,
+target
+);
+
+continue;
+}
+
+if (!containsTargetItem(
+itemLayer,
+target
+))
+{
+continue;
+}
+
+renderTileHighlight(
+graphics,
+tile
+);
+}
+}
+
+return null;
+}
+
+private void renderItemOutlines(
+ItemLayer itemLayer,
+GuideTarget target)
+{
+Node current =
+itemLayer.getTop();
+
+while (current instanceof TileItem)
+{
+TileItem item =
+(TileItem) current;
+
+if (isTargetItem(
+item,
+target
+))
+{
+modelOutlineRenderer.drawOutline(
+itemLayer,
+item,
+config.highlightOutlineWidth(),
+config.highlightColor(),
+config.highlightFeather()
+);
+}
+
+current =
+current.getNext();
+}
+}
+
+private void renderTileHighlight(
+Graphics2D graphics,
+Tile tile)
+{
 Polygon polygon =
 Perspective.getCanvasTilePoly(
 client,
@@ -86,7 +160,7 @@ tile.getLocalLocation()
 
 if (polygon == null)
 {
-continue;
+return;
 }
 
 Color color =
@@ -117,15 +191,12 @@ config.highlightOutlineWidth()
 )
 );
 }
-}
-
-return null;
-}
 
 private GuideTarget findGroundItemTarget(
 GuideStep step)
 {
-for (GuideTarget target : step.getTargets())
+for (GuideTarget target :
+step.getTargets())
 {
 if (target.getType()
 == GuideTargetType.GROUND_ITEM)
@@ -138,17 +209,9 @@ return null;
 }
 
 private boolean containsTargetItem(
-Tile tile,
+ItemLayer itemLayer,
 GuideTarget target)
 {
-ItemLayer itemLayer =
-tile.getItemLayer();
-
-if (itemLayer == null)
-{
-return false;
-}
-
 Node current =
 itemLayer.getTop();
 
@@ -157,16 +220,32 @@ while (current instanceof TileItem)
 TileItem item =
 (TileItem) current;
 
-for (int itemId : target.getIds())
+if (isTargetItem(
+item,
+target
+))
+{
+return true;
+}
+
+current =
+current.getNext();
+}
+
+return false;
+}
+
+private boolean isTargetItem(
+TileItem item,
+GuideTarget target)
+{
+for (int itemId :
+target.getIds())
 {
 if (item.getId() == itemId)
 {
 return true;
 }
-}
-
-current =
-current.getNext();
 }
 
 return false;
@@ -195,9 +274,13 @@ return false;
 }
 
 int radius =
-Math.max(0, target.getRadius());
+Math.max(
+0,
+target.getRadius()
+);
 
-return tilePoint.distanceTo2D(reference)
-<= radius;
+return tilePoint.distanceTo2D(
+reference
+) <= radius;
 }
 }

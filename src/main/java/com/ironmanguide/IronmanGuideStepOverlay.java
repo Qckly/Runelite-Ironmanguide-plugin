@@ -115,6 +115,12 @@ continue;
 boolean complete =
 ruleEvaluator.isRuleComplete(rule);
 
+if (rule.getType()
+== GuideRuleType.ITEM_ON_ITEM)
+{
+continue;
+}
+
 String action;
 
 switch (rule.getType())
@@ -137,6 +143,18 @@ break;
 
 case HAVE_ITEM:
 action = "Have";
+break;
+
+case BANK_DEPOSIT:
+action = "Deposit";
+break;
+
+case BANK_WITHDRAW:
+action = "Withdraw";
+break;
+
+case EQUIP:
+action = "Equip";
 break;
 
 default:
