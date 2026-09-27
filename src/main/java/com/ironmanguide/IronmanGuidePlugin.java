@@ -5,8 +5,10 @@ import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -18,6 +20,7 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.Text;
 
 @PluginDescriptor(
 name = "Ironman Guide"
@@ -48,6 +51,7 @@ private IronmanGuideConfig config;
 
 private GuideManager guideManager;
 	private IronmanGuideItemChecker itemChecker;
+	private IronmanGuideStepCompletionChecker completionChecker;
 	private IronmanGuideItemNameResolver itemNameResolver;
 	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
@@ -69,6 +73,7 @@ config.currentStep()
 );
 
 itemChecker = new IronmanGuideItemChecker(client);
+		completionChecker = new IronmanGuideStepCompletionChecker(client, itemChecker);
 		itemNameResolver = new IronmanGuideItemNameResolver(client);
 		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
 
@@ -161,16 +166,85 @@ clientToolbar.removeNavigation(navButton);
 @Subscribe
 public void onGameTick(GameTick event)
 {
+GuideStep currentStep = guideManager.getCurrentStep();
+
+	itemChecker.update(client.getItemContainer(InventoryID.INV));
+
 boolean itemNameChanged =
-itemNameResolver.update(
-guideManager.getCurrentStep()
-);
+itemNameResolver.update(currentStep);
 
 dialogueHighlighter.update();
+
+if ((currentStep instanceof LocationGuideStep || currentStep instanceof ItemGuideStep)
+&& completionChecker.isComplete(currentStep))
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return;
+}
 
 if (itemNameChanged && panel != null)
 {
 panel.refresh();
+}
+}
+
+@Subscribe
+public void onMenuOptionClicked(MenuOptionClicked event)
+{
+GuideStep step = guideManager.getCurrentStep();
+
+if (!(step instanceof DialogueGuideStep))
+{
+return;
+}
+
+Widget widget = event.getWidget();
+
+if (widget == null || widget.getText() == null)
+{
+return;
+}
+
+String clickedText = Text.removeTags(widget.getText());
+
+DialogueGuideStep dialogueStep =
+(DialogueGuideStep) step;
+
+for (String option : dialogueStep.getOptions())
+{
+if (clickedText.equals(option))
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return;
+}
 }
 }
 
@@ -183,6 +257,23 @@ return;
 }
 
 itemChecker.update(event.getItemContainer());
+
+GuideStep currentStep = guideManager.getCurrentStep();
+
+	itemChecker.update(client.getItemContainer(InventoryID.INV));
+
+if (completionChecker.isComplete(currentStep))
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+}
 
 if (panel != null)
 {
