@@ -39,6 +39,7 @@ private IronmanGuideConfig config;
 private GuideManager guideManager;
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
+	private IronmanGuideObjectOverlay objectOverlay;
 private NavigationButton navButton;
 
 @Override
@@ -61,6 +62,9 @@ step
 overlay = new IronmanGuideOverlay(client, guideManager, modelOutlineRenderer, config);
 overlayManager.add(overlay);
 
+		objectOverlay = new IronmanGuideObjectOverlay(client, guideManager, modelOutlineRenderer, config);
+		overlayManager.add(objectOverlay);
+
 BufferedImage icon =
 ImageUtil.loadImageResource(getClass(), "icon.png");
 
@@ -77,6 +81,7 @@ clientToolbar.addNavigation(navButton);
 protected void shutDown()
 {
 overlayManager.remove(overlay);
+		overlayManager.remove(objectOverlay);
 clientToolbar.removeNavigation(navButton);
 }
 

@@ -22,10 +22,11 @@ new NpcGuideStep(
 null
 ),
 
-new GuideStep(
-GuideStepType.LOCATION,
-"Tutorial Island",
-"Continue through Tutorial Island."
+new ObjectGuideStep(
+"Object Highlight Test",
+"Interact with the highlighted tree.",
+1276,
+null
 )
 };
 }
