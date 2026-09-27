@@ -15,10 +15,12 @@ private final IntConsumer onStepChanged;
 private final JLabel title = new JLabel();
 private final JTextArea stepText = new JTextArea();
 
-public IronmanGuidePanel(int savedStep, IntConsumer onStepChanged)
+public IronmanGuidePanel(
+GuideManager guideManager,
+IntConsumer onStepChanged)
 {
+this.guideManager = guideManager;
 this.onStepChanged = onStepChanged;
-this.guideManager = new GuideManager(GuideData.getSteps(), savedStep);
 
 setLayout(new BorderLayout(0, 10));
 setBorder(new EmptyBorder(10, 10, 10, 10));
