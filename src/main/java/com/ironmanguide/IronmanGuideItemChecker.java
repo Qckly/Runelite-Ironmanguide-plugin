@@ -14,24 +14,30 @@ private final Client client;
 private final Map<Integer, Integer> inventory =
 new HashMap<>();
 
-public IronmanGuideItemChecker(
-Client client)
+private final Map<Integer, Integer> bank =
+new HashMap<>();
+
+public IronmanGuideItemChecker(Client client)
 {
 this.client = client;
 }
 
 public void refresh()
 {
-ItemContainer container =
-client.getItemContainer(
-InventoryID.INV
+update(
+client.getItemContainer(InventoryID.INV)
 );
 
-update(container);
+ItemContainer bankContainer =
+client.getItemContainer(InventoryID.BANK);
+
+if (bankContainer != null)
+{
+updateBank(bankContainer);
+}
 }
 
-public void update(
-ItemContainer container)
+public void update(ItemContainer container)
 {
 inventory.clear();
 
@@ -42,8 +48,7 @@ return;
 
 for (Item item : container.getItems())
 {
-if (item.getId() <= 0
-|| item.getQuantity() <= 0)
+if (item.getId() <= 0)
 {
 continue;
 }
@@ -56,10 +61,41 @@ Integer::sum
 }
 }
 
-public int getInventoryQuantity(
-int itemId)
+public void updateBank(ItemContainer container)
+{
+if (container == null)
+{
+return;
+}
+
+bank.clear();
+
+for (Item item : container.getItems())
+{
+if (item.getId() <= 0)
+{
+continue;
+}
+
+bank.merge(
+item.getId(),
+item.getQuantity(),
+Integer::sum
+);
+}
+}
+
+public int getInventoryQuantity(int itemId)
 {
 return inventory.getOrDefault(
+itemId,
+0
+);
+}
+
+public int getBankQuantity(int itemId)
+{
+return bank.getOrDefault(
 itemId,
 0
 );
@@ -70,6 +106,14 @@ int itemId,
 int requiredQuantity)
 {
 return getInventoryQuantity(itemId)
+>= requiredQuantity;
+}
+
+public boolean hasBankRequiredQuantity(
+int itemId,
+int requiredQuantity)
+{
+return getBankQuantity(itemId)
 >= requiredQuantity;
 }
 

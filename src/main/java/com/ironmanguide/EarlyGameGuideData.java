@@ -522,8 +522,9 @@ ItemID.ARROW_SHAFT,
 "early_020_fletch_1000_arrow_shafts"
 )
 .withExactResources(
-GuideResourceRequirement.fromOutput(
+GuideResourceRequirement.fromRemainingOutput(
 ItemID.LOGS,
+ItemID.ARROW_SHAFT,
 1000,
 15
 )

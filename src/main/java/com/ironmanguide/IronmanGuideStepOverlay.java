@@ -126,7 +126,7 @@ for (GuideResourceRequirement requirement :
 requirements)
 {
 int requiredQuantity =
-requirement.resolveQuantity(client);
+requirement.resolveQuantity(client, itemChecker);
 
 if (requiredQuantity <= 0)
 {

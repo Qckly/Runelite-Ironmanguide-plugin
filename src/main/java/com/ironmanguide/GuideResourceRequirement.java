@@ -19,12 +19,19 @@ private final Skill skill;
 private final int targetLevel;
 private final double xpPerItem;
 
+private final int outputItemId;
+private final int targetOutput;
+private final int outputPerInput;
+
 private GuideResourceRequirement(
 int itemId,
 int quantity,
 Skill skill,
 int targetLevel,
-double xpPerItem)
+double xpPerItem,
+int outputItemId,
+int targetOutput,
+int outputPerInput)
 {
 if (itemId <= 0)
 {
@@ -35,16 +42,18 @@ throw new IllegalArgumentException(
 
 this.itemId = itemId;
 this.quantity = quantity;
+
 this.skill = skill;
 this.targetLevel = targetLevel;
 this.xpPerItem = xpPerItem;
+
+this.outputItemId = outputItemId;
+this.targetOutput = targetOutput;
+this.outputPerInput = outputPerInput;
 }
 
 /**
  * Fixed exact quantity.
- *
- * Example:
- * exactly 7 logs are required.
  */
 public static GuideResourceRequirement exact(
 int itemId,
@@ -62,15 +71,17 @@ itemId,
 quantity,
 null,
 0,
+0,
+-1,
+0,
 0
 );
 }
 
 /**
- * Exact quantity calculated from fixed output per input.
+ * Exact quantity from a fixed output ratio.
  *
- * Example:
- * 1000 arrow shafts / 15 shafts per log = 67 logs.
+ * This represents the full requirement from zero progress.
  */
 public static GuideResourceRequirement fromOutput(
 int itemId,
@@ -102,11 +113,59 @@ requiredInput
 }
 
 /**
- * Exact quantity calculated from the player's current skill XP.
+ * Exact REMAINING resource requirement.
  *
  * Example:
- * current Firemaking XP -> level 15 target
- * using normal logs at 40 XP each.
+ * Goal = 1000 Arrow shafts
+ * Each log = 15 Arrow shafts
+ *
+ * If player already owns 400 shafts:
+ * 600 remain / 15 = 40 Logs still required.
+ *
+ * Existing output in inventory and known bank state
+ * is counted automatically.
+ */
+public static GuideResourceRequirement fromRemainingOutput(
+int inputItemId,
+int outputItemId,
+int targetOutput,
+int outputPerInput)
+{
+if (outputItemId <= 0)
+{
+throw new IllegalArgumentException(
+"outputItemId must be positive"
+);
+}
+
+if (targetOutput <= 0)
+{
+throw new IllegalArgumentException(
+"targetOutput must be positive"
+);
+}
+
+if (outputPerInput <= 0)
+{
+throw new IllegalArgumentException(
+"outputPerInput must be positive"
+);
+}
+
+return new GuideResourceRequirement(
+inputItemId,
+0,
+null,
+0,
+0,
+outputItemId,
+targetOutput,
+outputPerInput
+);
+}
+
+/**
+ * Exact quantity calculated from current skill XP.
  */
 public static GuideResourceRequirement forSkillLevel(
 int itemId,
@@ -141,20 +200,53 @@ itemId,
 0,
 skill,
 targetLevel,
-xpPerItem
+xpPerItem,
+-1,
+0,
+0
 );
 }
 
 /**
- * Resolves the exact quantity needed right now.
+ * Resolves how many input resources are still required RIGHT NOW.
  */
-public int resolveQuantity(Client client)
+public int resolveQuantity(
+Client client,
+IronmanGuideItemChecker itemChecker)
 {
-if (skill == null)
+if (outputItemId > 0)
 {
-return quantity;
+if (itemChecker == null)
+{
+throw new IllegalArgumentException(
+"itemChecker is required for output-based resources"
+);
 }
 
+int currentOutput =
+itemChecker.getInventoryQuantity(outputItemId)
++ itemChecker.getBankQuantity(outputItemId);
+
+int remainingOutput =
+Math.max(
+0,
+targetOutput - currentOutput
+);
+
+if (remainingOutput == 0)
+{
+return 0;
+}
+
+return (
+remainingOutput
++ outputPerInput
+- 1
+) / outputPerInput;
+}
+
+if (skill != null)
+{
 if (client == null)
 {
 throw new IllegalArgumentException(
@@ -178,8 +270,11 @@ xpPerItem
 );
 }
 
+return quantity;
+}
+
 /**
- * Pure calculation kept separate so it can be tested.
+ * Pure skill calculation for tests.
  */
 static int calculateRequiredActions(
 int currentXp,
@@ -228,16 +323,12 @@ public int getItemId()
 return itemId;
 }
 
-/**
- * Only for fixed requirements.
- * Dynamic skill requirements must use resolveQuantity(client).
- */
 public int getQuantity()
 {
-if (skill != null)
+if (skill != null || outputItemId > 0)
 {
 throw new IllegalStateException(
-"Skill-based resources must be resolved with the client"
+"Dynamic resources must be resolved from live player state"
 );
 }
 
