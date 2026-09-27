@@ -305,7 +305,7 @@ else
 questHelperBridge.stopManagedQuest();
 }
 
-	itemChecker.update(client.getItemContainer(InventoryID.INV));
+	itemChecker.refresh();
 
 boolean itemNameChanged =
 itemNameResolver.update(currentStep);
@@ -466,6 +466,34 @@ return;
 @Subscribe
 public void onItemContainerChanged(ItemContainerChanged event)
 {
+if (event.getContainerId() == InventoryID.BANK)
+{
+itemChecker.updateBank(event.getItemContainer());
+
+GuideStep currentStep =
+guideManager.getCurrentStep();
+
+if (guideRuleEvaluator.isStepComplete(currentStep))
+{
+guideManager.next();
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+
+worldMapGuideManager.update();
+}
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return;
+}
+
 if (event.getContainerId() != InventoryID.INV)
 {
 return;
