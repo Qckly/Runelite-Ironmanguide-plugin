@@ -86,6 +86,18 @@ rule.getSkill()
 case INVENTORY_EMPTY:
 return itemChecker.isInventoryEmpty();
 
+case BANK_DEPOSIT:
+return itemChecker.hasBankRequiredQuantity(
+rule.getItemId(),
+rule.getQuantity()
+);
+
+case BANK_WITHDRAW:
+return itemChecker.hasRequiredQuantity(
+rule.getItemId(),
+rule.getQuantity()
+);
+
 case QUEST_STARTED:
 return questStateChecker.isStarted(
 rule.getQuestName()
