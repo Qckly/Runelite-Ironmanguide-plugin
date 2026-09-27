@@ -13,6 +13,9 @@ private String questHelperQuestName;
 private GuideTarget[] targets =
 new GuideTarget[0];
 
+private GuideResourceRequirement[] exactResources =
+new GuideResourceRequirement[0];
+
 public GuideStep(
 GuideStepType type,
 String title,
@@ -66,6 +69,17 @@ targets != null
 return this;
 }
 
+public GuideStep withExactResources(
+GuideResourceRequirement... exactResources)
+{
+this.exactResources =
+exactResources != null
+? exactResources
+: new GuideResourceRequirement[0];
+
+return this;
+}
+
 public String getId()
 {
 return id;
@@ -99,5 +113,9 @@ return rules;
 public GuideTarget[] getTargets()
 {
 return targets;
+}
+public GuideResourceRequirement[] getExactResources()
+{
+return exactResources;
 }
 }

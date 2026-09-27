@@ -39,6 +39,20 @@ rule.getItemId()
 }
 }
 
+GuideResourceRequirement[] exactResources =
+step.getExactResources();
+
+if (exactResources != null)
+{
+for (GuideResourceRequirement requirement :
+exactResources)
+{
+changed |= resolve(
+requirement.getItemId()
+);
+}
+}
+
 if (step instanceof ItemGuideStep)
 {
 ItemGuideStep itemStep =
