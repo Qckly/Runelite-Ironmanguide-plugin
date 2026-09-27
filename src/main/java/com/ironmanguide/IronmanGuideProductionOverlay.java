@@ -25,6 +25,8 @@ private final GuideManager guideManager;
 private final IronmanGuideConfig config;
 private final GuideRuleEvaluator ruleEvaluator;
 
+private boolean diagnosticDumped;
+
 public IronmanGuideProductionOverlay(
 Client client,
 GuideManager guideManager,
@@ -48,6 +50,38 @@ MAKE_X_INTERFACE
 @Override
 public Dimension render(Graphics2D graphics)
 {
+Widget productionTitle =
+findWidgetByText(
+client.getWidgetRoots(),
+"What would you like to make?"
+);
+
+if (productionTitle != null)
+{
+if (!diagnosticDumped)
+{
+diagnosticDumped = true;
+
+int interfaceId =
+WidgetUtil.componentToInterface(
+productionTitle.getId()
+);
+
+System.out.println(
+"IRONMAN_GUIDE_PRODUCTION_INTERFACE=" + interfaceId
+);
+
+dumpProductionInterface(
+client.getWidgetRoots(),
+interfaceId
+);
+}
+}
+else
+{
+diagnosticDumped = false;
+}
+
 GuideStep step =
 guideManager.getCurrentStep();
 
@@ -262,5 +296,117 @@ graphics.draw(bounds);
 graphics.setStroke(
 new BasicStroke(1)
 );
+}
+
+private Widget findWidgetByText(
+Widget[] widgets,
+String targetText)
+{
+if (widgets == null)
+{
+return null;
+}
+
+for (Widget widget : widgets)
+{
+if (widget == null)
+{
+continue;
+}
+
+String text = widget.getText();
+
+if (text != null
+&& text.contains(targetText))
+{
+return widget;
+}
+
+Widget found =
+findWidgetByText(
+widget.getChildren(),
+targetText
+);
+
+if (found != null)
+{
+return found;
+}
+
+found =
+findWidgetByText(
+widget.getDynamicChildren(),
+targetText
+);
+
+if (found != null)
+{
+return found;
+}
+
+found =
+findWidgetByText(
+widget.getStaticChildren(),
+targetText
+);
+
+if (found != null)
+{
+return found;
+}
+}
+
+return null;
+}
+
+private void dumpProductionInterface(
+Widget[] widgets,
+int targetInterfaceId)
+{
+if (widgets == null)
+{
+return;
+}
+
+for (Widget widget : widgets)
+{
+if (widget == null)
+{
+continue;
+}
+
+int interfaceId =
+WidgetUtil.componentToInterface(
+widget.getId()
+);
+
+if (interfaceId == targetInterfaceId)
+{
+System.out.println(
+"IRONMAN_WIDGET"
++ " id=" + widget.getId()
++ " itemId=" + widget.getItemId()
++ " modelType=" + widget.getModelType()
++ " modelId=" + widget.getModelId()
++ " text=[" + widget.getText() + "]"
++ " name=[" + widget.getName() + "]"
+);
+}
+
+dumpProductionInterface(
+widget.getChildren(),
+targetInterfaceId
+);
+
+dumpProductionInterface(
+widget.getDynamicChildren(),
+targetInterfaceId
+);
+
+dumpProductionInterface(
+widget.getStaticChildren(),
+targetInterfaceId
+);
+}
 }
 }
