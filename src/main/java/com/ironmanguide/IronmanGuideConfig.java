@@ -20,6 +20,17 @@ return Color.YELLOW;
 }
 
 @ConfigItem(
+keyName = "showMinimapArrow",
+name = "Minimap guidance",
+description = "Show direction guidance on the minimap",
+position = 1
+)
+default boolean showMinimapArrow()
+{
+return true;
+}
+
+@ConfigItem(
 keyName = "currentStep",
 name = "",
 description = "",

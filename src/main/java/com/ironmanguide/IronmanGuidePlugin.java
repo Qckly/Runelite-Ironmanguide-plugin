@@ -40,6 +40,8 @@ private GuideManager guideManager;
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
 	private IronmanGuideObjectOverlay objectOverlay;
+	private IronmanGuideLocationOverlay locationOverlay;
+	private IronmanGuideMinimapOverlay minimapOverlay;
 private NavigationButton navButton;
 
 @Override
@@ -65,6 +67,12 @@ overlayManager.add(overlay);
 		objectOverlay = new IronmanGuideObjectOverlay(client, guideManager, modelOutlineRenderer, config);
 		overlayManager.add(objectOverlay);
 
+		locationOverlay = new IronmanGuideLocationOverlay(client, guideManager, config);
+		overlayManager.add(locationOverlay);
+
+		minimapOverlay = new IronmanGuideMinimapOverlay(client, guideManager, config);
+		overlayManager.add(minimapOverlay);
+
 BufferedImage icon =
 ImageUtil.loadImageResource(getClass(), "icon.png");
 
@@ -82,6 +90,8 @@ protected void shutDown()
 {
 overlayManager.remove(overlay);
 		overlayManager.remove(objectOverlay);
+		overlayManager.remove(locationOverlay);
+		overlayManager.remove(minimapOverlay);
 clientToolbar.removeNavigation(navButton);
 }
 

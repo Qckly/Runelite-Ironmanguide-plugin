@@ -1,5 +1,7 @@
 package com.ironmanguide;
 
+import net.runelite.api.coords.WorldPoint;
+
 public final class GuideData
 {
 private GuideData()
@@ -22,11 +24,10 @@ new NpcGuideStep(
 null
 ),
 
-new ObjectGuideStep(
-"Object Highlight Test",
-"Interact with the highlighted tree.",
-1276,
-null
+new LocationGuideStep(
+"Location Highlight Test",
+"Walk to the highlighted tile.",
+new WorldPoint(3222, 3218, 0)
 )
 };
 }
