@@ -9,10 +9,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
+import net.runelite.api.Client;
 import net.runelite.client.ui.PluginPanel;
 
 public class IronmanGuidePanel extends PluginPanel
 {
+private final Client client;
 private final GuideManager guideManager;
 private final IronmanGuideItemChecker itemChecker;
 private final IronmanGuideItemNameResolver itemNameResolver;
@@ -23,11 +25,13 @@ private final JTextArea stepText = new JTextArea();
 private final IronmanGuideStepListPanel stepListPanel;
 
 public IronmanGuidePanel(
+Client client,
 GuideManager guideManager,
 IronmanGuideItemChecker itemChecker,
 IronmanGuideItemNameResolver itemNameResolver,
 IntConsumer onStepChanged)
 {
+this.client = client;
 this.guideManager = guideManager;
 this.itemChecker = itemChecker;
 this.itemNameResolver = itemNameResolver;
@@ -118,8 +122,16 @@ if (exactResources != null
 for (GuideResourceRequirement requirement :
 exactResources)
 {
+int requiredQuantity =
+requirement.resolveQuantity(client);
+
+if (requiredQuantity <= 0)
+{
+continue;
+}
+
 text += "\n\nYou will need "
-+ requirement.getQuantity()
++ requiredQuantity
 + " "
 + itemNameResolver.getName(
 requirement.getItemId()
