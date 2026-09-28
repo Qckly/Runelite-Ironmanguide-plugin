@@ -63,14 +63,6 @@ player
 return null;
 }
 
-if (step instanceof ObjectGuideStep)
-{
-renderLegacyTarget(
-(ObjectGuideStep) step,
-player
-);
-}
-
 return null;
 }
 
@@ -144,77 +136,6 @@ config.highlightFeather()
 }
 }
 
-private void renderLegacyTarget(
-ObjectGuideStep step,
-Player player)
-{
-List<TileObject> matches =
-new ArrayList<>();
-
-for (Tile[] row :
-client.getScene()
-.getTiles()[client.getPlane()])
-{
-for (Tile tile : row)
-{
-if (tile == null)
-{
-continue;
-}
-
-for (TileObject object :
-tile.getGameObjects())
-{
-if (object != null
-&& object.getId()
-== step.getObjectId())
-{
-matches.add(object);
-}
-}
-
-addLegacyIfMatch(
-matches,
-tile.getWallObject(),
-step
-);
-
-addLegacyIfMatch(
-matches,
-tile.getDecorativeObject(),
-step
-);
-
-addLegacyIfMatch(
-matches,
-tile.getGroundObject(),
-step
-);
-}
-}
-
-WorldPoint reference =
-step.getWorldPoint() != null
-? step.getWorldPoint()
-: player.getWorldLocation();
-
-TileObject closest =
-findClosest(
-matches,
-reference
-);
-
-if (closest != null)
-{
-modelOutlineRenderer.drawOutline(
-closest,
-config.highlightOutlineWidth(),
-config.highlightColor(),
-config.highlightFeather()
-);
-}
-}
-
 private GuideTarget findObjectTarget(
 GuideStep step)
 {
@@ -248,19 +169,6 @@ if (object.getId() == id)
 matches.add(object);
 return;
 }
-}
-}
-
-private void addLegacyIfMatch(
-List<TileObject> matches,
-TileObject object,
-ObjectGuideStep step)
-{
-if (object != null
-&& object.getId()
-== step.getObjectId())
-{
-matches.add(object);
 }
 }
 
