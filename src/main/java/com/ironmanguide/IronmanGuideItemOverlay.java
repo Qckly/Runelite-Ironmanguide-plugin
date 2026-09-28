@@ -5,15 +5,18 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
 import net.runelite.api.Client;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.api.widgets.WidgetUtil;
+
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.overlay.WidgetItemOverlay;
 
-public class IronmanGuideItemOverlay extends WidgetItemOverlay
+public class IronmanGuideItemOverlay
+extends WidgetItemOverlay
 {
 private final Client client;
 private final GuideManager guideManager;
@@ -35,9 +38,11 @@ this.ruleEvaluator = ruleEvaluator;
 this.itemManager = itemManager;
 
 showOnInventory();
+
 showOnInterfaces(
 InterfaceID.SHOPMAIN
 );
+
 showOnBank();
 }
 
@@ -68,23 +73,11 @@ WidgetUtil.componentToInterface(
 widget.getId()
 );
 
-boolean shouldHighlight =
-shouldHighlightRuleItem(
+if (!shouldHighlightRuleItem(
 step,
 itemId,
 interfaceId
-);
-
-if (!shouldHighlight)
-{
-shouldHighlight =
-shouldHighlightLegacyItem(
-step,
-itemId
-);
-}
-
-if (!shouldHighlight)
+))
 {
 return;
 }
@@ -162,9 +155,21 @@ if (ruleEvaluator == null)
 return false;
 }
 
+
+/*
+ * Inventory-empty guidance.
+ *
+ * Hidden rules are completion-only and must never
+ * produce inventory/bank/shop highlighting.
+ */
 for (GuideRule rule :
 step.getRules())
 {
+if (rule.isHidden())
+{
+continue;
+}
+
 if (rule.getType()
 == GuideRuleType.INVENTORY_EMPTY
 && !ruleEvaluator.isRuleComplete(rule))
@@ -178,9 +183,18 @@ return interfaceId
 }
 }
 
+
+/*
+ * Item-on-item guidance.
+ */
 for (GuideRule rule :
 step.getRules())
 {
+if (rule.isHidden())
+{
+continue;
+}
+
 if (rule.getType()
 != GuideRuleType.ITEM_ON_ITEM)
 {
@@ -230,9 +244,18 @@ return itemId
 return true;
 }
 
+
+/*
+ * Generic item rules.
+ */
 for (GuideRule rule :
 step.getRules())
 {
+if (rule.isHidden())
+{
+continue;
+}
+
 if (rule.getItemId()
 != itemId)
 {
@@ -282,40 +305,6 @@ return interfaceId
 
 default:
 break;
-}
-}
-
-return false;
-}
-
-private boolean shouldHighlightLegacyItem(
-GuideStep step,
-int itemId)
-{
-if (step instanceof ItemGuideStep)
-{
-return itemId
-== ((ItemGuideStep) step)
-.getItemId();
-}
-
-if (step instanceof QuestGuideStep)
-{
-GuideItemRequirement[] requirements =
-((QuestGuideStep) step)
-.getItemRequirements();
-
-if (requirements != null)
-{
-for (GuideItemRequirement requirement :
-requirements)
-{
-if (itemId
-== requirement.getItemId())
-{
-return true;
-}
-}
 }
 }
 

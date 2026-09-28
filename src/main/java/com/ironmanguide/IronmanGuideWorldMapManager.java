@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+
 import net.runelite.api.coords.WorldPoint;
+
 import net.runelite.client.ui.overlay.worldmap.WorldMapPoint;
 import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
 
@@ -31,73 +33,129 @@ public void update()
 {
 remove();
 
-GuideStep step = guideManager.getCurrentStep();
+GuideStep step =
+guideManager.getCurrentStep();
 
-WorldPoint worldPoint = null;
-String title = step.getTitle();
+GuideTarget target =
+findExactWorldTarget(step);
 
-if (step instanceof LocationGuideStep)
+if (step == null
+|| target == null)
 {
-LocationGuideStep locationStep = (LocationGuideStep) step;
-worldPoint = locationStep.getWorldPoint();
+return;
 }
-else if (step instanceof DialogueGuideStep)
-{
-DialogueGuideStep dialogueStep = (DialogueGuideStep) step;
-worldPoint = dialogueStep.getWorldPoint();
-}
-else if (step instanceof QuestGuideStep)
-{
-QuestGuideStep questStep = (QuestGuideStep) step;
-worldPoint = questStep.getWorldPoint();
-}
+
+WorldPoint worldPoint =
+target.getWorldPoint();
 
 if (worldPoint == null)
 {
 return;
 }
 
-currentPoint = new WorldMapPoint(
+currentPoint =
+new WorldMapPoint(
 worldPoint,
-createMarker(config.highlightColor())
+createMarker(
+config.highlightColor()
+)
 );
 
 currentPoint.setSnapToEdge(true);
-currentPoint.setTooltip(title);
+currentPoint.setTooltip(
+step.getTitle()
+);
 
-worldMapPointManager.add(currentPoint);
+worldMapPointManager.add(
+currentPoint
+);
 }
 
 public void remove()
 {
 if (currentPoint != null)
 {
-worldMapPointManager.remove(currentPoint);
+worldMapPointManager.remove(
+currentPoint
+);
+
 currentPoint = null;
 }
 }
 
-private BufferedImage createMarker(Color color)
+private GuideTarget findExactWorldTarget(
+GuideStep step)
+{
+if (step == null)
+{
+return null;
+}
+
+for (GuideTarget target :
+step.getTargets())
+{
+if (target.getWorldPoint() != null
+&& target.getRadius() == 0)
+{
+return target;
+}
+}
+
+return null;
+}
+
+private BufferedImage createMarker(
+Color color)
 {
 BufferedImage image =
-new BufferedImage(22, 22, BufferedImage.TYPE_INT_ARGB);
+new BufferedImage(
+22,
+22,
+BufferedImage.TYPE_INT_ARGB
+);
 
-Graphics2D graphics = image.createGraphics();
+Graphics2D graphics =
+image.createGraphics();
 
 graphics.setRenderingHint(
 RenderingHints.KEY_ANTIALIASING,
 RenderingHints.VALUE_ANTIALIAS_ON
 );
 
-graphics.setColor(Color.BLACK);
-graphics.fillOval(1, 1, 20, 20);
+graphics.setColor(
+Color.BLACK
+);
+
+graphics.fillOval(
+1,
+1,
+20,
+20
+);
 
 graphics.setColor(color);
-graphics.fillOval(4, 4, 14, 14);
 
-graphics.setColor(Color.WHITE);
-graphics.setStroke(new BasicStroke(2));
-graphics.drawOval(4, 4, 14, 14);
+graphics.fillOval(
+4,
+4,
+14,
+14
+);
+
+graphics.setColor(
+Color.WHITE
+);
+
+graphics.setStroke(
+new BasicStroke(2)
+);
+
+graphics.drawOval(
+4,
+4,
+14,
+14
+);
 
 graphics.dispose();
 

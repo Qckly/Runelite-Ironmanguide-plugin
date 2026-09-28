@@ -122,7 +122,7 @@ itemChecker,
 guideStateTracker,
 questStateChecker
 );
-		completionChecker = new IronmanGuideStepCompletionChecker(client, itemChecker);
+		completionChecker = new IronmanGuideStepCompletionChecker(itemChecker);
 		itemNameResolver = new IronmanGuideItemNameResolver(client);
 		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
 
@@ -312,7 +312,7 @@ panel.refresh();
 return;
 }
 
-if ((currentStep instanceof LocationGuideStep || currentStep instanceof ItemGuideStep)
+if (currentStep instanceof ItemGuideStep
 && completionChecker.isComplete(currentStep))
 {
 guideManager.next();
