@@ -130,7 +130,8 @@ step.getTargets())
 {
 if (target.getType()
 == GuideTargetType.LOCATION
-&& target.getWorldPoint() != null)
+&& target.getWorldPoint() != null
+&& target.getRadius() == 0)
 {
 return target;
 }

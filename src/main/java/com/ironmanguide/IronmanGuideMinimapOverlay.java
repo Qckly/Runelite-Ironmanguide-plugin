@@ -142,14 +142,7 @@ return null;
 
 private WorldPoint findLegacyTarget(
 GuideStep step)
-{
-if (step instanceof LocationGuideStep)
-{
-return ((LocationGuideStep) step)
-.getWorldPoint();
-}
-
-if (step instanceof DialogueGuideStep)
+{if (step instanceof DialogueGuideStep)
 {
 return ((DialogueGuideStep) step)
 .getWorldPoint();
