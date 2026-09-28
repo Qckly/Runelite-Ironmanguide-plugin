@@ -78,7 +78,6 @@ private IronmanGuideWorldMapManager worldMapGuideManager;
 private QuestHelperIntegration questHelperIntegration;
 	private QuestHelperBridge questHelperBridge;
 private IronmanGuideQuestStateChecker questStateChecker;
-private boolean productionWidgetDiagnosticDumped;
 
 private IronmanGuidePanel panel;
 private IronmanGuideOverlay overlay;
@@ -266,26 +265,7 @@ clientToolbar.removeNavigation(navButton);
 
 @Subscribe
 public void onWidgetLoaded(WidgetLoaded event)
-{
-int loadedGroupId =
-event.getGroupId();
-
-System.out.println(
-"IRONMAN_WIDGET_LOADED="
-+ loadedGroupId
-);
-
-if (loadedGroupId == 270)
-{
-clientThread.invokeLater(() ->
-{
-dumpProductionWidgetGroupDirect(
-loadedGroupId
-);
-});
-}
-
-if (event.getGroupId() != InterfaceID.CHATMENU)
+{if (event.getGroupId() != InterfaceID.CHATMENU)
 {
 return;
 }
@@ -302,7 +282,6 @@ dialogueHighlighter.update();
 @Subscribe
 public void onGameTick(GameTick event)
 {
-debugProductionWidgetsFromGameTick();
 
 GuideStep currentStep = guideManager.getCurrentStep();
 
@@ -610,222 +589,4 @@ IronmanGuideConfig provideConfig(ConfigManager configManager)
 return configManager.getConfig(IronmanGuideConfig.class);
 }
 
-private void debugProductionWidgetsFromGameTick()
-{
-Widget title =
-findProductionTitle(
-client.getWidgetRoots()
-);
-
-if (title == null)
-{
-productionWidgetDiagnosticDumped = false;
-return;
-}
-
-if (productionWidgetDiagnosticDumped)
-{
-return;
-}
-
-productionWidgetDiagnosticDumped = true;
-
-int groupId =
-title.getId() >>> 16;
-
-System.out.println(
-"IRONMAN_GUIDE_PRODUCTION_INTERFACE="
-+ groupId
-);
-
-dumpProductionWidgetGroup(
-client.getWidgetRoots(),
-groupId
-);
-}
-
-private Widget findProductionTitle(
-Widget[] widgets)
-{
-if (widgets == null)
-{
-return null;
-}
-
-for (Widget widget : widgets)
-{
-if (widget == null)
-{
-continue;
-}
-
-String widgetText =
-widget.getText();
-
-if (widgetText != null
-&& widgetText.contains(
-"What would you like to make?"
-))
-{
-return widget;
-}
-
-Widget found =
-findProductionTitle(
-widget.getChildren()
-);
-
-if (found != null)
-{
-return found;
-}
-}
-
-return null;
-}
-
-private void dumpProductionWidgetGroup(
-Widget[] widgets,
-int groupId)
-{
-if (widgets == null)
-{
-return;
-}
-
-for (Widget widget : widgets)
-{
-if (widget == null)
-{
-continue;
-}
-
-int widgetGroupId =
-widget.getId() >>> 16;
-
-if (widgetGroupId == groupId)
-{
-System.out.println(
-"IRONMAN_WIDGET"
-+ " id=" + widget.getId()
-+ " type=" + widget.getType()
-+ " itemId=" + widget.getItemId()
-+ " itemQty=" + widget.getItemQuantity()
-+ " modelType=" + widget.getModelType()
-+ " modelId=" + widget.getModelId()
-+ " text=[" + widget.getText() + "]"
-+ " name=[" + widget.getName() + "]"
-+ " bounds=[" + widget.getBounds() + "]"
-);
-}
-
-dumpProductionWidgetGroup(
-widget.getChildren(),
-groupId
-);
-}
-}
-
-private void dumpProductionWidgetGroupDirect(
-int groupId)
-{
-System.out.println(
-"IRONMAN_PRODUCTION_GROUP="
-+ groupId
-);
-
-for (int childId = 0;
-childId < 200;
-childId++)
-{
-Widget widget =
-client.getWidget(
-groupId,
-childId
-);
-
-if (widget == null)
-{
-continue;
-}
-
-dumpProductionWidgetDirect(
-widget,
-childId,
-0
-);
-}
-}
-
-private void dumpProductionWidgetDirect(
-Widget widget,
-int rootChildId,
-int depth)
-{
-if (widget == null
-|| depth > 8)
-{
-return;
-}
-
-System.out.println(
-"IRONMAN_WIDGET"
-+ " rootChild=" + rootChildId
-+ " depth=" + depth
-+ " id=" + widget.getId()
-+ " type=" + widget.getType()
-+ " itemId=" + widget.getItemId()
-+ " itemQty=" + widget.getItemQuantity()
-+ " modelType=" + widget.getModelType()
-+ " modelId=" + widget.getModelId()
-+ " text=[" + widget.getText() + "]"
-+ " name=[" + widget.getName() + "]"
-+ " bounds=[" + widget.getBounds() + "]"
-);
-
-Widget[] children =
-widget.getChildren();
-
-if (children != null)
-{
-for (Widget child : children)
-{
-dumpProductionWidgetDirect(
-child,
-rootChildId,
-depth + 1
-);
-}
-}
-
-Widget[] dynamicChildren =
-widget.getDynamicChildren();
-
-if (dynamicChildren != null)
-{
-for (Widget child : dynamicChildren)
-{
-dumpProductionWidgetDirect(
-child,
-rootChildId,
-depth + 1
-);
-}
-}
-
-Widget[] staticChildren =
-widget.getStaticChildren();
-
-if (staticChildren != null)
-{
-for (Widget child : staticChildren)
-{
-dumpProductionWidgetDirect(
-child,
-rootChildId,
-depth + 1
-);
-}
-}
-}
 }
