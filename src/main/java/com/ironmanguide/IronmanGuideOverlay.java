@@ -125,17 +125,7 @@ GuideStep step)
 {
 int npcId;
 WorldPoint targetPoint;
-
-if (step instanceof NpcGuideStep)
-{
-NpcGuideStep npcStep =
-(NpcGuideStep) step;
-
-npcId = npcStep.getNpcId();
-targetPoint =
-npcStep.getWorldPoint();
-}
-else if (step
+if (step
 instanceof DialogueGuideStep)
 {
 DialogueGuideStep dialogueStep =
