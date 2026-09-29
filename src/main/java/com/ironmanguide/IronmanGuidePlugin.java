@@ -109,7 +109,10 @@ if (config.questHelperIntegration())
 questHelperIntegration.disableAutoStart();
 }
 
-itemChecker = new IronmanGuideItemChecker(client);
+itemChecker = new IronmanGuideItemChecker(
+client,
+configManager
+);
 		guideStateTracker = new GuideStateTracker(
 client,
 itemChecker,

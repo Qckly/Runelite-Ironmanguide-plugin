@@ -44,6 +44,11 @@ return false;
 
 for (GuideRule rule : rules)
 {
+if (rule.isGuidanceOnly())
+{
+continue;
+}
+
 if (!isRuleComplete(rule))
 {
 return false;
@@ -139,6 +144,12 @@ rule.getItemId(),
 rule.getQuantity()
 );
 
+case BANK_HAS_ITEM:
+return itemChecker.hasBankRequiredQuantity(
+rule.getItemId(),
+rule.getQuantity()
+);
+
 case INVENTORY_EMPTY:
 return itemChecker.isInventoryEmpty();
 
@@ -219,6 +230,11 @@ return rule.isBankIncluded()
 rule.getItemId()
 )
 : itemChecker.getInventoryQuantity(
+rule.getItemId()
+);
+
+case BANK_HAS_ITEM:
+return itemChecker.getBankQuantity(
 rule.getItemId()
 );
 

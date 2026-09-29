@@ -323,8 +323,8 @@ rule.getItemId()
 )
 )
 .right(
-String.valueOf(
-rule.getQuantity()
+formatRuleProgress(
+rule
 )
 )
 .leftColor(

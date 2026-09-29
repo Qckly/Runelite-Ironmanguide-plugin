@@ -289,6 +289,14 @@ return interfaceId
 || interfaceId
 == InterfaceID.BANKMAIN;
 
+case BANK_HAS_ITEM:
+return interfaceId
+== InterfaceID.BANKMAIN
+|| interfaceId
+== InterfaceID.BANKSIDE
+|| interfaceId
+== InterfaceID.BANK_DEPOSITBOX;
+
 case BANK_DEPOSIT:
 return interfaceId
 == InterfaceID.BANKSIDE

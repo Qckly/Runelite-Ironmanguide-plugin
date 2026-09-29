@@ -33,11 +33,11 @@ Skill.FIREMAKING,
 ),
 
 GuideRule.action(
-GuideRuleType.PICKUP
+GuideRuleType.HAVE_ITEM
 ).item(
 ASHES,
 4
-)
+).includeBank()
 )
 .withId(
 "early_019_firemaking_15"
@@ -68,14 +68,14 @@ GuideRuleType.ITEM_ON_ITEM
 ).itemOnItem(
 ItemID.KNIFE,
 ItemID.LOGS
-),
+).guidanceOnly(),
 
 GuideRule.action(
 GuideRuleType.HAVE_ITEM
 ).item(
 ItemID.ARROW_SHAFT,
 1000
-).hidden()
+).includeBank().hidden()
 )
 .withId(
 "early_020_fletch_1000_arrow_shafts"
@@ -106,10 +106,10 @@ ItemID.LOGS
 new GuideStep(
 GuideStepType.TEXT,
 "Bank four ashes",
-"Deposit at least 4 Ashes into the Lumbridge Castle bank.",
+"Make sure at least 4 Ashes are stored in the Lumbridge Castle bank.",
 
 GuideRule.action(
-GuideRuleType.BANK_DEPOSIT
+GuideRuleType.BANK_HAS_ITEM
 ).item(
 ASHES,
 4
@@ -130,15 +130,15 @@ new WorldPoint(3208, 3220, 2),
 
 new GuideStep(
 GuideStepType.TEXT,
-"Collect seven logs",
-"Pick up 7 more Logs from the spawns beside the bank for later use.",
+"Collect logs for later use",
+"Collect enough Logs to have 11 total across your inventory and bank for later use.",
 
 GuideRule.action(
-GuideRuleType.PICKUP
+GuideRuleType.HAVE_ITEM
 ).item(
 ItemID.LOGS,
-7
-)
+11
+).includeBank()
 )
 .withId(
 "early_022_collect_seven_logs"
@@ -160,14 +160,14 @@ ItemID.LOGS
 
 new GuideStep(
 GuideStepType.TEXT,
-"Bank seven logs",
-"Deposit the 7 Logs you just collected.",
+"Bank the logs",
+"Make sure all 11 Logs are stored in the Lumbridge Castle bank.",
 
 GuideRule.action(
-GuideRuleType.BANK_DEPOSIT
+GuideRuleType.BANK_HAS_ITEM
 ).item(
 ItemID.LOGS,
-7
+11
 )
 )
 .withId(
