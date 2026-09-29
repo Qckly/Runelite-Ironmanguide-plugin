@@ -8,6 +8,8 @@ private GuideData()
 
 public static GuideStep[] getSteps()
 {
-return EarlyGameGuideData.getSteps();
+return GuideDataValidator.validate(
+EarlyGameGuideData.getSteps()
+);
 }
 }
