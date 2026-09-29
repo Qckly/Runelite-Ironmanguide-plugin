@@ -129,7 +129,12 @@ rule.getText()
 );
 
 case HAVE_ITEM:
-return itemChecker.hasRequiredQuantity(
+return rule.isBankIncluded()
+? itemChecker.hasOwnedQuantity(
+rule.getItemId(),
+rule.getQuantity()
+)
+: itemChecker.hasRequiredQuantity(
 rule.getItemId(),
 rule.getQuantity()
 );

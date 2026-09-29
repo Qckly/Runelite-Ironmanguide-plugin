@@ -27,6 +27,7 @@ private WorldPoint worldPoint;
 private int radius;
 
 private boolean hidden;
+private boolean includeBank;
 
 private GuideRule(GuideRuleType type)
 {
@@ -124,6 +125,11 @@ this.hidden = true;
 return this;
 }
 
+public GuideRule includeBank()
+{
+this.includeBank = true;
+return this;
+}
 public GuideRuleType getType()
 {
 return type;
@@ -194,6 +200,10 @@ public int getRadius()
 return radius;
 }
 
+public boolean isBankIncluded()
+{
+return includeBank;
+}
 public boolean isHidden()
 {
 return hidden;

@@ -85,6 +85,11 @@ Integer::sum
 }
 }
 
+public void clearBank()
+{
+bank.clear();
+}
+
 public int getInventoryQuantity(int itemId)
 {
 return inventory.getOrDefault(
@@ -101,6 +106,12 @@ itemId,
 );
 }
 
+public int getOwnedQuantity(int itemId)
+{
+return getInventoryQuantity(itemId)
++ getBankQuantity(itemId);
+}
+
 public boolean hasRequiredQuantity(
 int itemId,
 int requiredQuantity)
@@ -114,6 +125,14 @@ int itemId,
 int requiredQuantity)
 {
 return getBankQuantity(itemId)
+>= requiredQuantity;
+}
+
+public boolean hasOwnedQuantity(
+int itemId,
+int requiredQuantity)
+{
+return getOwnedQuantity(itemId)
 >= requiredQuantity;
 }
 

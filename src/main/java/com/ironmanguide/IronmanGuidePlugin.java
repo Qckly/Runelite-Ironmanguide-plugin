@@ -307,15 +307,30 @@ guideStateTracker.onMenuOptionClicked(event);
 @Subscribe
 public void onItemContainerChanged(ItemContainerChanged event)
 {
-if (event.getContainerId() != InventoryID.INV)
+int containerId =
+event.getContainerId();
+
+if (containerId == InventoryID.INV)
+{
+itemChecker.update(
+event.getItemContainer()
+);
+
+guideStateTracker.onInventoryUpdated();
+}
+else if (containerId == InventoryID.BANK)
+{
+itemChecker.updateBank(
+event.getItemContainer()
+);
+}
+else
 {
 return;
 }
 
-itemChecker.update(event.getItemContainer());
-guideStateTracker.onInventoryUpdated();
-
-GuideStep currentStep = guideManager.getCurrentStep();
+GuideStep currentStep =
+guideManager.getCurrentStep();
 
 if (advanceCurrentStepIfComplete())
 {
