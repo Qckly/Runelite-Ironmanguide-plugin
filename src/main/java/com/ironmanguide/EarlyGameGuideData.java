@@ -40,6 +40,11 @@ steps,
 DraynorXMarksGuideData.getSteps()
 );
 
+append(
+steps,
+FaladorFeroxGuideData.getSteps()
+);
+
 return steps.toArray(
 new GuideStep[0]
 );
