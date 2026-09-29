@@ -81,13 +81,17 @@ public int getTotalSteps()
 return steps.length;
 }
 
-public void next()
+public boolean next()
 {
 if (currentStep
-< steps.length - 1)
+>= steps.length - 1)
 {
-currentStep++;
+return false;
 }
+
+currentStep++;
+
+return true;
 }
 
 public void previous()

@@ -287,18 +287,8 @@ syncQuestHelper(currentStep);
 boolean itemNameChanged =
 itemNameResolver.update(currentStep);
 
-if (guideRuleEvaluator.isStepComplete(currentStep))
+if (advanceCurrentStepIfComplete())
 {
-guideManager.next();
-saveCurrentStepProgress();
-
-worldMapGuideManager.update();
-
-if (panel != null)
-{
-panel.refresh();
-}
-
 return;
 }
 
@@ -327,18 +317,8 @@ guideStateTracker.onInventoryUpdated();
 
 GuideStep currentStep = guideManager.getCurrentStep();
 
-if (guideRuleEvaluator.isStepComplete(currentStep))
+if (advanceCurrentStepIfComplete())
 {
-guideManager.next();
-saveCurrentStepProgress();
-
-worldMapGuideManager.update();
-
-if (panel != null)
-{
-panel.refresh();
-}
-
 return;
 }
 
@@ -415,6 +395,55 @@ worldMapGuideManager.remove();
 }
 }
 
+private boolean advanceCurrentStepIfComplete()
+{
+if (guideManager == null
+|| guideRuleEvaluator == null)
+{
+return false;
+}
+
+GuideStep currentStep =
+guideManager.getCurrentStep();
+
+if (currentStep == null
+|| !guideRuleEvaluator.isStepComplete(currentStep))
+{
+return false;
+}
+
+
+/*
+ * Important:
+ *
+ * GuideManager.next() returns false at the final step.
+ * In that case we do NOT save progress, refresh UI,
+ * restart Quest Helper, or update map state every tick.
+ */
+if (!guideManager.next())
+{
+return false;
+}
+
+GuideStep nextStep =
+guideManager.getCurrentStep();
+
+saveCurrentStepProgress();
+
+syncQuestHelper(nextStep);
+
+if (worldMapGuideManager != null)
+{
+worldMapGuideManager.update();
+}
+
+if (panel != null)
+{
+panel.refresh();
+}
+
+return true;
+}
 private void saveCurrentStepProgress()
 {
 if (guideManager == null)
