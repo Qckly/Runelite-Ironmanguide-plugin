@@ -45,6 +45,11 @@ steps,
 FaladorFeroxGuideData.getSteps()
 );
 
+append(
+steps,
+YanilleKhazardGuideData.getSteps()
+);
+
 return steps.toArray(
 new GuideStep[0]
 );
