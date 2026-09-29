@@ -257,19 +257,6 @@ if (itemChecker == null
 return;
 }
 
-if (step instanceof ItemGuideStep)
-{
-ItemGuideStep itemStep =
-(ItemGuideStep) step;
-
-addItem(
-itemStep.getItemId(),
-itemStep.getQuantity()
-);
-
-return;
-}
-
 if (step instanceof QuestGuideStep)
 {
 GuideItemRequirement[] requirements =

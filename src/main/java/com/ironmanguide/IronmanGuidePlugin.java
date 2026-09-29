@@ -312,27 +312,6 @@ panel.refresh();
 return;
 }
 
-if (currentStep instanceof ItemGuideStep
-&& completionChecker.isComplete(currentStep))
-{
-guideManager.next();
-
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-guideManager.getCurrentStepIndex()
-);
-
-worldMapGuideManager.update();
-
-if (panel != null)
-{
-panel.refresh();
-}
-
-return;
-}
-
 if (currentStep instanceof QuestGuideStep)
 {
 QuestGuideStep questStep = (QuestGuideStep) currentStep;
@@ -479,20 +458,6 @@ return;
 }
 
 syncQuestHelper(currentStep);
-
-if (currentStep instanceof ItemGuideStep
-&& completionChecker.isComplete(currentStep))
-{
-guideManager.next();
-
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-guideManager.getCurrentStepIndex()
-);
-
-worldMapGuideManager.update();
-}
 
 if (panel != null)
 {

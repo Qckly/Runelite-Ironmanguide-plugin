@@ -13,17 +13,6 @@ this.itemChecker = itemChecker;
 public boolean isComplete(
 GuideStep step)
 {
-if (step instanceof ItemGuideStep)
-{
-ItemGuideStep itemStep =
-(ItemGuideStep) step;
-
-return itemChecker.hasRequiredQuantity(
-itemStep.getItemId(),
-itemStep.getQuantity()
-);
-}
-
 if (step instanceof QuestGuideStep)
 {
 QuestGuideStep questStep =

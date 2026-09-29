@@ -53,16 +53,7 @@ requirement.getItemId()
 }
 }
 
-if (step instanceof ItemGuideStep)
-{
-ItemGuideStep itemStep =
-(ItemGuideStep) step;
-
-changed |= resolve(
-itemStep.getItemId()
-);
-}
-else if (step instanceof QuestGuideStep)
+if (step instanceof QuestGuideStep)
 {
 QuestGuideStep questStep =
 (QuestGuideStep) step;
