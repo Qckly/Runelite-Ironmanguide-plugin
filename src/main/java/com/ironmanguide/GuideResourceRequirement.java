@@ -274,6 +274,82 @@ return quantity;
 }
 
 /**
+ * Whether this resource requirement represents an input item
+ * consumed to create a target output.
+ *
+ * Example:
+ * Logs -> Arrow shafts.
+ */
+public boolean isOutputBased()
+{
+return outputItemId > 0;
+}
+
+/**
+ * How many required input items the player currently owns
+ * across inventory and known bank state.
+ */
+public int resolveOwnedInputQuantity(
+IronmanGuideItemChecker itemChecker)
+{
+if (!isOutputBased())
+{
+throw new IllegalStateException(
+"Owned input quantity is only available for output-based resources"
+);
+}
+
+if (itemChecker == null)
+{
+throw new IllegalArgumentException(
+"itemChecker is required for output-based resources"
+);
+}
+
+return itemChecker.getOwnedQuantity(
+itemId
+);
+}
+
+/**
+ * How many more input items still need to be collected.
+ *
+ * Example:
+ *
+ * 16 Logs still required for the remaining Arrow shafts.
+ * Player already owns 13 Logs.
+ *
+ * Missing = 3 Logs.
+ */
+public int resolveMissingInputQuantity(
+Client client,
+IronmanGuideItemChecker itemChecker)
+{
+if (!isOutputBased())
+{
+throw new IllegalStateException(
+"Missing input quantity is only available for output-based resources"
+);
+}
+
+int requiredQuantity =
+resolveQuantity(
+client,
+itemChecker
+);
+
+int ownedQuantity =
+resolveOwnedInputQuantity(
+itemChecker
+);
+
+return Math.max(
+0,
+requiredQuantity - ownedQuantity
+);
+}
+
+/**
  * Pure skill calculation for tests.
  */
 static int calculateRequiredActions(

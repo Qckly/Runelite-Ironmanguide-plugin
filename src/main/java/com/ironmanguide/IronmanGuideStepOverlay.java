@@ -146,7 +146,69 @@ requirement.getItemId()
 .leftColor(RESOURCE_COLOR)
 .build()
 );
+
+addOwnedResourceProgress(
+requirement,
+requiredQuantity
+);
 }
+}
+
+private void addOwnedResourceProgress(
+GuideResourceRequirement requirement,
+int requiredQuantity)
+{
+if (requirement == null
+|| !requirement.isOutputBased()
+|| itemChecker == null)
+{
+return;
+}
+
+int ownedQuantity =
+requirement.resolveOwnedInputQuantity(
+itemChecker
+);
+
+int missingQuantity =
+requirement.resolveMissingInputQuantity(
+client,
+itemChecker
+);
+
+String progressText;
+
+Color progressColor;
+
+if (missingQuantity > 0)
+{
+progressText =
+"Have: "
++ ownedQuantity
++ " • Collect: "
++ missingQuantity
++ " more";
+
+progressColor =
+RESOURCE_COLOR;
+}
+else
+{
+progressText =
+"Have: "
++ ownedQuantity
++ " • Ready";
+
+progressColor =
+HAVE_COLOR;
+}
+
+panelComponent.getChildren().add(
+LineComponent.builder()
+.left(progressText)
+.leftColor(progressColor)
+.build()
+);
 }
 
 private void addRules(GuideStep step)
