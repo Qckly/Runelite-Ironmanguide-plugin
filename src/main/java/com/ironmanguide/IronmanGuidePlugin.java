@@ -353,10 +353,7 @@ if (!config.questHelperIntegration())
 questHelperBridge.stopManagedQuest();
 return;
 }
-
-questHelperIntegration.applyForStep(
-currentStep
-);
+questHelperIntegration.disableAutoStart();
 
 if (currentStep != null
 && currentStep.getQuestHelperQuestName() != null
