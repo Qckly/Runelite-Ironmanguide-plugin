@@ -92,11 +92,13 @@ private NavigationButton navButton;
 
 @Override
 protected void startUp()
-{
-guideManager = new GuideManager(
+{guideManager = new GuideManager(
 GuideData.getSteps(),
+config.currentStepId(),
 config.currentStep()
 );
+
+saveCurrentStepProgress();
 
 questHelperIntegration = new QuestHelperIntegration(configManager);
 		questHelperBridge = new QuestHelperBridge(pluginManager);
@@ -137,12 +139,7 @@ panel = new IronmanGuidePanel(
 		itemChecker,
 		itemNameResolver,
 			step ->
-{
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-step
-);
+{saveCurrentStepProgress();
 
 worldMapGuideManager.update();
 }
@@ -293,12 +290,7 @@ itemNameResolver.update(currentStep);
 if (guideRuleEvaluator.isStepComplete(currentStep))
 {
 guideManager.next();
-
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-guideManager.getCurrentStepIndex()
-);
+saveCurrentStepProgress();
 
 worldMapGuideManager.update();
 
@@ -338,12 +330,7 @@ GuideStep currentStep = guideManager.getCurrentStep();
 if (guideRuleEvaluator.isStepComplete(currentStep))
 {
 guideManager.next();
-
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-guideManager.getCurrentStepIndex()
-);
+saveCurrentStepProgress();
 
 worldMapGuideManager.update();
 
@@ -428,6 +415,32 @@ worldMapGuideManager.remove();
 }
 }
 
+private void saveCurrentStepProgress()
+{
+if (guideManager == null)
+{
+return;
+}
+
+String stepId =
+guideManager.getCurrentStepId();
+
+if (stepId != null
+&& !stepId.isBlank())
+{
+configManager.setConfiguration(
+"ironmanguide",
+"currentStepId",
+stepId
+);
+}
+
+configManager.setConfiguration(
+"ironmanguide",
+"currentStep",
+guideManager.getCurrentStepIndex()
+);
+}
 @Provides
 IronmanGuideConfig provideConfig(ConfigManager configManager)
 {

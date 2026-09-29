@@ -150,4 +150,15 @@ default int currentStep()
 {
 return 0;
 }
+
+@ConfigItem(
+keyName = "currentStepId",
+name = "",
+description = "",
+hidden = true
+)
+default String currentStepId()
+{
+return "";
+}
 }
