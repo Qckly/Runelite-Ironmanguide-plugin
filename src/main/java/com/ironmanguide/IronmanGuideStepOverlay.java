@@ -211,6 +211,38 @@ LineComponent.builder()
 );
 }
 
+private String formatRuleProgress(
+GuideRule rule)
+{
+int target =
+Math.max(
+1,
+rule.getQuantity()
+);
+
+int current =
+Math.max(
+0,
+ruleEvaluator.getRuleProgressQuantity(
+rule
+)
+);
+
+/*
+ * Do not display values such as 9/7 after an action
+ * overshoots the requirement.
+ */
+current =
+Math.min(
+current,
+target
+);
+
+return current
++ "/"
++ target;
+}
+
 private void addRules(GuideStep step)
 {
 if (ruleEvaluator == null

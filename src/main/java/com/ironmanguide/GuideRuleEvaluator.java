@@ -184,6 +184,59 @@ return false;
 }
 }
 
+/**
+ * Returns current numeric progress for item-based guide rules.
+ *
+ * Action rules such as PICKUP / BUY / SELL / DEPOSIT / WITHDRAW
+ * use confirmed progress from the current guide step.
+ *
+ * HAVE_ITEM uses live inventory or inventory + bank ownership.
+ */
+public int getRuleProgressQuantity(
+GuideRule rule)
+{
+if (rule == null)
+{
+return 0;
+}
+
+switch (rule.getType())
+{
+case SELL:
+case BUY:
+case DROP:
+case PICKUP:
+case BANK_DEPOSIT:
+case BANK_WITHDRAW:
+return stateTracker.getConfirmedQuantity(
+rule.getType(),
+rule.getItemId()
+);
+
+case HAVE_ITEM:
+return rule.isBankIncluded()
+? itemChecker.getOwnedQuantity(
+rule.getItemId()
+)
+: itemChecker.getInventoryQuantity(
+rule.getItemId()
+);
+
+case EQUIP:
+return getEquippedQuantity(
+rule.getItemId()
+);
+
+default:
+return isRuleComplete(rule)
+? Math.max(
+1,
+rule.getQuantity()
+)
+: 0;
+}
+}
+
 private boolean confirmedItemAction(
 GuideRuleType type,
 GuideRule rule)
@@ -199,9 +252,17 @@ private boolean hasEquipped(
 int itemId,
 int quantity)
 {
+return getEquippedQuantity(
+itemId
+) >= quantity;
+}
+
+private int getEquippedQuantity(
+int itemId)
+{
 if (itemId <= 0)
 {
-return false;
+return 0;
 }
 
 ItemContainer equipment =
@@ -209,9 +270,14 @@ client.getItemContainer(
 InventoryID.WORN
 );
 
-return equipment != null
-&& equipment.count(itemId)
->= quantity;
+if (equipment == null)
+{
+return 0;
+}
+
+return equipment.count(
+itemId
+);
 }
 
 private boolean isAtLocation(
