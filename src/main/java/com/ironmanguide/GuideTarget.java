@@ -70,17 +70,6 @@ target.radius = radius;
 
 return target;
 }
-
-public static GuideTarget widget(int widgetId)
-{
-GuideTarget target =
-new GuideTarget(GuideTargetType.WIDGET);
-
-target.ids = new int[] { widgetId };
-
-return target;
-}
-
 public static GuideTarget dialogue(
 String... options)
 {
