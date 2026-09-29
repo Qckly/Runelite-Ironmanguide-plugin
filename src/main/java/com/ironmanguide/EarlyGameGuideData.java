@@ -50,6 +50,11 @@ steps,
 YanilleKhazardGuideData.getSteps()
 );
 
+append(
+steps,
+ArdougneGnomeGuideData.getSteps()
+);
+
 return steps.toArray(
 new GuideStep[0]
 );
