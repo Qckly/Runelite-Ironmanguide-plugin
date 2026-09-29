@@ -53,7 +53,7 @@ findGuideTarget(step);
 WorldPoint target =
 guideTarget != null
 ? guideTarget.getWorldPoint()
-: findLegacyTarget(step);
+: null;
 
 Player player =
 client.getLocalPlayer();
@@ -135,23 +135,6 @@ if (target.getWorldPoint() != null)
 {
 return target;
 }
-}
-
-return null;
-}
-
-private WorldPoint findLegacyTarget(
-GuideStep step)
-{if (step instanceof DialogueGuideStep)
-{
-return ((DialogueGuideStep) step)
-.getWorldPoint();
-}
-
-if (step instanceof QuestGuideStep)
-{
-return ((QuestGuideStep) step)
-.getWorldPoint();
 }
 
 return null;

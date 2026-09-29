@@ -102,7 +102,6 @@ LineComponent.builder()
 
 addExactResources(step);
 addRules(step);
-addItemRequirements(step);
 
 return super.render(graphics);
 }
@@ -249,67 +248,4 @@ complete
 }
 }
 
-private void addItemRequirements(GuideStep step)
-{
-if (itemChecker == null
-|| itemNameResolver == null)
-{
-return;
-}
-
-if (step instanceof QuestGuideStep)
-{
-GuideItemRequirement[] requirements =
-((QuestGuideStep) step)
-.getItemRequirements();
-
-if (requirements == null)
-{
-return;
-}
-
-for (GuideItemRequirement requirement :
-requirements)
-{
-addItem(
-requirement.getItemId(),
-requirement.getQuantity()
-);
-}
-}
-}
-
-private void addItem(
-int itemId,
-int requiredQuantity)
-{
-int currentQuantity =
-itemChecker.getInventoryQuantity(itemId);
-
-boolean complete =
-currentQuantity >= requiredQuantity;
-
-panelComponent.getChildren().add(
-LineComponent.builder()
-.left(
-itemNameResolver.getName(itemId)
-)
-.right(
-currentQuantity
-+ "/"
-+ requiredQuantity
-)
-.leftColor(
-complete
-? HAVE_COLOR
-: MISSING_COLOR
-)
-.rightColor(
-complete
-? HAVE_COLOR
-: MISSING_COLOR
-)
-.build()
-);
-}
 }

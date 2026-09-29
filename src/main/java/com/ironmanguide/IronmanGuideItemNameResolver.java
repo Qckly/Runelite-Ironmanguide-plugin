@@ -53,26 +53,6 @@ requirement.getItemId()
 }
 }
 
-if (step instanceof QuestGuideStep)
-{
-QuestGuideStep questStep =
-(QuestGuideStep) step;
-
-GuideItemRequirement[] requirements =
-questStep.getItemRequirements();
-
-if (requirements != null)
-{
-for (GuideItemRequirement requirement :
-requirements)
-{
-changed |= resolve(
-requirement.getItemId()
-);
-}
-}
-}
-
 return changed;
 }
 

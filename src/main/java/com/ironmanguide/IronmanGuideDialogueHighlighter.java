@@ -75,18 +75,6 @@ return target.getTexts();
 }
 }
 
-if (step instanceof DialogueGuideStep)
-{
-return ((DialogueGuideStep) step)
-.getOptions();
-}
-
-if (step instanceof QuestGuideStep)
-{
-return ((QuestGuideStep) step)
-.getDialogueOptions();
-}
-
 return null;
 }
 

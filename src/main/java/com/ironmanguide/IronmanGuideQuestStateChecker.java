@@ -26,33 +26,6 @@ public boolean isFinished(String questName)
 return getState(questName) == QuestState.FINISHED;
 }
 
-public boolean meetsProgress(
-QuestProgressRequirement requirement)
-{
-if (requirement == null)
-{
-return false;
-}
-
-int value;
-
-if (requirement.getType()
-== QuestProgressRequirement.Type.VARP)
-{
-value = client.getVarpValue(
-requirement.getId()
-);
-}
-else
-{
-value = client.getVarbitValue(
-requirement.getId()
-);
-}
-
-return value >= requirement.getMinimumValue();
-}
-
 private QuestState getState(String questName)
 {
 if (questName == null || questName.isEmpty())

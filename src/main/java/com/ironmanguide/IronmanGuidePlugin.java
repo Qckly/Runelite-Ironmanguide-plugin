@@ -71,7 +71,6 @@ private GuideManager guideManager;
 	private IronmanGuideItemChecker itemChecker;
 	private GuideStateTracker guideStateTracker;
 	private GuideRuleEvaluator guideRuleEvaluator;
-	private IronmanGuideStepCompletionChecker completionChecker;
 	private IronmanGuideItemNameResolver itemNameResolver;
 	private IronmanGuideDialogueHighlighter dialogueHighlighter;
 private IronmanGuideWorldMapManager worldMapGuideManager;
@@ -122,7 +121,6 @@ itemChecker,
 guideStateTracker,
 questStateChecker
 );
-		completionChecker = new IronmanGuideStepCompletionChecker(itemChecker);
 		itemNameResolver = new IronmanGuideItemNameResolver(client);
 		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
 
@@ -312,57 +310,6 @@ panel.refresh();
 return;
 }
 
-if (currentStep instanceof QuestGuideStep)
-{
-QuestGuideStep questStep = (QuestGuideStep) currentStep;
-
-boolean complete = false;
-
-if (questStep.getRouteType() == QuestRouteType.FULL
-|| questStep.getRouteType() == QuestRouteType.FINISH)
-{
-complete =
-questStateChecker.isFinished(
-questStep.getQuestName()
-);
-}
-else if (questStep.getRouteType() == QuestRouteType.START)
-{
-complete =
-questStateChecker.isStarted(
-questStep.getQuestName()
-);
-}
-else if (questStep.getRouteType() == QuestRouteType.CONTINUE
-|| questStep.getRouteType() == QuestRouteType.UNTIL)
-{
-complete =
-questStateChecker.meetsProgress(
-questStep.getProgressRequirement()
-);
-}
-
-if (complete)
-{
-guideManager.next();
-
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-guideManager.getCurrentStepIndex()
-);
-
-worldMapGuideManager.update();
-
-if (panel != null)
-{
-panel.refresh();
-}
-
-return;
-}
-}
-
 if (itemNameChanged && panel != null)
 {
 panel.refresh();
@@ -373,55 +320,6 @@ panel.refresh();
 public void onMenuOptionClicked(MenuOptionClicked event)
 {
 guideStateTracker.onMenuOptionClicked(event);
-
-GuideStep step = guideManager.getCurrentStep();
-
-String[] options;
-
-if (step instanceof DialogueGuideStep)
-{
-options = ((DialogueGuideStep) step).getOptions();
-}
-else if (step instanceof QuestGuideStep)
-{
-return;
-}
-else
-{
-return;
-}
-
-Widget widget = event.getWidget();
-
-if (widget == null || widget.getText() == null)
-{
-return;
-}
-
-String clickedText = Text.removeTags(widget.getText());
-
-for (String option : options)
-{
-if (clickedText.equals(option))
-{
-guideManager.next();
-
-configManager.setConfiguration(
-"ironmanguide",
-"currentStep",
-guideManager.getCurrentStepIndex()
-);
-
-worldMapGuideManager.update();
-
-if (panel != null)
-{
-panel.refresh();
-}
-
-return;
-}
-}
 }
 
 @Subscribe
@@ -486,24 +384,6 @@ questHelperBridge.startQuest(
 currentStep.getQuestHelperQuestName()
 );
 return;
-}
-
-if (currentStep instanceof QuestGuideStep)
-{
-QuestGuideStep questStep =
-(QuestGuideStep) currentStep;
-
-QuestRouteType routeType =
-questStep.getRouteType();
-
-if (routeType == QuestRouteType.FULL
-|| routeType == QuestRouteType.FINISH)
-{
-questHelperBridge.startQuest(
-questStep.getQuestName()
-);
-return;
-}
 }
 
 questHelperBridge.stopManagedQuest();

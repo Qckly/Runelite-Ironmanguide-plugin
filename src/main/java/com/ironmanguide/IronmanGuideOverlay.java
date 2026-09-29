@@ -48,7 +48,6 @@ highlightTarget(npcTarget);
 return null;
 }
 
-highlightLegacyStep(step);
 
 return null;
 }
@@ -96,91 +95,6 @@ continue;
 WorldPoint reference =
 target.getWorldPoint() != null
 ? target.getWorldPoint()
-: player.getWorldLocation();
-
-int distance =
-npc.getWorldLocation()
-.distanceTo2D(reference);
-
-if (distance < closestDistance)
-{
-closestDistance = distance;
-closestNpc = npc;
-}
-}
-
-if (closestNpc != null)
-{
-modelOutlineRenderer.drawOutline(
-closestNpc,
-config.highlightOutlineWidth(),
-config.highlightColor(),
-config.highlightFeather()
-);
-}
-}
-
-private void highlightLegacyStep(
-GuideStep step)
-{
-int npcId;
-WorldPoint targetPoint;
-if (step
-instanceof DialogueGuideStep)
-{
-DialogueGuideStep dialogueStep =
-(DialogueGuideStep) step;
-
-npcId =
-dialogueStep.getNpcId();
-
-targetPoint =
-dialogueStep.getWorldPoint();
-}
-else if (step
-instanceof QuestGuideStep)
-{
-QuestGuideStep questStep =
-(QuestGuideStep) step;
-
-npcId =
-questStep.getNpcId();
-
-targetPoint =
-questStep.getWorldPoint();
-}
-else
-{
-return;
-}
-
-if (npcId < 0)
-{
-return;
-}
-
-Player player =
-client.getLocalPlayer();
-
-if (player == null)
-{
-return;
-}
-
-NPC closestNpc = null;
-int closestDistance =
-Integer.MAX_VALUE;
-
-for (NPC npc : client.getNpcs())
-{
-if (npc.getId() != npcId)
-{
-continue;
-}
-
-WorldPoint reference =
-targetPoint != null
-? targetPoint
 : player.getWorldLocation();
 
 int distance =
