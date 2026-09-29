@@ -8,6 +8,7 @@ private final String description;
 private final GuideRule[] rules;
 
 private String id;
+private String section;
 private String questHelperQuestName;
 
 private GuideTarget[] targets =
@@ -51,6 +52,12 @@ this.id = id;
 return this;
 }
 
+public GuideStep withSection(
+String section)
+{
+this.section = section;
+return this;
+}
 public GuideStep withQuestHelper(
 String questName)
 {
@@ -85,6 +92,10 @@ public String getId()
 return id;
 }
 
+public String getSection()
+{
+return section;
+}
 public String getQuestHelperQuestName()
 {
 return questHelperQuestName;

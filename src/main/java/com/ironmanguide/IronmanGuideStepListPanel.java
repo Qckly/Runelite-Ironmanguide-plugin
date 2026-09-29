@@ -479,29 +479,20 @@ guideManager.getCurrentStepIndex()
 private String getSectionName(
 int index)
 {
-if (index <= 5)
+GuideStep step =
+guideManager.getStep(index);
+
+String section =
+step.getSection();
+
+if (section == null
+|| section.isBlank())
 {
-return "Starting off";
+return "Guide";
 }
 
-if (index <= 17)
-{
-return "Lumbridge setup";
+return section;
 }
-
-if (index <= 25)
-{
-return "Training and preparation";
-}
-
-if (index <= 34)
-{
-return "Leaving Lumbridge";
-}
-
-return "Draynor and X Marks";
-}
-
 private String escapeHtml(
 String text)
 {

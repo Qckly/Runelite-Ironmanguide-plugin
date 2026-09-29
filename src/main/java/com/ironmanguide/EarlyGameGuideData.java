@@ -43,6 +43,9 @@ GuideRule.action(GuideRuleType.SELL)
 .withId(
 "early_001_sell_starting_equipment"
 )
+.withSection(
+"Starting off"
+)
 .withTargets(
 GuideTarget.npc(
 new WorldPoint(3212, 3246, 0),
@@ -61,6 +64,9 @@ GuideRule.action(GuideRuleType.BUY)
 )
 .withId(
 "early_002_buy_spade"
+)
+.withSection(
+"Starting off"
 )
 .withTargets(
 GuideTarget.npc(
@@ -83,6 +89,9 @@ GuideRuleType.QUEST_STARTED
 )
 .withId(
 "early_003_start_x_marks_the_spot"
+)
+.withSection(
+"Starting off"
 )
 .withTargets(
 GuideTarget.npc(
@@ -111,6 +120,9 @@ GuideRule.action(GuideRuleType.DROP)
 )
 .withId(
 "early_004_drop_starter_runes"
+)
+.withSection(
+"Starting off"
 ),
 
 new GuideStep(
@@ -126,6 +138,9 @@ GuideRule.action(GuideRuleType.HAVE_ITEM)
 )
 .withId(
 "early_005_claim_replacement_runes"
+)
+.withSection(
+"Starting off"
 )
 .withTargets(
 GuideTarget.npc(
@@ -147,6 +162,9 @@ GuideRule.action(GuideRuleType.PICKUP)
 )
 .withId(
 "early_006_pick_up_dropped_runes"
+)
+.withSection(
+"Starting off"
 )
 .withTargets(
 GuideTarget.groundItem(
@@ -175,6 +193,9 @@ GuideRule.action(GuideRuleType.PICKUP)
 )
 .withId(
 "early_007_collect_kitchen_supplies"
+)
+.withSection(
+"Lumbridge setup"
 )
 .withTargets(
 GuideTarget.location(
@@ -206,6 +227,9 @@ new WorldPoint(3209, 9616, 0),
 .withId(
 "early_008_enter_lumbridge_basement"
 )
+.withSection(
+"Lumbridge setup"
+)
 .withTargets(
 GuideTarget.object(
 new WorldPoint(3209, 3216, 0),
@@ -236,6 +260,9 @@ GuideRule.action(GuideRuleType.PICKUP)
 .withId(
 "early_009_collect_basement_supplies"
 )
+.withSection(
+"Lumbridge setup"
+)
 .withTargets(
 GuideTarget.groundItem(
 null,
@@ -262,6 +289,9 @@ new WorldPoint(3209, 3216, 0),
 .withId(
 "early_010_exit_lumbridge_basement"
 )
+.withSection(
+"Lumbridge setup"
+)
 .withTargets(
 GuideTarget.object(
 new WorldPoint(3209, 9616, 0),
@@ -284,6 +314,9 @@ ItemID.JUG_WATER,
 .withId(
 "early_011_fill_jug_with_water"
 )
+.withSection(
+"Lumbridge setup"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3221, 3210, 0),
@@ -304,6 +337,9 @@ GuideRule.action(GuideRuleType.PICKUP)
 )
 .withId(
 "early_012_collect_castle_stair_spawns"
+)
+.withSection(
+"Lumbridge setup"
 )
 .withTargets(
 GuideTarget.location(
@@ -328,6 +364,9 @@ GuideRule.action(GuideRuleType.PICKUP)
 )
 .withId(
 "early_013_collect_bronze_dagger"
+)
+.withSection(
+"Lumbridge setup"
 )
 .withTargets(
 GuideTarget.object(
@@ -354,6 +393,9 @@ GuideRuleType.QUEST_STARTED
 )
 .withId(
 "early_014_start_rune_mysteries"
+)
+.withSection(
+"Lumbridge setup"
 )
 .withTargets(
 GuideTarget.npc(
@@ -382,6 +424,9 @@ new WorldPoint(3208, 3218, 2),
 .withId(
 "early_015_go_to_lumbridge_bank"
 )
+.withSection(
+"Lumbridge setup"
+)
 .withTargets(
 GuideTarget.object(
 new WorldPoint(3205, 3208, 1),
@@ -403,6 +448,9 @@ ItemID.LOGS,
 )
 .withId(
 "early_016_collect_four_logs"
+)
+.withSection(
+"Lumbridge setup"
 )
 .withTargets(
 GuideTarget.location(
@@ -427,6 +475,9 @@ GuideRuleType.INVENTORY_EMPTY
 )
 .withId(
 "early_017_bank_everything"
+)
+.withSection(
+"Lumbridge setup"
 )
 .withTargets(
 GuideTarget.location(
@@ -457,6 +508,9 @@ ItemID.KNIFE,
 .withId(
 "early_018_withdraw_skilling_tools"
 )
+.withSection(
+"Lumbridge setup"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3208, 3220, 2),
@@ -485,6 +539,9 @@ ASHES,
 )
 .withId(
 "early_019_firemaking_15"
+)
+.withSection(
+"Training and preparation"
 )
 .withTargets(
 GuideTarget.location(
@@ -521,6 +578,9 @@ ItemID.ARROW_SHAFT,
 .withId(
 "early_020_fletch_1000_arrow_shafts"
 )
+.withSection(
+"Training and preparation"
+)
 .withExactResources(
 GuideResourceRequirement.fromRemainingOutput(
 ItemID.LOGS,
@@ -556,6 +616,9 @@ ASHES,
 .withId(
 "early_021_bank_four_ashes"
 )
+.withSection(
+"Training and preparation"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3208, 3220, 2),
@@ -577,6 +640,9 @@ ItemID.LOGS,
 )
 .withId(
 "early_022_collect_seven_logs"
+)
+.withSection(
+"Training and preparation"
 )
 .withTargets(
 GuideTarget.location(
@@ -604,6 +670,9 @@ ItemID.LOGS,
 )
 .withId(
 "early_023_bank_seven_logs"
+)
+.withSection(
+"Training and preparation"
 )
 .withTargets(
 GuideTarget.location(
@@ -644,6 +713,9 @@ GuideRule.action(GuideRuleType.HAVE_ITEM)
 .withId(
 "early_024_prepare_lumbridge_route_loadout"
 )
+.withSection(
+"Training and preparation"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3208, 3220, 2),
@@ -665,6 +737,9 @@ new WorldPoint(3208, 3218, 0),
 )
 .withId(
 "early_025_return_to_ground_floor"
+)
+.withSection(
+"Training and preparation"
 )
 .withTargets(
 GuideTarget.object(
@@ -688,6 +763,9 @@ Skill.THIEVING,
 )
 .withId(
 "early_026_thieving_5"
+)
+.withSection(
+"Training and preparation"
 )
 .withTargets(
 GuideTarget.npc(
@@ -714,6 +792,9 @@ VarbitID.CLUEQUEST,
 .withId(
 "early_027_x_marks_bob"
 )
+.withSection(
+"Leaving Lumbridge"
+)
 .withQuestHelper(
 "X Marks the Spot"
 )
@@ -739,6 +820,9 @@ ItemID.STEEL_AXE,
 .withId(
 "early_028_buy_steel_axe"
 )
+.withSection(
+"Leaving Lumbridge"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3232, 3203, 0),
@@ -759,6 +843,9 @@ GuideRuleType.QUEST_STARTED
 )
 .withId(
 "early_029_start_restless_ghost"
+)
+.withSection(
+"Leaving Lumbridge"
 )
 .withTargets(
 GuideTarget.npc(
@@ -787,6 +874,9 @@ VarbitID.CLUEQUEST,
 .withId(
 "early_030_x_marks_castle"
 )
+.withSection(
+"Leaving Lumbridge"
+)
 .withQuestHelper(
 "X Marks the Spot"
 )
@@ -811,6 +901,9 @@ ItemID.RAW_RAT_MEAT,
 )
 .withId(
 "early_031_get_raw_rat_meat"
+)
+.withSection(
+"Leaving Lumbridge"
 )
 .withTargets(
 GuideTarget.npc(
@@ -837,6 +930,9 @@ new WorldPoint(3169, 3172, 0),
 .withId(
 "early_032_reach_swamp_cave"
 )
+.withSection(
+"Leaving Lumbridge"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3169, 3172, 0),
@@ -858,6 +954,9 @@ ItemID.SWAMP_TAR,
 )
 .withId(
 "early_033_collect_swamp_tar"
+)
+.withSection(
+"Leaving Lumbridge"
 )
 .withTargets(
 GuideTarget.location(
@@ -886,6 +985,9 @@ ItemID.AMULET_OF_GHOSTSPEAK,
 .withId(
 "early_034_get_ghostspeak_amulet"
 )
+.withSection(
+"Leaving Lumbridge"
+)
 .withTargets(
 GuideTarget.npc(
 new WorldPoint(3147, 3175, 0),
@@ -913,6 +1015,9 @@ ItemID.RESEARCH_PACKAGE,
 .withId(
 "early_035_rune_mysteries_package"
 )
+.withSection(
+"Leaving Lumbridge"
+)
 .withQuestHelper(
 "Rune Mysteries"
 )
@@ -938,6 +1043,9 @@ new WorldPoint(3091, 3252, 0),
 .withId(
 "early_036_reach_draynor"
 )
+.withSection(
+"Draynor and X Marks"
+)
 .withTargets(
 GuideTarget.location(
 new WorldPoint(3091, 3252, 0),
@@ -959,6 +1067,9 @@ VarbitID.CLUEQUEST,
 )
 .withId(
 "early_037_x_marks_draynor"
+)
+.withSection(
+"Draynor and X Marks"
 )
 .withQuestHelper(
 "X Marks the Spot"
@@ -984,6 +1095,9 @@ ItemID.CHEESE,
 )
 .withId(
 "early_038_pick_up_cheese"
+)
+.withSection(
+"Draynor and X Marks"
 )
 .withTargets(
 GuideTarget.location(
@@ -1012,6 +1126,9 @@ ItemID.JUG_WINE,
 .withId(
 "early_039_buy_wine"
 )
+.withSection(
+"Draynor and X Marks"
+)
 .withTargets(
 GuideTarget.npc(
 new WorldPoint(3085, 3251, 0),
@@ -1033,6 +1150,9 @@ VarbitID.CLUEQUEST,
 )
 .withId(
 "early_040_x_marks_pig_pen"
+)
+.withSection(
+"Draynor and X Marks"
 )
 .withQuestHelper(
 "X Marks the Spot"
@@ -1057,6 +1177,9 @@ GuideRuleType.QUEST_FINISHED
 )
 .withId(
 "early_041_finish_x_marks"
+)
+.withSection(
+"Draynor and X Marks"
 )
 .withQuestHelper(
 "X Marks the Spot"
