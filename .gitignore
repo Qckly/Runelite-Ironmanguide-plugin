@@ -8,3 +8,7 @@ nbactions.xml
 nb-configuration.xml
 nbproject/
 *.class
+# Local audit / diagnostic files
+audit-*.txt
+*-audit.zip
+current-resource-engine.zip
