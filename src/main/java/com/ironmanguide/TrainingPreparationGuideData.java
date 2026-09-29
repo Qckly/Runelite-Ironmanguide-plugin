@@ -1,0 +1,284 @@
+package com.ironmanguide;
+
+import net.runelite.api.Skill;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.VarbitID;
+
+public final class TrainingPreparationGuideData
+{
+private static final int EMPTY_JUG = 1935;
+private static final int ASHES = 592;
+
+private TrainingPreparationGuideData()
+{
+}
+
+public static GuideStep[] getSteps()
+{
+return new GuideStep[] {
+
+new GuideStep(
+GuideStepType.TEXT,
+"Train Firemaking to 15",
+"Use the four log spawns beside the bank to train Firemaking to level 15. Pick up at least 4 ashes while training.",
+
+GuideRule.action(
+GuideRuleType.SKILL_LEVEL
+).skill(
+Skill.FIREMAKING,
+15
+),
+
+GuideRule.action(
+GuideRuleType.PICKUP
+).item(
+ASHES,
+4
+)
+)
+.withId(
+"early_019_firemaking_15"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3209, 3221, 2),
+10
+),
+
+GuideTarget.groundItem(
+null,
+ItemID.LOGS,
+ASHES
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Fletch 1,000 arrow shafts",
+"Keep collecting the four log spawns and use your Knife on them until you have at least 1,000 Arrow shafts.",
+
+GuideRule.action(
+GuideRuleType.ITEM_ON_ITEM
+).itemOnItem(
+ItemID.KNIFE,
+ItemID.LOGS
+),
+
+GuideRule.action(
+GuideRuleType.HAVE_ITEM
+).item(
+ItemID.ARROW_SHAFT,
+1000
+).hidden()
+)
+.withId(
+"early_020_fletch_1000_arrow_shafts"
+)
+.withSection(
+"Training and preparation"
+)
+.withExactResources(
+GuideResourceRequirement.fromRemainingOutput(
+ItemID.LOGS,
+ItemID.ARROW_SHAFT,
+1000,
+15
+)
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3209, 3221, 2),
+10
+),
+
+GuideTarget.groundItem(
+null,
+ItemID.LOGS
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Bank four ashes",
+"Deposit at least 4 Ashes into the Lumbridge Castle bank.",
+
+GuideRule.action(
+GuideRuleType.BANK_DEPOSIT
+).item(
+ASHES,
+4
+)
+)
+.withId(
+"early_021_bank_four_ashes"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3208, 3220, 2),
+8
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Collect seven logs",
+"Pick up 7 more Logs from the spawns beside the bank for later use.",
+
+GuideRule.action(
+GuideRuleType.PICKUP
+).item(
+ItemID.LOGS,
+7
+)
+)
+.withId(
+"early_022_collect_seven_logs"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3209, 3221, 2),
+10
+),
+
+GuideTarget.groundItem(
+null,
+ItemID.LOGS
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Bank seven logs",
+"Deposit the 7 Logs you just collected.",
+
+GuideRule.action(
+GuideRuleType.BANK_DEPOSIT
+).item(
+ItemID.LOGS,
+7
+)
+)
+.withId(
+"early_023_bank_seven_logs"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3208, 3220, 2),
+8
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Prepare the Lumbridge route loadout",
+"Withdraw your coins, X Marks the Spot clue, Air talisman, Spade, Air runes, Mind runes, Bread and Shrimps.",
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.COINS, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.CLUEQUEST_CLUE1, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.AIR_TALISMAN, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.SPADE, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.AIRRUNE, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.MINDRUNE, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.BREAD, 1),
+
+GuideRule.action(GuideRuleType.HAVE_ITEM)
+.item(ItemID.SHRIMP, 1)
+)
+.withId(
+"early_024_prepare_lumbridge_route_loadout"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.location(
+new WorldPoint(3208, 3220, 2),
+8
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Return to the ground floor",
+"Climb down both staircases and return to the ground floor of Lumbridge Castle.",
+
+GuideRule.action(
+GuideRuleType.LOCATION
+).location(
+new WorldPoint(3208, 3218, 0),
+18
+)
+)
+.withId(
+"early_025_return_to_ground_floor"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.object(
+null,
+ObjectID.SPIRALSTAIRSTOP,
+ObjectID.SPIRALSTAIRSMIDDLE
+)
+),
+
+new GuideStep(
+GuideStepType.TEXT,
+"Train Thieving to 5",
+"Pickpocket the Men and Women around Lumbridge Castle until you reach level 5 Thieving.",
+
+GuideRule.action(
+GuideRuleType.SKILL_LEVEL
+).skill(
+Skill.THIEVING,
+5
+)
+)
+.withId(
+"early_026_thieving_5"
+)
+.withSection(
+"Training and preparation"
+)
+.withTargets(
+GuideTarget.npc(
+new WorldPoint(3215, 3219, 0),
+NpcID.MAN2,
+NpcID.MAN3,
+NpcID.DSKIN_W_ARDOUNGECITIZEN2,
+NpcID.AVAN_FITZHARMON_MAN
+).areaRadius(12)
+)
+
+};
+}
+}
