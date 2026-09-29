@@ -12,9 +12,15 @@ private static final String QUEST_HELPER_PLUGIN =
 private static final String QUEST_HELPER_QUEST =
 "com.questhelper.questinfo.QuestHelperQuest";
 
+private static final long RETRY_DELAY_MS =
+10_000L;
+
 private final PluginManager pluginManager;
 
 private String managedQuestName;
+
+private String failedQuestName;
+private long retryAfterMillis;
 
 public QuestHelperBridge(PluginManager pluginManager)
 {
@@ -38,10 +44,16 @@ if (questName.equalsIgnoreCase(managedQuestName))
 return true;
 }
 
+if (isRetryBlocked(questName))
+{
+return false;
+}
+
 Plugin questHelperPlugin = findQuestHelper();
 
 if (questHelperPlugin == null)
 {
+scheduleRetry(questName);
 return false;
 }
 
@@ -64,6 +76,7 @@ getByName.invoke(null, questName);
 
 if (questHelper == null)
 {
+scheduleRetry(questName);
 return false;
 }
 
@@ -75,6 +88,7 @@ questHelperPlugin
 
 if (questManager == null)
 {
+scheduleRetry(questName);
 return false;
 }
 
@@ -102,14 +116,18 @@ false
 
 managedQuestName = questName;
 
+clearRetry();
+
 return true;
 }
 }
+
+scheduleRetry(questName);
 }
 catch (ReflectiveOperationException
 | RuntimeException ignored)
 {
-return false;
+scheduleRetry(questName);
 }
 
 return false;
@@ -119,6 +137,7 @@ public void stopManagedQuest()
 {
 if (managedQuestName == null)
 {
+clearRetry();
 return;
 }
 
@@ -127,6 +146,7 @@ Plugin questHelperPlugin = findQuestHelper();
 if (questHelperPlugin == null)
 {
 managedQuestName = null;
+clearRetry();
 return;
 }
 
@@ -152,17 +172,43 @@ boolean.class
 catch (ReflectiveOperationException
 | RuntimeException ignored)
 {
-// Do not interfere with RuneLite if Quest Helper changed.
+// Quest Helper may have changed its internal API.
+// Do not interfere with RuneLite.
 }
 finally
 {
 managedQuestName = null;
+clearRetry();
 }
 }
 
 public String getManagedQuestName()
 {
 return managedQuestName;
+}
+
+private boolean isRetryBlocked(
+String questName)
+{
+return failedQuestName != null
+&& failedQuestName.equalsIgnoreCase(questName)
+&& System.currentTimeMillis() < retryAfterMillis;
+}
+
+private void scheduleRetry(
+String questName)
+{
+failedQuestName = questName;
+
+retryAfterMillis =
+System.currentTimeMillis()
++ RETRY_DELAY_MS;
+}
+
+private void clearRetry()
+{
+failedQuestName = null;
+retryAfterMillis = 0L;
 }
 
 private Plugin findQuestHelper()
