@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.png" width="128" alt="Ironman Guide logo">
+  <img src="docs/logo.png" width="180" alt="Ironman Guide logo">
 </p>
 
 <h1 align="center">Ironman Guide</h1>
