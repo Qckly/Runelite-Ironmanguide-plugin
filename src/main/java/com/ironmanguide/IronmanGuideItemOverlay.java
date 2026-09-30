@@ -289,6 +289,10 @@ return interfaceId
 || interfaceId
 == InterfaceID.BANKMAIN;
 
+case ALL_OWNED_IN_INVENTORY:
+return interfaceId
+== InterfaceID.BANKMAIN;
+
 case BANK_HAS_ITEM:
 return interfaceId
 == InterfaceID.BANKMAIN

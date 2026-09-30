@@ -186,10 +186,14 @@ new WorldPoint(3208, 3220, 2),
 new GuideStep(
 GuideStepType.TEXT,
 "Prepare the Lumbridge route loadout",
-"Withdraw your coins, X Marks the Spot clue, Air talisman, Spade, Air runes, Mind runes, Bread and Shrimps.",
+"Withdraw all of your Coins, Air runes and Mind runes. Also withdraw the X Marks the Spot clue, Air talisman, Spade, Bread and Shrimp.",
 
-GuideRule.action(GuideRuleType.HAVE_ITEM)
-.item(ItemID.COINS, 1),
+GuideRule.action(
+GuideRuleType.ALL_OWNED_IN_INVENTORY
+).item(
+ItemID.COINS,
+1
+),
 
 GuideRule.action(GuideRuleType.HAVE_ITEM)
 .item(ItemID.CLUEQUEST_CLUE1, 1),
@@ -200,11 +204,19 @@ GuideRule.action(GuideRuleType.HAVE_ITEM)
 GuideRule.action(GuideRuleType.HAVE_ITEM)
 .item(ItemID.SPADE, 1),
 
-GuideRule.action(GuideRuleType.HAVE_ITEM)
-.item(ItemID.AIRRUNE, 1),
+GuideRule.action(
+GuideRuleType.ALL_OWNED_IN_INVENTORY
+).item(
+ItemID.AIRRUNE,
+1
+),
 
-GuideRule.action(GuideRuleType.HAVE_ITEM)
-.item(ItemID.MINDRUNE, 1),
+GuideRule.action(
+GuideRuleType.ALL_OWNED_IN_INVENTORY
+).item(
+ItemID.MINDRUNE,
+1
+),
 
 GuideRule.action(GuideRuleType.HAVE_ITEM)
 .item(ItemID.BREAD, 1),

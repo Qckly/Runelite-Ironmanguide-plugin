@@ -144,6 +144,14 @@ rule.getItemId(),
 rule.getQuantity()
 );
 
+case ALL_OWNED_IN_INVENTORY:
+return itemChecker.getInventoryQuantity(
+rule.getItemId()
+) > 0
+&& itemChecker.getBankQuantity(
+rule.getItemId()
+) == 0;
+
 case BANK_HAS_ITEM:
 return itemChecker.hasBankRequiredQuantity(
 rule.getItemId(),

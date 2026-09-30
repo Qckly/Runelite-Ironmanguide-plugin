@@ -296,6 +296,25 @@ case HAVE_ITEM:
 action = "Have";
 break;
 
+case ALL_OWNED_IN_INVENTORY:
+panelComponent.getChildren().add(
+LineComponent.builder()
+.left(
+(complete ? "✓ " : "○ ")
++ "Withdraw all "
++ itemNameResolver.getName(
+rule.getItemId()
+)
+)
+.leftColor(
+complete
+? HAVE_COLOR
+: MISSING_COLOR
+)
+.build()
+);
+continue;
+
 case BANK_DEPOSIT:
 action = "Deposit";
 break;
@@ -323,7 +342,10 @@ rule.getItemId()
 )
 )
 .right(
-formatRuleProgress(
+rule.getType()
+== GuideRuleType.ALL_OWNED_IN_INVENTORY
+? ""
+: formatRuleProgress(
 rule
 )
 )

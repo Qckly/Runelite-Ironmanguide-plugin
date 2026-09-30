@@ -18,7 +18,11 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.banktags.BankTagsPlugin;
+import net.runelite.client.plugins.banktags.BankTagsService;
+import net.runelite.client.plugins.banktags.TagManager;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -31,6 +35,7 @@ import net.runelite.client.util.Text;
 @PluginDescriptor(
 name = "Ironman Guide"
 )
+@PluginDependency(BankTagsPlugin.class)
 public class IronmanGuidePlugin extends Plugin
 {
 @Inject
@@ -65,6 +70,11 @@ private ConfigManager configManager;
 
 @Inject
 private IronmanGuideConfig config;
+@Inject
+private TagManager tagManager;
+
+@Inject
+private BankTagsService bankTagsService;
 
 
 private GuideManager guideManager;
@@ -87,6 +97,7 @@ private IronmanGuideMinimapOverlay minimapOverlay;
 private IronmanGuideWorldMapAreaOverlay worldMapAreaOverlay;
 private IronmanGuideGroundItemOverlay groundItemOverlay;
 	private IronmanGuideItemOverlay itemOverlay;
+private IronmanGuideBankFilter bankFilter;
 private IronmanGuideProductionOverlay productionOverlay;
 private NavigationButton navButton;
 
@@ -126,6 +137,17 @@ itemChecker,
 guideStateTracker,
 questStateChecker
 );
+bankFilter = new IronmanGuideBankFilter(
+client,
+clientThread,
+guideManager,
+guideRuleEvaluator,
+itemChecker,
+tagManager,
+bankTagsService
+);
+
+bankFilter.startUp();
 		itemNameResolver = new IronmanGuideItemNameResolver(client);
 		dialogueHighlighter = new IronmanGuideDialogueHighlighter(client, guideManager, config);
 
@@ -263,7 +285,18 @@ clientToolbar.removeNavigation(navButton);
 
 @Subscribe
 public void onWidgetLoaded(WidgetLoaded event)
-{if (event.getGroupId() != InterfaceID.CHATMENU)
+{
+if (event.getGroupId() == InterfaceID.BANKMAIN)
+{
+if (bankFilter != null)
+{
+bankFilter.onBankOpened();
+}
+
+return;
+}
+
+if (event.getGroupId() != InterfaceID.CHATMENU)
 {
 return;
 }
