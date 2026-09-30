@@ -128,16 +128,32 @@ if (step == null)
 return null;
 }
 
+GuideTarget fallback = null;
+
 for (GuideTarget target :
 step.getTargets())
 {
-if (target.getWorldPoint() != null)
+WorldPoint worldPoint =
+target.getWorldPoint();
+
+if (worldPoint == null)
+{
+continue;
+}
+
+if (fallback == null)
+{
+fallback = target;
+}
+
+if (worldPoint.getPlane()
+== client.getPlane())
 {
 return target;
 }
 }
 
-return null;
+return fallback;
 }
 
 private boolean drawAreaOnMinimap(

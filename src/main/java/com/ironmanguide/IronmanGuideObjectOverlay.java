@@ -139,17 +139,34 @@ config.highlightFeather()
 private GuideTarget findObjectTarget(
 GuideStep step)
 {
+GuideTarget fallback = null;
+
 for (GuideTarget target :
 step.getTargets())
 {
 if (target.getType()
-== GuideTargetType.OBJECT)
+!= GuideTargetType.OBJECT)
+{
+continue;
+}
+
+if (fallback == null)
+{
+fallback = target;
+}
+
+WorldPoint worldPoint =
+target.getWorldPoint();
+
+if (worldPoint != null
+&& worldPoint.getPlane()
+== client.getPlane())
 {
 return target;
 }
 }
 
-return null;
+return fallback;
 }
 
 private void addIfMatch(
