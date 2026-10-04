@@ -257,10 +257,14 @@ new WorldPoint(3208, 3218, 0),
 )
 .withTargets(
 GuideTarget.object(
-null,
-ObjectID.SPIRALSTAIRSTOP,
+new WorldPoint(3205, 3208, 2),
+56231
+).areaRadius(1),
+
+GuideTarget.object(
+new WorldPoint(3205, 3208, 1),
 ObjectID.SPIRALSTAIRSMIDDLE
-)
+).areaRadius(1)
 ),
 
 new GuideStep(

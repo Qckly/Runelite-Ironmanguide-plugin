@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.Tile;
@@ -59,8 +60,6 @@ renderUniversalTarget(
 target,
 player
 );
-
-return null;
 }
 
 return null;
