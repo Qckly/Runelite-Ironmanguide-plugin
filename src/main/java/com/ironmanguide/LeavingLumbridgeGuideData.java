@@ -1,16 +1,12 @@
 package com.ironmanguide;
 
-import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.api.gameval.ObjectID;
 import net.runelite.api.gameval.VarbitID;
 
 public final class LeavingLumbridgeGuideData
 {
-private static final int EMPTY_JUG = 1935;
-private static final int ASHES = 592;
 
 private LeavingLumbridgeGuideData()
 {
