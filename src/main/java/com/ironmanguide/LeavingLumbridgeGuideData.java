@@ -67,10 +67,10 @@ ItemID.STEEL_AXE,
 "Leaving Lumbridge"
 )
 .withTargets(
-GuideTarget.location(
-new WorldPoint(3232, 3203, 0),
-6
-)
+GuideTarget.npc(
+new WorldPoint(3231, 3203, 0),
+NpcID.BOB
+).areaRadius(6)
 ),
 
 new GuideStep(
