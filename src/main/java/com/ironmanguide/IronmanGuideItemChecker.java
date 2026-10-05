@@ -16,7 +16,6 @@ private static final String CONFIG_GROUP =
 private static final String BANK_SNAPSHOT_KEY =
 "bankSnapshot";
 
-private final Client client;
 private final ConfigManager configManager;
 
 private final Map<Integer, Integer> inventory =
@@ -29,25 +28,9 @@ public IronmanGuideItemChecker(
 Client client,
 ConfigManager configManager)
 {
-this.client = client;
 this.configManager = configManager;
 
 loadBankSnapshot();
-}
-
-public void refresh()
-{
-update(
-client.getItemContainer(InventoryID.INV)
-);
-
-ItemContainer bankContainer =
-client.getItemContainer(InventoryID.BANK);
-
-if (bankContainer != null)
-{
-updateBank(bankContainer);
-}
 }
 
 public void update(ItemContainer container)
@@ -97,12 +80,6 @@ Integer::sum
 );
 }
 
-saveBankSnapshot();
-}
-
-public void clearBank()
-{
-bank.clear();
 saveBankSnapshot();
 }
 
