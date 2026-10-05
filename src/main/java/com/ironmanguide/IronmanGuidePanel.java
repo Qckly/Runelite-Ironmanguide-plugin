@@ -24,8 +24,6 @@ private final IronmanGuideStepListPanel stepListPanel;
 
 public IronmanGuidePanel(
 GuideManager guideManager,
-IronmanGuideItemChecker itemChecker,
-IronmanGuideItemNameResolver itemNameResolver,
 IntConsumer onStepChanged)
 {
 super(false);
