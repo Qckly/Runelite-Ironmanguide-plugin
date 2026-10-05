@@ -32,21 +32,6 @@ public IronmanGuideStepOverlay(
 Client client,
 GuideManager guideManager,
 IronmanGuideItemChecker itemChecker,
-IronmanGuideItemNameResolver itemNameResolver)
-{
-this(
-client,
-guideManager,
-itemChecker,
-itemNameResolver,
-null
-);
-}
-
-public IronmanGuideStepOverlay(
-Client client,
-GuideManager guideManager,
-IronmanGuideItemChecker itemChecker,
 IronmanGuideItemNameResolver itemNameResolver,
 GuideRuleEvaluator ruleEvaluator)
 {
