@@ -39,11 +39,6 @@ setLayer(OverlayLayer.ABOVE_WIDGETS);
 @Override
 public Dimension render(Graphics2D graphics)
 {
-if (!config.showMinimapArrow())
-{
-return null;
-}
-
 GuideStep step =
 guideManager.getCurrentStep();
 
@@ -69,12 +64,24 @@ if (target.getPlane()
 return null;
 }
 
+/*
+ * RS3-style target areas remain visible in both modes.
+ */
 if (guideTarget != null
 && guideTarget.getRadius() > 0
 && drawAreaOnMinimap(
 graphics,
 target,
 guideTarget.getRadius()))
+{
+return null;
+}
+
+/*
+ * When Shortest Path is enabled, it replaces our direction arrow.
+ * The external plugin draws the route instead.
+ */
+if (config.useShortestPath())
 {
 return null;
 }

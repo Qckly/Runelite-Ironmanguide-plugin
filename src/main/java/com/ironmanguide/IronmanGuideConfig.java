@@ -105,15 +105,15 @@ return false;
 }
 
 @ConfigItem(
-keyName = "showMinimapArrow",
-name = "Minimap guidance",
-description = "Show direction guidance on the minimap",
+keyName = "useShortestPath",
+name = "Use Shortest Path plugin",
+description = "Use the Shortest Path plugin to draw a route to the current guide target. Requires Shortest Path to be installed and enabled.",
 position = 0,
 section = navigationSection
 )
-default boolean showMinimapArrow()
+default boolean useShortestPath()
 {
-return true;
+return false;
 }
 
 @ConfigItem(
