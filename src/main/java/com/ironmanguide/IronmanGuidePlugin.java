@@ -202,8 +202,6 @@ worldMapGuideManager.update();
 panel =
 new IronmanGuidePanel(
 guideManager,
-itemChecker,
-itemNameResolver,
 step ->
 {
 saveCurrentStepProgress();
