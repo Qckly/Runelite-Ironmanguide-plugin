@@ -23,17 +23,6 @@ this.configManager =
 configManager;
 }
 
-public void applyForStep(
-GuideStep step)
-{
-disableAutoStart();
-}
-
-public void enableAutoStart()
-{
-setAutoStart(true);
-}
-
 public void disableAutoStart()
 {
 setAutoStart(false);

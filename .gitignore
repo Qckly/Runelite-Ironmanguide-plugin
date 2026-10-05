@@ -12,3 +12,11 @@ nbproject/
 audit-*.txt
 *-audit.zip
 current-resource-engine.zip
+
+# Local logs
+*.log
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db

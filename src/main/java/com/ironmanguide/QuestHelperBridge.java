@@ -27,11 +27,6 @@ public QuestHelperBridge(PluginManager pluginManager)
 this.pluginManager = pluginManager;
 }
 
-public boolean isAvailable()
-{
-return findQuestHelper() != null;
-}
-
 public boolean startQuest(String questName)
 {
 if (questName == null || questName.isEmpty())
@@ -180,11 +175,6 @@ finally
 managedQuestName = null;
 clearRetry();
 }
-}
-
-public String getManagedQuestName()
-{
-return managedQuestName;
 }
 
 private boolean isRetryBlocked(
