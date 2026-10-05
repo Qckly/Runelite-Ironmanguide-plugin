@@ -1,6 +1,7 @@
 .gradle
 build
 .idea/
+.vscode/
 .project
 .settings/
 .classpath
@@ -8,6 +9,10 @@ nbactions.xml
 nb-configuration.xml
 nbproject/
 *.class
+*.log
+.DS_Store
+Thumbs.db
+
 # Local audit / diagnostic files
 audit-*.txt
 *-audit.zip
