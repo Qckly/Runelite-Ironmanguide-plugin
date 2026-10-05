@@ -18,7 +18,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Pick up 1 Snape grass",
 "Walk toward Rimmington and the Crafting Guild. Go to the hobgoblin peninsula west of the Crafting Guild and pick up 1 Snape grass. Have about 10 run energy available so you can grab it and get away from the hobgoblins.",
 
@@ -47,7 +46,6 @@ ItemID.SNAPE_GRASS
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Walk to Falador",
 "Walk north to Falador.",
 
@@ -72,7 +70,6 @@ new WorldPoint(2966, 3380, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Start The Knight's Sword",
 "Go to the White Knights' Castle and talk to the Squire in the courtyard to start The Knight's Sword.",
 
@@ -99,7 +96,6 @@ NpcID.SQUIRE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Minigame teleport to Clan Wars",
 "Use the minigame teleport to Clan Wars. You will arrive at the Clan Wars area in Ferox Enclave.",
 
@@ -124,7 +120,6 @@ new WorldPoint(3130, 3630, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect 2 iron bars",
 "Leave Ferox Enclave through the west side and pick up 2 Iron bars from the spawn just north-west of the enclave. You are entering the Wilderness, so do not carry anything you are not prepared to lose.",
 
@@ -149,7 +144,6 @@ ItemID.IRON_BAR
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Recharge at the Pool of Refreshment",
 "Return inside Ferox Enclave and drink from the Pool of Refreshment to restore your run energy and other stats.",
 
@@ -173,7 +167,6 @@ POOL_OF_REFRESHMENT
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Use the green portal to Castle Wars",
 "Use the green Castle Wars portal in Ferox Enclave. The step completes when you arrive in the Castle Wars lobby.",
 

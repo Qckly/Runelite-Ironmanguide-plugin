@@ -19,7 +19,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Run to Draynor Village",
 "Leave the Wizards' Tower and head north-west into Draynor Village.",
 
@@ -44,7 +43,6 @@ new WorldPoint(3091, 3252, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Dig the Draynor clue",
 "Dig the next X Marks the Spot clue south-west of the wheat field east of Draynor Village.",
 
@@ -72,7 +70,6 @@ new WorldPoint(3108, 3262, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Pick up 2 cheese",
 "Pick up 2 Cheese from the spawn inside Aggie's house in Draynor Village.",
 
@@ -102,7 +99,6 @@ ItemID.CHEESE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Buy 5 jugs of wine",
 "Buy 5 Jugs of wine from Fortunato. Keep them as emergency food.",
 
@@ -127,7 +123,6 @@ NpcID.RAG_WINE_MERCHANT
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Dig inside the pig pen",
 "Dig the final X Marks the Spot clue inside Martin the Master Gardener's pig pen.",
 
@@ -155,7 +150,6 @@ new WorldPoint(3078, 3259, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Finish X Marks the Spot",
 "Take the Ancient casket to Veos in Port Sarim and finish X Marks the Spot. Do not use the XP lamp yet.",
 

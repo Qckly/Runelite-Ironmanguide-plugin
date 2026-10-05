@@ -18,7 +18,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Train Woodcutting to 15",
 "Monk's Friend gives you 2,000 Woodcutting XP, but that is not quite enough to cut oak trees. Cut nearby normal trees until 15 Woodcutting. Light the Logs with your Tinderbox as you go.",
 
@@ -52,7 +51,6 @@ Skill.WOODCUTTING,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Train Woodcutting to 35",
 "Cut the two oak trees just south of Ardougne Zoo until 35 Woodcutting. Light the Oak logs with your Tinderbox as you cut them instead of banking them.",
 
@@ -92,7 +90,6 @@ OAK_TREE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Reach 30 Firemaking",
 "If you followed the previous step and burned the Oak logs as you cut them, this step should complete immediately. Otherwise, burn Oak logs until 30 Firemaking.",
 
@@ -119,7 +116,6 @@ Skill.FIREMAKING,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Train Thieving to 20",
 "Steal from the Ardougne bakery stalls until 20 Thieving. Keep and bank at least 15 Bread and every normal Cake you get. Drop the chocolate slices. Keep stealing after 20 if you still have fewer than 15 Bread.",
 
@@ -145,7 +141,6 @@ ItemID.BREAD,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Train Thieving to 25",
 "Steal Silk from the Ardougne silk stalls until 25 Thieving. Keep all of the Silk for now. We will sell most of it later, but 10 pieces will eventually stay in the bank for quests.",
 
@@ -164,7 +159,6 @@ Skill.THIEVING,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Prepare for Sheep Herder",
 "Have at least 100 coins in your inventory before starting Sheep Herder. Doctor Orbon will charge 100 coins for the protective plague clothing.",
 
@@ -183,7 +177,6 @@ ItemID.COINS,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Complete Sheep Herder",
 "Complete Sheep Herder in Ardougne. Quest Helper will guide you through buying the plague suit, herding one sheep of each colour, poisoning them and incinerating the bones.",
 
@@ -204,7 +197,6 @@ GuideRuleType.QUEST_FINISHED
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Prepare for Sea Slug",
 "Take your Swamp paste and a Small fishing net. Keep some coins with you as well because we will buy sardines in Witchaven immediately after the quest.",
 
@@ -237,7 +229,6 @@ Skill.FIREMAKING,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Complete Sea Slug",
 "Complete Sea Slug with Quest Helper. While you are on the Fishing Platform, use the Small fishing net to catch at least one raw shrimp for the Ardougne diary. Keep one Raw shrimp until the quest is complete, and do not drop the Oyster pearls from the quest reward.",
 

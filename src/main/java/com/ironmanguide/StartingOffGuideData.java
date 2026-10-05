@@ -18,7 +18,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Sell starting equipment",
 "Sell the bronze dagger, bronze sword, bronze axe, wooden shield and shortbow to the Lumbridge General Store.",
 
@@ -52,7 +51,6 @@ NpcID.GENERALASSISTANT1
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Buy a spade",
 "Buy 1 spade from the Lumbridge General Store.",
 
@@ -74,7 +72,6 @@ NpcID.GENERALASSISTANT1
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Start X Marks the Spot",
 "Talk to Veos in The Sheared Ram and start X Marks the Spot. Do not continue the whole quest yet.",
 
@@ -105,7 +102,6 @@ GuideTarget.dialogue(
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Drop starter runes",
 "Drop your Air runes and Mind runes before claiming replacement runes from the Magic tutor.",
 
@@ -123,7 +119,6 @@ GuideRule.action(GuideRuleType.DROP)
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Claim replacement runes",
 "Right-click the Magic combat tutor and choose Claim to receive replacement Air and Mind runes.",
 
@@ -147,7 +142,6 @@ new WorldPoint(3216, 3237, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Pick up dropped runes",
 "Pick up the Air runes and Mind runes you dropped.",
 

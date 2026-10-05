@@ -19,7 +19,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Dig north of Bob's Axes",
 "Dig on the X Marks the Spot tile north of Bob's Brilliant Axes.",
 
@@ -47,7 +46,6 @@ new WorldPoint(3230, 3209, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Buy a steel axe",
 "Buy 1 Steel axe from Bob's Brilliant Axes. Full stock should cost about 200 coins.",
 
@@ -72,7 +70,6 @@ NpcID.BOB
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Start The Restless Ghost",
 "Talk to Father Aereck in Lumbridge Church and start The Restless Ghost.",
 
@@ -101,7 +98,6 @@ GuideTarget.dialogue(
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Dig behind Lumbridge Castle",
 "Dig the next X Marks the Spot clue just behind Lumbridge Castle, outside the kitchen.",
 
@@ -129,7 +125,6 @@ new WorldPoint(3203, 3213, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Get raw rat meat",
 "Kill a Giant rat near Lumbridge Swamp and pick up its Raw rat meat. Wind Strike can be used safely from range.",
 
@@ -157,7 +152,6 @@ NpcID.GIANTRAT_GREY
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Run west through the swamp",
 "Follow the fence west toward the Lumbridge Swamp cave entrance. Keep some run energy available in case something attacks you.",
 
@@ -182,7 +176,6 @@ new WorldPoint(3169, 3172, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect 5 swamp tar",
 "Pick up 5 Swamp tar around the Lumbridge Swamp cave entrance.",
 
@@ -212,7 +205,6 @@ ItemID.SWAMP_TAR
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Get the Ghostspeak amulet",
 "Talk to Father Urhney, receive the Ghostspeak amulet and equip it.",
 
@@ -242,7 +234,6 @@ GuideTarget.dialogue(
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Take the Air talisman to Sedridor",
 "Go to the Wizards' Tower basement. Give Sedridor the Air talisman and continue until he gives you the Research package.",
 

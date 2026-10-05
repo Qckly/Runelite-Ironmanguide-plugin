@@ -92,7 +92,7 @@ private IronmanGuideQuestStateChecker questStateChecker;
 private IronmanGuideShortestPathBridge shortestPathBridge;
 
 private IronmanGuidePanel panel;
-private IronmanGuideOverlay overlay;
+private IronmanGuideNpcOverlay npcOverlay;
 private IronmanGuideStepOverlay stepOverlay;
 private IronmanGuideObjectOverlay objectOverlay;
 private IronmanGuideLocationOverlay locationOverlay;
@@ -217,15 +217,15 @@ shortestPathBridge.update();
 }
 );
 
-overlay =
-new IronmanGuideOverlay(
+npcOverlay =
+new IronmanGuideNpcOverlay(
 client,
 guideManager,
 modelOutlineRenderer,
 config
 );
 overlayManager.add(
-overlay
+npcOverlay
 );
 
 objectOverlay =
@@ -359,7 +359,7 @@ if (worldMapGuideManager != null)
 worldMapGuideManager.remove();
 }
 
-overlayManager.remove(overlay);
+overlayManager.remove(npcOverlay);
 overlayManager.remove(objectOverlay);
 overlayManager.remove(locationOverlay);
 overlayManager.remove(minimapOverlay);

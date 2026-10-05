@@ -19,7 +19,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Walk to Yanille",
 "Walk east from Castle Wars to Yanille. Enter the city and head toward the cooking shop in the north-central part of town.",
 
@@ -44,7 +43,6 @@ new WorldPoint(2603, 3092, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Buy a pie dish",
 "Go to Frenita's Cookery Shop in Yanille and buy 1 Pie dish. Keep it for later questing.",
 
@@ -63,7 +61,6 @@ PIE_DISH,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Get a Jug of water",
 "Pick up the Jug of water inside Frenita's Cookery Shop. Keep it in your inventory because Monk's Friend will require it shortly.",
 
@@ -88,7 +85,6 @@ JUG_OF_WATER
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Walk to Port Khazard",
 "Leave Yanille and walk north to Port Khazard.",
 
@@ -113,7 +109,6 @@ new WorldPoint(2674, 3143, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Buy 1 swamp paste",
 "Open the Khazard General Store and buy 1 Swamp paste. Keep it for a later quest.",
 
@@ -132,7 +127,6 @@ SWAMP_PASTE,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Prepare for Monk's Friend",
 "Before starting Monk's Friend, have 1 Jug of water and 1 normal Logs in your inventory. You should already have the Jug of water from Yanille. If you do not have Logs, chop any nearby normal tree.",
 
@@ -158,7 +152,6 @@ ItemID.LOGS,
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Complete Monk's Friend",
 "Go north-west to the monastery south of Ardougne and complete Monk's Friend. Quest Helper will guide you through the blanket, Brother Omad and Brother Cedric steps.",
 

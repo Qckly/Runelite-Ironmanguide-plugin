@@ -20,7 +20,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Train Firemaking to 15",
 "Use the four log spawns beside the bank to train Firemaking to level 15. Pick up at least 4 ashes while training.",
 
@@ -58,7 +57,6 @@ ASHES
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Fletch 1,000 arrow shafts",
 "Keep collecting the four log spawns and use your Knife on them until you have at least 1,000 Arrow shafts.",
 
@@ -103,7 +101,6 @@ ItemID.LOGS
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Bank four ashes",
 "Make sure at least 4 Ashes are stored in the Lumbridge Castle bank.",
 
@@ -128,7 +125,6 @@ new WorldPoint(3208, 3220, 2),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect logs for later use",
 "Collect enough Logs to have 11 total across your inventory and bank for later use.",
 
@@ -158,7 +154,6 @@ ItemID.LOGS
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Bank the logs",
 "Make sure all 11 Logs are stored in the Lumbridge Castle bank.",
 
@@ -183,7 +178,6 @@ new WorldPoint(3208, 3220, 2),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Prepare the Lumbridge route loadout",
 "Withdraw all of your Coins, Air runes and Mind runes. Also withdraw the X Marks the Spot clue, Air talisman, Spade, Bread and Shrimp.",
 
@@ -237,7 +231,6 @@ new WorldPoint(3208, 3220, 2),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Return to the ground floor",
 "Climb down both staircases and return to the ground floor of Lumbridge Castle.",
 
@@ -267,7 +260,6 @@ ObjectID.SPIRALSTAIRSMIDDLE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Train Thieving to 5",
 "Pickpocket the Men and Women around Lumbridge Castle until you reach level 5 Thieving.",
 

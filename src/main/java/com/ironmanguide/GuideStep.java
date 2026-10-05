@@ -2,7 +2,6 @@ package com.ironmanguide;
 
 public class GuideStep
 {
-private final GuideStepType type;
 private final String title;
 private final String description;
 private final GuideRule[] rules;
@@ -18,12 +17,10 @@ private GuideResourceRequirement[] exactResources =
 new GuideResourceRequirement[0];
 
 public GuideStep(
-GuideStepType type,
 String title,
 String description)
 {
 this(
-type,
 title,
 description,
 new GuideRule[0]
@@ -31,12 +28,10 @@ new GuideRule[0]
 }
 
 public GuideStep(
-GuideStepType type,
 String title,
 String description,
 GuideRule... rules)
 {
-this.type = type;
 this.title = title;
 this.description = description;
 
@@ -99,11 +94,6 @@ return section;
 public String getQuestHelperQuestName()
 {
 return questHelperQuestName;
-}
-
-public GuideStepType getType()
-{
-return type;
 }
 
 public String getTitle()

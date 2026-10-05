@@ -9,14 +9,14 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
-public class IronmanGuideOverlay extends Overlay
+public class IronmanGuideNpcOverlay extends Overlay
 {
 private final Client client;
 private final GuideManager guideManager;
 private final ModelOutlineRenderer modelOutlineRenderer;
 private final IronmanGuideConfig config;
 
-public IronmanGuideOverlay(
+public IronmanGuideNpcOverlay(
 Client client,
 GuideManager guideManager,
 ModelOutlineRenderer modelOutlineRenderer,

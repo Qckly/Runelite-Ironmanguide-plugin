@@ -19,7 +19,6 @@ public static GuideStep[] getSteps()
 return new GuideStep[] {
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect kitchen supplies",
 "Pick up the pot, jug, bowl and knife in the Lumbridge Castle kitchen.",
 
@@ -57,7 +56,6 @@ ItemID.KNIFE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Enter the basement",
 "Open the trapdoor in the Lumbridge Castle kitchen and climb down.",
 
@@ -82,7 +80,6 @@ ObjectID.QIP_COOK_TRAPDOOR_OPEN
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect basement supplies",
 "Pick up the bucket, cabbage, jug, knife and both pairs of leather boots in the basement.",
 
@@ -119,7 +116,6 @@ ItemID.LEATHER_BOOTS
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Return upstairs",
 "Climb the basement ladder back into the Lumbridge Castle kitchen.",
 
@@ -144,7 +140,6 @@ ObjectID.LADDER_FROM_CELLAR
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Fill a jug with water",
 "Fill one empty jug with water before continuing.",
 
@@ -169,7 +164,6 @@ new WorldPoint(3221, 3210, 0),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect castle stair spawns",
 "Pick up the Bronze arrow by the north staircase and the Mind rune by the south staircase.",
 
@@ -199,7 +193,6 @@ ItemID.MINDRUNE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect the bronze dagger",
 "Go up one floor and pick up the Bronze dagger inside Lumbridge Castle.",
 
@@ -225,7 +218,6 @@ ItemID.BRONZE_DAGGER
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Start Rune Mysteries",
 "Talk to Duke Horacio and start Rune Mysteries. Stop after starting the quest.",
 
@@ -254,7 +246,6 @@ GuideTarget.dialogue(
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Go to the top floor",
 "Climb to the top floor of Lumbridge Castle where the bank and log spawns are.",
 
@@ -279,7 +270,6 @@ ObjectID.SPIRALSTAIRSMIDDLE
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Collect the four log spawns",
 "Pick up all four Logs that spawn beside the Lumbridge Castle bank.",
 
@@ -309,7 +299,6 @@ ItemID.LOGS
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Bank everything",
 "Open the Lumbridge Castle bank and deposit everything in your inventory.",
 
@@ -331,7 +320,6 @@ new WorldPoint(3208, 3220, 2),
 ),
 
 new GuideStep(
-GuideStepType.TEXT,
 "Withdraw skilling tools",
 "Withdraw your Tinderbox and Knife from the bank.",
 
